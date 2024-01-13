@@ -19,13 +19,13 @@ export default class Level {
     });
 
     // add all of the bodies to the world
-    MATTER.Composite.add(this.physicEngine, [boxA, boxB, ground]);
+    MATTER.Composite.add(this.physicEngine.world, [boxA, boxB, ground]);
 
     // run the renderer
-    MATTER.Render.run(this.physicEngine);
+    MATTER.Render.run(this.physicRenderer);
 
     // create runner
-    var runner = MATTER.Runner.create();
+    const runner = MATTER.Runner.create();
 
     // run the engine
     MATTER.Runner.run(runner, this.physicEngine);
