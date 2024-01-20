@@ -23,8 +23,6 @@ export default class Level {
     this.player = new Player();
 
     MATTER.Composite.add(this.physicEngine.world, [ground, this.player.body]);
-
-    // add all of the bodies to the world
   }
 
   initPhysicEngine() {
