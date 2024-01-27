@@ -8,7 +8,7 @@ export default class Level {
   player: Player;
   constructor() {
     this.initPhysicEngine();
-
+    this.initMouseListener();
     // create two boxes and a ground
     const ground = MATTER.Bodies.rectangle(
       config.WIDTH / 2,
@@ -43,5 +43,15 @@ export default class Level {
 
     // run the engine
     MATTER.Runner.run(runner, this.physicEngine);
+  }
+
+  initMouseListener() {
+    window.addEventListener("pointerdown", () => this.player.jump());
+  }
+
+  update() {}
+
+  destroy() {
+    window.removeEventListener("pointerdown", () => this.player.jump());
   }
 }
