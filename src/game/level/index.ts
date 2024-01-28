@@ -49,7 +49,9 @@ export default class Level {
     window.addEventListener("pointerdown", () => this.player.jump());
   }
 
-  update() {}
+  update() {
+    if (this.player) this.player.update();
+  }
 
   destroy() {
     window.removeEventListener("pointerdown", () => this.player.jump());

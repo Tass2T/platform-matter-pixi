@@ -3,9 +3,9 @@ import config from "../../../gameConfig.js";
 
 export default class Player {
   body: MATTER.Body;
-  jumpCount: number = config.player.jumpSpeed;
+  jumpCount: number = config.player.jumpNumber;
   constructor() {
-    this.body = MATTER.Bodies.rectangle(10, 10, 10, 10);
+    this.body = MATTER.Bodies.rectangle(100, 10, 10, 10);
   }
 
   jump() {
@@ -13,5 +13,10 @@ export default class Player {
       MATTER.Body.setVelocity(this.body, { x: 0, y: -config.player.jumpSpeed });
       this.jumpCount--;
     }
+  }
+
+  update() {
+    if (this.body.velocity.y === 0 && !this.jumpCount)
+      this.jumpCount = config.player.jumpNumber;
   }
 }
