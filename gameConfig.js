@@ -3,6 +3,6 @@ export default {
   WIDTH: 1200,
   player: {
     jumpNumber: 2,
-    jumpSpeed: 10,
+    jumpSpeed: 15,
   },
 };
