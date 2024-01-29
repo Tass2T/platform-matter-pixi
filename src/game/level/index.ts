@@ -1,31 +1,22 @@
 import * as MATTER from "matter-js";
 import config from "../../../gameConfig.js";
 import Player from "../player";
-import Platform from "../platform/index.js";
+import PlatformManager from "../platform/index.js";
 
 export default class Level {
   physicEngine: MATTER.Engine;
   physicRenderer: MATTER.Render;
   player: Player;
-  platFormList: Array<MATTER.Body> = [];
+  platformManager: PlatformManager;
+
   constructor() {
     this.initPhysicEngine();
     this.initMouseListener();
-    // create two boxes and a ground
-    const ground = MATTER.Bodies.rectangle(
-      config.WIDTH / 2,
-      config.HEIGHT - 30,
-      config.WIDTH,
-      100,
-      {
-        isStatic: true,
-      }
-    );
-    this.platFormList.push(ground);
+    this.platformManager = new PlatformManager(this.physicEngine);
 
     this.player = new Player();
 
-    MATTER.Composite.add(this.physicEngine.world, [ground, this.player.body]);
+    MATTER.Composite.add(this.physicEngine.world, [this.player.body]);
   }
 
   initPhysicEngine() {
@@ -53,7 +44,7 @@ export default class Level {
   }
 
   checkForCollision() {
-    this.platFormList.forEach((platform) => {
+    this.platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(this.player.body, platform);
       if (collision?.collided && collision.normal.y === 1)
         this.player.resetJump();

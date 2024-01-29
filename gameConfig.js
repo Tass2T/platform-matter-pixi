@@ -5,4 +5,10 @@ export default {
     jumpNumber: 2,
     jumpSpeed: 10,
   },
+  platForm: {
+    standard: {
+      width: 100,
+      height: 400,
+    },
+  },
 };
