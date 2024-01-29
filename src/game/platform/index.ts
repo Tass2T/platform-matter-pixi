@@ -6,15 +6,15 @@ export default class PlatformManager {
   platFormList: Array<MATTER.Body> = [];
   constructor(engineWorld: MATTER.Engine) {
     this.engine = engineWorld;
-    this.createInitialPlatForm();
+    this.createInitialPlatForms();
   }
 
-  createInitialPlatForm() {
+  createInitialPlatForms() {
     const ground = MATTER.Bodies.rectangle(
-      config.WIDTH / 2,
-      config.HEIGHT - 30,
-      config.WIDTH,
-      100,
+      200,
+      config.HEIGHT,
+      config.platForm.standard.width,
+      config.HEIGHT,
       {
         isStatic: true,
       }

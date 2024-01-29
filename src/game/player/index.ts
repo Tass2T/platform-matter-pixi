@@ -5,7 +5,7 @@ export default class Player {
   body: MATTER.Body;
   jumpCount: number = config.player.jumpNumber;
   constructor() {
-    this.body = MATTER.Bodies.rectangle(100, config.HEIGHT / 2, 50, 50);
+    this.body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50);
   }
 
   jump() {
