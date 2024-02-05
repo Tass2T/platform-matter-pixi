@@ -7,6 +7,7 @@ export default class PlatformManager {
   constructor(engineWorld: MATTER.Engine) {
     this.engine = engineWorld;
     this.createInitialPlatForms();
+    this.initVelocity();
   }
 
   createInitialPlatForms() {
@@ -21,7 +22,25 @@ export default class PlatformManager {
     );
     this.platFormList.push(ground);
 
-    MATTER.Composite.add(this.engine.world, [ground]);
+    for (let i = 0; i < 4; i++) {
+      const platForm = MATTER.Bodies.rectangle(
+        800,
+        config.HEIGHT,
+        config.platForm.standard.width,
+        config.HEIGHT,
+        { isStatic: true }
+      );
+
+      this.platFormList.push(platForm);
+    }
+
+    MATTER.Composite.add(this.engine.world, this.platFormList);
+  }
+
+  initVelocity() {
+    this.platFormList.forEach((platForm) => {
+      MATTER.Body.setVelocity(platForm, { x: 0.1, y: 0 });
+    });
   }
 
   getPlatformList() {
