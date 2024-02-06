@@ -7,27 +7,29 @@ export default class PlatformManager {
   constructor(engineWorld: MATTER.Engine) {
     this.engine = engineWorld;
     this.createInitialPlatForms();
-    this.initVelocity();
+    this.createAdditionnalPlatforms();
   }
 
   createInitialPlatForms() {
     const ground = MATTER.Bodies.rectangle(
       200,
-      config.HEIGHT,
+      config.HEIGHT * 0.8,
       config.platForm.standard.width,
-      config.HEIGHT,
+      config.platForm.standard.height,
       {
         isStatic: true,
       }
     );
     this.platFormList.push(ground);
+  }
 
-    for (let i = 0; i < 4; i++) {
+  createAdditionnalPlatforms() {
+    for (let i = 1; i <= 3; i++) {
       const platForm = MATTER.Bodies.rectangle(
-        800,
-        config.HEIGHT,
+        500 * i,
+        config.HEIGHT * Math.random(),
         config.platForm.standard.width,
-        config.HEIGHT,
+        config.platForm.standard.height,
         { isStatic: true }
       );
 
@@ -37,13 +39,20 @@ export default class PlatformManager {
     MATTER.Composite.add(this.engine.world, this.platFormList);
   }
 
-  initVelocity() {
+  movePlatforms(): void {
     this.platFormList.forEach((platForm) => {
-      MATTER.Body.setVelocity(platForm, { x: 0.1, y: 0 });
+      MATTER.Body.setPosition(platForm, {
+        x: platForm.position.x - config.SPEED,
+        y: platForm.position.y,
+      });
     });
   }
 
   getPlatformList() {
     return this.platFormList;
+  }
+
+  update() {
+    this.movePlatforms();
   }
 }

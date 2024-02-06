@@ -54,6 +54,7 @@ export default class Level {
   update() {
     MATTER.Engine.update(this.physicEngine);
     this.checkForCollision();
+    this.platformManager.update();
   }
 
   destroy() {
