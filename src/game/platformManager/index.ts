@@ -12,7 +12,7 @@ export default class PlatformManager {
   }
 
   createInitialPlatForms() {
-    const ground = new Platform("standard", config.platForm.start);
+    const ground = new Platform("standard", config.platForm.start, true);
     MATTER.Composite.add(this.engine.world, ground.getBody());
     this.platFormList.push(ground);
   }

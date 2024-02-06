@@ -45,7 +45,10 @@ export default class Level {
 
   checkForCollision() {
     this.platformManager.getPlatformList().forEach((platform) => {
-      const collision = MATTER.Collision.collides(this.player.body, platform);
+      const collision = MATTER.Collision.collides(
+        this.player.body,
+        platform.getBody()
+      );
       if (collision?.collided && collision.normal.y === 1)
         this.player.resetJump();
     });
