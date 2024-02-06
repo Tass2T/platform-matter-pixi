@@ -35,4 +35,15 @@ export default class Platform {
       y: this.#body.position.y,
     });
   }
+
+  hasDisappeared(): boolean {
+    return this.getRightCoord() < 0;
+  }
+
+  moveToRight(x: number) {
+    MATTER.Body.setPosition(this.#body, {
+      x,
+      y: config.HEIGHT * Math.random(),
+    });
+  }
 }

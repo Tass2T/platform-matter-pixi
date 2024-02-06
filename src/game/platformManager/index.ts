@@ -31,7 +31,17 @@ export default class PlatformManager {
 
   movePlatforms(): void {
     this.platFormList.forEach((platForm) => {
-      platForm.moveLeft();
+      if (platForm.hasDisappeared()) {
+        const x =
+          this.platFormList[this.platFormList.length - 1].getRightCoord();
+
+        platForm.moveToRight(x + config.platForm.gap);
+        const tiptop = this.platFormList.shift();
+
+        this.platFormList.push(tiptop as Platform);
+      } else {
+        platForm.moveLeft();
+      }
     });
   }
 
