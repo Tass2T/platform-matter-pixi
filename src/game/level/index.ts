@@ -1,7 +1,7 @@
 import * as MATTER from "matter-js";
 import config from "../../../gameConfig.js";
 import Player from "../player";
-import PlatformManager from "../platform/index.js";
+import PlatformManager from "../platformManager/index.js";
 
 export default class Level {
   physicEngine: MATTER.Engine;

@@ -1,58 +1,38 @@
 import * as MATTER from "matter-js";
 import config from "../../../gameConfig.js";
 
-export default class PlatformManager {
-  engine: MATTER.Engine;
-  platFormList: Array<MATTER.Body> = [];
-  constructor(engineWorld: MATTER.Engine) {
-    this.engine = engineWorld;
-    this.createInitialPlatForms();
-    this.createAdditionnalPlatforms();
-  }
-
-  createInitialPlatForms() {
-    const ground = MATTER.Bodies.rectangle(
-      200,
-      config.HEIGHT * 0.8,
-      config.platForm.standard.width,
-      config.platForm.standard.height,
+export default class Platform {
+  #body: MATTER.Body;
+  constructor(type: string, xStart: number) {
+    const randomHeight = config.HEIGHT * Math.random();
+    this.#body = MATTER.Bodies.rectangle(
+      xStart,
+      randomHeight,
+      config.platForm[type].width,
+      config.platForm[type].height,
       {
         isStatic: true,
       }
     );
-    this.platFormList.push(ground);
+    this.#body.label = "standard";
   }
 
-  createAdditionnalPlatforms() {
-    for (let i = 1; i <= 3; i++) {
-      const platForm = MATTER.Bodies.rectangle(
-        500 * i,
-        config.HEIGHT * Math.random(),
-        config.platForm.standard.width,
-        config.platForm.standard.height,
-        { isStatic: true }
-      );
-
-      this.platFormList.push(platForm);
-    }
-
-    MATTER.Composite.add(this.engine.world, this.platFormList);
+  getBody(): MATTER.Body {
+    return this.#body;
   }
 
-  movePlatforms(): void {
-    this.platFormList.forEach((platForm) => {
-      MATTER.Body.setPosition(platForm, {
-        x: platForm.position.x - config.SPEED,
-        y: platForm.position.y,
-      });
+  getPlatformType() {
+    return this.#body.label;
+  }
+
+  getRightCoord() {
+    return this.#body.position.x + config.platForm[this.#body.label].width;
+  }
+
+  moveLeft() {
+    MATTER.Body.setPosition(this.#body, {
+      x: this.#body.position.x - config.SPEED,
+      y: this.#body.position.y,
     });
-  }
-
-  getPlatformList() {
-    return this.platFormList;
-  }
-
-  update() {
-    this.movePlatforms();
   }
 }
