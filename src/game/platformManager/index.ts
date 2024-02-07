@@ -22,11 +22,15 @@ export default class PlatformManager {
       const platForm = new Platform(
         "standard",
         this.platFormList[this.platFormList.length - 1].getRightCoord() +
-          config.platForm.gap
+          this.setAjustedGap()
       );
       this.platFormList.push(platForm);
       MATTER.Composite.add(this.engine.world, platForm.getBody());
     }
+  }
+
+  setAjustedGap(): number {
+    return config.platForm.gap * (Math.random() * 3) + 1;
   }
 
   movePlatforms(): void {
@@ -35,7 +39,7 @@ export default class PlatformManager {
         const x =
           this.platFormList[this.platFormList.length - 1].getRightCoord();
 
-        platForm.moveToRight(x + config.platForm.gap);
+        platForm.moveToRight(x + this.setAjustedGap());
         const tiptop = this.platFormList.shift();
 
         this.platFormList.push(tiptop as Platform);

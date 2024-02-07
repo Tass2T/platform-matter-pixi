@@ -4,7 +4,8 @@ import config from "../../../gameConfig.js";
 export default class Platform {
   #body: MATTER.Body;
   constructor(type: string, xStart: number, first = false) {
-    const randomHeight = config.HEIGHT * Math.random();
+    const randomHeight = config.HEIGHT * this.ajustedHeight();
+
     this.#body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : randomHeight,
@@ -15,6 +16,14 @@ export default class Platform {
       }
     );
     this.#body.label = "standard";
+  }
+
+  ajustedHeight(): number {
+    let randomNumber = Math.random();
+
+    if (randomNumber <= 0.2) randomNumber += 0.15;
+    if (randomNumber >= 0.8) randomNumber -= 0.15;
+    return randomNumber;
   }
 
   getBody(): MATTER.Body {
@@ -43,7 +52,7 @@ export default class Platform {
   moveToRight(x: number) {
     MATTER.Body.setPosition(this.#body, {
       x,
-      y: config.HEIGHT * Math.random(),
+      y: config.HEIGHT * this.ajustedHeight(),
     });
   }
 }

@@ -12,7 +12,7 @@ export default {
     start: 200,
     standard: {
       width: 300,
-      height: 50,
+      height: 10,
     },
   },
 };
