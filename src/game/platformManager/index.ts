@@ -1,19 +1,22 @@
 import * as MATTER from "matter-js";
 import config from "../../../gameConfig.js";
 import Platform from "../platform/index.js";
+import Diamond from "../diamond/index.js";
 
 export default class PlatformManager {
   engine: MATTER.Engine;
   platFormList: Array<Platform> = [];
+  diamondList: Array<Diamond> = [];
   constructor(engineWorld: MATTER.Engine) {
     this.engine = engineWorld;
     this.createInitialPlatForms();
     this.createAdditionnalPlatforms();
+    this.registerPlatformAndDiamonds();
   }
 
   createInitialPlatForms() {
     const ground = new Platform("standard", config.platForm.start, true);
-    MATTER.Composite.add(this.engine.world, ground.getBody());
+    this.diamondList.push(...ground.getDiamondList());
     this.platFormList.push(ground);
   }
 
@@ -25,8 +28,18 @@ export default class PlatformManager {
           this.setAjustedGap()
       );
       this.platFormList.push(platForm);
-      MATTER.Composite.add(this.engine.world, platForm.getBody());
+      this.diamondList.push(...platForm.getDiamondList());
     }
+  }
+
+  registerPlatformAndDiamonds() {
+    this.platFormList.forEach((platform) => {
+      MATTER.Composite.add(this.engine.world, platform.getBody());
+
+      platform.getDiamondList().forEach((diamond) => {
+        MATTER.Composite.add(this.engine.world, diamond.getBody());
+      });
+    });
   }
 
   setAjustedGap(): number {

@@ -15,4 +15,10 @@ export default {
       height: 10,
     },
   },
+  diamond: {
+    side: 10,
+    height: 10,
+    nb: 3,
+    gap: 30,
+  },
 };
