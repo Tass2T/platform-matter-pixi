@@ -21,8 +21,8 @@ export default class Platform {
   ajustedHeight(): number {
     let randomNumber = Math.random();
 
-    if (randomNumber <= 0.2) randomNumber += 0.15;
-    if (randomNumber >= 0.8) randomNumber -= 0.15;
+    if (randomNumber <= 0.2) randomNumber += 0.2;
+    if (randomNumber >= 0.8) randomNumber -= 0.2;
     return randomNumber;
   }
 
