@@ -1,6 +1,6 @@
 export default {
   HEIGHT: 700,
-  WIDTH: 900,
+  WIDTH: 1000,
   SPEED: 5,
   player: {
     xAxisStart: 150,
@@ -16,9 +16,9 @@ export default {
     },
   },
   diamond: {
-    side: 20,
-    height: 40,
-    nb: 5,
+    side: 30,
+    height: 50,
+    nb: 4,
     gap: 30,
   },
 };
