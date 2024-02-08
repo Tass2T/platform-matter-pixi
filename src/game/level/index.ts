@@ -60,7 +60,12 @@ export default class Level {
         this.player.getBody(),
         diamond.getBody()
       );
-      if (collision?.collided) diamond.isRecuperated();
+      if (collision?.collided && !diamond.getHasBeenTaken()) {
+        console.log(this.platformManager.getGamespeed());
+
+        diamond.setHasBeenTaken(true);
+        this.platformManager.increaseGamespeed();
+      }
     });
   }
 

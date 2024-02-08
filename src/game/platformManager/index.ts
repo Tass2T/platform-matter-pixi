@@ -15,6 +15,14 @@ export default class PlatformManager {
     this.registerPlatformAndDiamonds();
   }
 
+  getGamespeed() {
+    return this.gameSpeed;
+  }
+
+  increaseGamespeed() {
+    this.gameSpeed += 0.1;
+  }
+
   createInitialPlatForms() {
     const ground = new Platform("standard", config.platForm.start, true);
     this.diamondList.push(...ground.getDiamondList());

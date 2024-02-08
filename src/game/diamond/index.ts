@@ -5,6 +5,7 @@ export default class Diamond {
   #body: MATTER.Body;
   #parentPos: MATTER.Vector;
   #orderIndex: number;
+  #hasBeenTaken: boolean;
   constructor(platFormPos: MATTER.Vector, pos: number) {
     this.#parentPos = platFormPos;
     this.#orderIndex = pos;
@@ -28,8 +29,12 @@ export default class Diamond {
     return this.#body.position;
   }
 
-  isRecuperated() {
-    console.log("you");
+  getHasBeenTaken() {
+    return this.#hasBeenTaken;
+  }
+
+  setHasBeenTaken(value: boolean) {
+    this.#hasBeenTaken = value;
   }
 
   syncPosition(): void {

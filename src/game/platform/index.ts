@@ -58,6 +58,7 @@ export default class Platform {
       x,
       y: config.HEIGHT * this.ajustedHeight(),
     });
+    this.#diamondList.forEach((diamond) => diamond.setHasBeenTaken(false));
   }
 
   getDiamondList(): Array<Diamond> {
