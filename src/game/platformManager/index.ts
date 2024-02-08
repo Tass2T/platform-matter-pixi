@@ -37,9 +37,9 @@ export default class PlatformManager {
     this.platFormList.forEach((platform) => {
       MATTER.Composite.add(this.engine.world, platform.getBody());
 
-      // platform.getDiamondList().forEach((diamond) => {
-      //   MATTER.Composite.add(this.engine.world, diamond.getBody());
-      // });
+      platform.getDiamondList().forEach((diamond) => {
+        MATTER.Composite.add(this.engine.world, diamond.getBody());
+      });
     });
   }
 
@@ -71,7 +71,18 @@ export default class PlatformManager {
     return this.platFormList;
   }
 
+  getDiamondList() {
+    return this.diamondList;
+  }
+
+  syncDiamonds() {
+    this.diamondList.forEach((diamond) => {
+      diamond.syncPosition();
+    });
+  }
+
   update() {
     this.movePlatforms();
+    this.syncDiamonds();
   }
 }

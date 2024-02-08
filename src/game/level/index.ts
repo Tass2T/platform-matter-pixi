@@ -43,7 +43,7 @@ export default class Level {
     window.addEventListener("pointerdown", () => this.player.jump());
   }
 
-  checkForCollision() {
+  checkForCollisionWithPlatform() {
     this.platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(
         this.player.getBody(),
@@ -54,6 +54,16 @@ export default class Level {
     });
   }
 
+  checkForCollisionWithDiamond() {
+    this.platformManager.getDiamondList().forEach((diamond) => {
+      const collision = MATTER.Collision.collides(
+        this.player.getBody(),
+        diamond.getBody()
+      );
+      if (collision?.collided) diamond.isRecuperated();
+    });
+  }
+
   checkIfPlayerFell(): void {
     if (this.player.hasFallen()) this.platformManager.setGameSpeed(0);
   }
@@ -61,7 +71,8 @@ export default class Level {
   update() {
     MATTER.Engine.update(this.physicEngine);
     this.checkIfPlayerFell();
-    this.checkForCollision();
+    this.checkForCollisionWithDiamond();
+    this.checkForCollisionWithPlatform();
     this.platformManager.update();
   }
 
