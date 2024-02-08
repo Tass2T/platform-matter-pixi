@@ -42,9 +42,9 @@ export default class Platform {
     return this.#body.position.x + config.platForm[this.#body.label].width;
   }
 
-  moveLeft() {
+  moveLeft(speed: number) {
     MATTER.Body.setPosition(this.#body, {
-      x: this.#body.position.x - config.SPEED,
+      x: this.#body.position.x - speed,
       y: this.#body.position.y,
     });
   }

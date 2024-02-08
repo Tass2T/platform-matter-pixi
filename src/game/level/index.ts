@@ -16,7 +16,7 @@ export default class Level {
 
     this.player = new Player();
 
-    MATTER.Composite.add(this.physicEngine.world, [this.player.body]);
+    MATTER.Composite.add(this.physicEngine.world, [this.player.getBody()]);
   }
 
   initPhysicEngine() {
@@ -46,7 +46,7 @@ export default class Level {
   checkForCollision() {
     this.platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(
-        this.player.body,
+        this.player.getBody(),
         platform.getBody()
       );
       if (collision?.collided && collision.normal.y === 1)
@@ -54,8 +54,13 @@ export default class Level {
     });
   }
 
+  checkIfPlayerFell(): void {
+    if (this.player.hasFallen()) this.platformManager.setGameSpeed(0);
+  }
+
   update() {
     MATTER.Engine.update(this.physicEngine);
+    this.checkIfPlayerFell();
     this.checkForCollision();
     this.platformManager.update();
   }

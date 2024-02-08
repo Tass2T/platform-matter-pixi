@@ -7,6 +7,7 @@ export default class PlatformManager {
   engine: MATTER.Engine;
   platFormList: Array<Platform> = [];
   diamondList: Array<Diamond> = [];
+  gameSpeed: number = config.SPEED;
   constructor(engineWorld: MATTER.Engine) {
     this.engine = engineWorld;
     this.createInitialPlatForms();
@@ -36,14 +37,18 @@ export default class PlatformManager {
     this.platFormList.forEach((platform) => {
       MATTER.Composite.add(this.engine.world, platform.getBody());
 
-      platform.getDiamondList().forEach((diamond) => {
-        MATTER.Composite.add(this.engine.world, diamond.getBody());
-      });
+      // platform.getDiamondList().forEach((diamond) => {
+      //   MATTER.Composite.add(this.engine.world, diamond.getBody());
+      // });
     });
   }
 
   setAjustedGap(): number {
     return config.platForm.gap * (Math.random() * 3) + 1;
+  }
+
+  setGameSpeed(newValue: number): void {
+    this.gameSpeed = newValue;
   }
 
   movePlatforms(): void {
@@ -57,7 +62,7 @@ export default class PlatformManager {
 
         this.platFormList.push(tiptop as Platform);
       } else {
-        platForm.moveLeft();
+        platForm.moveLeft(this.gameSpeed);
       }
     });
   }
