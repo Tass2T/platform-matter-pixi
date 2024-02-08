@@ -8,7 +8,7 @@ export default {
     jumpSpeed: 14,
   },
   platForm: {
-    gap: 100,
+    gap: 90,
     start: 200,
     standard: {
       width: 300,

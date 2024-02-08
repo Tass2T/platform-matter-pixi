@@ -7,7 +7,6 @@ export default class Player {
   constructor() {
     this.body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50, {
       inertia: -Infinity,
-      mass: 0.3,
     });
   }
 
