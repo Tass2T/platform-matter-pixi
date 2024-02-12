@@ -1,87 +1,95 @@
 import * as MATTER from "matter-js";
+import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
 import Player from "../player";
 import PlatformManager from "../platformManager/index.js";
 
 export default class Level {
-  physicEngine: MATTER.Engine;
-  physicRenderer: MATTER.Render;
-  player: Player;
-  platformManager: PlatformManager;
+  #physicEngine: MATTER.Engine;
+  #physicRenderer: MATTER.Render;
+  #player: Player;
+  #platformManager: PlatformManager;
+  #levelContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
-    this.initPhysicEngine();
+    this.initphysicEngine();
     this.initMouseListener();
-    this.platformManager = new PlatformManager(this.physicEngine);
+    this.#platformManager = new PlatformManager(this.#physicEngine);
 
-    this.player = new Player();
+    this.#player = new Player(this.#levelContainer);
 
-    MATTER.Composite.add(this.physicEngine.world, [this.player.getBody()]);
+    MATTER.Composite.add(this.#physicEngine.world, [this.#player.getBody()]);
   }
 
-  initPhysicEngine() {
-    this.physicEngine = MATTER.Engine.create();
-    this.physicRenderer = MATTER.Render.create({
-      element: document.body,
-      engine: this.physicEngine,
-    });
+  getLevelContainer(): PIXI.Container {
+    return this.#levelContainer;
+  }
 
-    this.physicRenderer.canvas.height = config.HEIGHT;
-    this.physicRenderer.canvas.width = config.WIDTH;
+  initphysicEngine() {
+    this.#physicEngine = MATTER.Engine.create();
 
-    // run the renderer
-    MATTER.Render.run(this.physicRenderer);
+    if (Number(import.meta.env.VITE_SHOW_PHYSICAL_RENDERER)) {
+      this.#physicRenderer = MATTER.Render.create({
+        element: document.body,
+        engine: this.#physicEngine,
+      });
+
+      this.#physicRenderer.canvas.height = config.HEIGHT;
+      this.#physicRenderer.canvas.width = config.WIDTH;
+
+      // run the renderer
+      MATTER.Render.run(this.#physicRenderer);
+    }
 
     // create runner
     const runner = MATTER.Runner.create();
 
     // run the engine
-    MATTER.Runner.run(runner, this.physicEngine);
+    MATTER.Runner.run(runner, this.#physicEngine);
   }
 
   initMouseListener() {
-    window.addEventListener("pointerdown", () => this.player.jump());
+    window.addEventListener("pointerdown", () => this.#player.jump());
   }
 
   checkForCollisionWithPlatform() {
-    this.platformManager.getPlatformList().forEach((platform) => {
+    this.#platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(
-        this.player.getBody(),
+        this.#player.getBody(),
         platform.getBody()
       );
       if (collision?.collided && collision.normal.y === 1)
-        this.player.resetJump();
+        this.#player.resetJump();
     });
   }
 
   checkForCollisionWithDiamond() {
-    this.platformManager.getDiamondList().forEach((diamond) => {
+    this.#platformManager.getDiamondList().forEach((diamond) => {
       const collision = MATTER.Collision.collides(
-        this.player.getBody(),
+        this.#player.getBody(),
         diamond.getBody()
       );
       if (collision?.collided && !diamond.getHasBeenTaken()) {
-        console.log(this.platformManager.getGamespeed());
-
         diamond.setHasBeenTaken(true);
-        this.platformManager.increaseGamespeed();
+        this.#platformManager.increaseGamespeed();
       }
     });
   }
 
   checkIfPlayerFell(): void {
-    if (this.player.hasFallen()) this.platformManager.setGameSpeed(0);
+    if (this.#player.hasFallen()) this.#platformManager.setGameSpeed(0);
   }
 
   update() {
-    MATTER.Engine.update(this.physicEngine);
+    MATTER.Engine.update(this.#physicEngine);
+    this.#player.update();
     this.checkIfPlayerFell();
     this.checkForCollisionWithDiamond();
     this.checkForCollisionWithPlatform();
-    this.platformManager.update();
+    this.#platformManager.update();
   }
 
   destroy() {
-    window.removeEventListener("pointerdown", () => this.player.jump());
+    window.removeEventListener("pointerdown", () => this.#player.jump());
   }
 }
