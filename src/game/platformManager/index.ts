@@ -59,16 +59,23 @@ export default class PlatformManager {
     this.gameSpeed = newValue;
   }
 
+  getFarfestXCoord(): number {
+    let result = 0;
+
+    for (let i = 0; i < this.platFormList.length; i++) {
+      if (this.platFormList[i].getRightCoord() > result)
+        result = this.platFormList[i].getRightCoord();
+    }
+
+    return result;
+  }
+
   movePlatforms(): void {
     this.platFormList.forEach((platForm) => {
       if (platForm.hasDisappeared()) {
-        const x =
-          this.platFormList[this.platFormList.length - 1].getRightCoord();
+        const x = this.getFarfestXCoord();
 
         platForm.moveToRight(x + this.setAjustedGap());
-        const movingPlatform = this.platFormList.shift();
-
-        this.platFormList.push(movingPlatform as Platform);
       } else {
         platForm.moveLeft(this.gameSpeed);
       }
