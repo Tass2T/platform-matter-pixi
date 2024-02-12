@@ -66,9 +66,9 @@ export default class PlatformManager {
           this.platFormList[this.platFormList.length - 1].getRightCoord();
 
         platForm.moveToRight(x + this.setAjustedGap());
-        const tiptop = this.platFormList.shift();
+        const movingPlatform = this.platFormList.shift();
 
-        this.platFormList.push(tiptop as Platform);
+        this.platFormList.push(movingPlatform as Platform);
       } else {
         platForm.moveLeft(this.gameSpeed);
       }
