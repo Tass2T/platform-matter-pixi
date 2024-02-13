@@ -19,6 +19,10 @@ export default class PlatformManager {
     return this.gameSpeed;
   }
 
+  getAllObjects(): Array<Diamond | Platform> {
+    return [...this.platFormList, ...this.diamondList];
+  }
+
   increaseGamespeed() {
     this.gameSpeed += 0.1;
   }

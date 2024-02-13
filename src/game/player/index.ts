@@ -4,12 +4,10 @@ import config from "../../../gameConfig.js";
 
 export default class Player {
   #body: MATTER.Body;
-  #container: PIXI.Container = new PIXI.Container();
   #sprite: PIXI.Graphics;
   #jumpCount: number = config.player.jumpNumber;
 
-  constructor(levelContainer: PIXI.Container) {
-    levelContainer.addChild(this.#container);
+  constructor() {
     this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50, {
       inertia: -Infinity,
     });
@@ -17,7 +15,6 @@ export default class Player {
     this.#sprite = new PIXI.Graphics();
     this.#sprite.beginFill(0x9900ff);
     this.#sprite.drawRect(this.#body.position.x, this.#body.position.y, 50, 50);
-    this.#container.addChild(this.#sprite);
   }
 
   getBody(): MATTER.Body {
@@ -45,6 +42,10 @@ export default class Player {
   syncBodyAndSprite() {
     this.#sprite.position.x = this.#body.position.x;
     this.#sprite.position.y = this.#body.position.y;
+  }
+
+  getSprite() {
+    return this.#sprite;
   }
 
   update(): void {

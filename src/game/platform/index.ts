@@ -1,10 +1,12 @@
 import * as MATTER from "matter-js";
+import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
 import Diamond from "../diamond/index.js";
 
 export default class Platform {
   #body: MATTER.Body;
   #diamondList: Array<Diamond> = [];
+  #sprite: PIXI.Graphics;
   constructor(type: string, xStart: number, first = false) {
     const randomHeight = config.HEIGHT * this.ajustedHeight();
 
@@ -19,6 +21,15 @@ export default class Platform {
     );
     this.#body.label = "standard";
 
+    this.#sprite = new PIXI.Graphics();
+    this.#sprite.beginFill(0x9900ff);
+    this.#sprite.drawRect(
+      this.#body.position.x,
+      this.#body.position.y,
+      config.platForm.standard.width,
+      config.platForm.standard.height
+    );
+
     this.prepareDiamond();
   }
 
@@ -32,6 +43,10 @@ export default class Platform {
 
   getBody(): MATTER.Body {
     return this.#body;
+  }
+
+  getSprite(): PIXI.Graphics {
+    return this.#sprite;
   }
 
   getPlatformType() {

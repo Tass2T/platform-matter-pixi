@@ -1,4 +1,5 @@
 import * as MATTER from "matter-js";
+import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
 
 export default class Diamond {
@@ -6,6 +7,7 @@ export default class Diamond {
   #parentPos: MATTER.Vector;
   #orderIndex: number;
   #hasBeenTaken: boolean;
+  #sprite: PIXI.Graphics;
   constructor(platFormPos: MATTER.Vector, pos: number) {
     this.#parentPos = platFormPos;
     this.#orderIndex = pos;
@@ -19,10 +21,23 @@ export default class Diamond {
       config.diamond.side,
       { isStatic: true, isSensor: true }
     );
+
+    this.#sprite = new PIXI.Graphics();
+    this.#sprite.beginFill(0x9900ff);
+    this.#sprite.drawRect(
+      this.#body.position.x,
+      this.#body.position.y,
+      config.diamond.side,
+      config.diamond.side
+    );
   }
 
   getBody(): MATTER.Body {
     return this.#body;
+  }
+
+  getSprite(): PIXI.Graphics {
+    return this.#sprite;
   }
 
   getPosition(): MATTER.Vector {

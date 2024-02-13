@@ -16,13 +16,21 @@ export default class Level {
     this.initMouseListener();
     this.#platformManager = new PlatformManager(this.#physicEngine);
 
-    this.#player = new Player(this.#levelContainer);
+    this.#player = new Player();
 
     MATTER.Composite.add(this.#physicEngine.world, [this.#player.getBody()]);
+    this.addAllItems();
   }
 
   getLevelContainer(): PIXI.Container {
     return this.#levelContainer;
+  }
+
+  addAllItems() {
+    this.#platformManager.getAllObjects().forEach((item) => {
+      this.#levelContainer.addChild(item.getSprite());
+    });
+    this.#levelContainer.addChild(this.#player.getSprite());
   }
 
   initphysicEngine() {
