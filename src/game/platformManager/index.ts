@@ -96,12 +96,19 @@ export default class PlatformManager {
 
   syncDiamonds() {
     this._diamondList.forEach((diamond) => {
-      diamond.syncPosition();
+      diamond.syncSpriteWithBody();
+    });
+  }
+
+  syncPlatforms() {
+    this._platFormList.forEach((platform) => {
+      platform.syncSpriteWithBody();
     });
   }
 
   update() {
     this.movePlatforms();
+    this.syncPlatforms();
     this.syncDiamonds();
   }
 }

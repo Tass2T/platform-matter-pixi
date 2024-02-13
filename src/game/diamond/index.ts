@@ -43,14 +43,4 @@ export default class Diamond extends VisibleObjects {
   setHasBeenTaken(value: boolean) {
     this._hasBeenTaken = value;
   }
-
-  syncPosition(): void {
-    MATTER.Body.setPosition(this._body, {
-      x:
-        this._parentPos.x -
-        config.platForm.standard.width / 2 +
-        (config.diamond.side + config.diamond.gap) * this._orderIndex,
-      y: this._parentPos.y - config.diamond.height,
-    });
-  }
 }
