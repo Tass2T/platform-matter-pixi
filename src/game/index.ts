@@ -4,7 +4,7 @@ import config from "../../gameConfig.js";
 
 export default class Game {
   #pixiApp: PIXI.Application;
-  #level: Level;
+  _level: Level;
   constructor() {
     this.#pixiApp = new PIXI.Application({
       height: config.HEIGHT,
@@ -12,8 +12,8 @@ export default class Game {
       background: "#aabbff",
     });
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
-    this.#level = new Level();
-    this.#pixiApp.stage.addChild(this.#level.getLevelContainer());
+    this._level = new Level();
+    this.#pixiApp.stage.addChild(this._level.getLevelContainer());
 
     this.#pixiApp.ticker.maxFPS = 60;
     this.#pixiApp.ticker.add(() => {
@@ -22,6 +22,6 @@ export default class Game {
   }
 
   update() {
-    this.#level.update();
+    this._level.update();
   }
 }

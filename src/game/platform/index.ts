@@ -2,15 +2,15 @@ import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
 import Diamond from "../diamond/index.js";
+import VisibleObjects from "../traits/VisibleObjects.js";
 
-export default class Platform {
-  #body: MATTER.Body;
-  #diamondList: Array<Diamond> = [];
-  #sprite: PIXI.Graphics;
+export default class Platform extends VisibleObjects {
+  _diamondList: Array<Diamond> = [];
   constructor(type: string, xStart: number, first = false) {
+    super();
     const randomHeight = config.HEIGHT * this.ajustedHeight();
 
-    this.#body = MATTER.Bodies.rectangle(
+    this._body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : randomHeight,
       config.platForm[type].width,
@@ -19,16 +19,17 @@ export default class Platform {
         isStatic: true,
       }
     );
-    this.#body.label = "standard";
+    this._body.label = "standard";
 
-    this.#sprite = new PIXI.Graphics();
-    this.#sprite.beginFill(0x9900ff);
-    this.#sprite.drawRect(
-      this.#body.position.x,
-      this.#body.position.y,
+    this._sprite = new PIXI.Graphics();
+    this._sprite.beginFill(0x9900ff);
+    this._sprite.drawRect(
+      this._body.position.x,
+      this._body.position.y,
       config.platForm.standard.width,
       config.platForm.standard.height
     );
+    this._sprite.pivot.set(0.5);
 
     this.prepareDiamond();
   }
@@ -41,26 +42,18 @@ export default class Platform {
     return randomNumber;
   }
 
-  getBody(): MATTER.Body {
-    return this.#body;
-  }
-
-  getSprite(): PIXI.Graphics {
-    return this.#sprite;
-  }
-
   getPlatformType() {
-    return this.#body.label;
+    return this._body.label;
   }
 
   getRightCoord() {
-    return this.#body.position.x + config.platForm[this.#body.label].width;
+    return this._body.position.x + config.platForm[this._body.label].width;
   }
 
   moveLeft(speed: number) {
-    MATTER.Body.setPosition(this.#body, {
-      x: this.#body.position.x - speed,
-      y: this.#body.position.y,
+    MATTER.Body.setPosition(this._body, {
+      x: this._body.position.x - speed,
+      y: this._body.position.y,
     });
   }
 
@@ -69,20 +62,20 @@ export default class Platform {
   }
 
   moveToRight(x: number) {
-    MATTER.Body.setPosition(this.#body, {
+    MATTER.Body.setPosition(this._body, {
       x,
       y: config.HEIGHT * this.ajustedHeight(),
     });
-    this.#diamondList.forEach((diamond) => diamond.setHasBeenTaken(false));
+    this._diamondList.forEach((diamond) => diamond.setHasBeenTaken(false));
   }
 
   getDiamondList(): Array<Diamond> {
-    return this.#diamondList;
+    return this._diamondList;
   }
 
   prepareDiamond() {
     for (let i = 1; i <= config.diamond.nb; i++) {
-      this.#diamondList.push(new Diamond(this.#body.position, i));
+      this._diamondList.push(new Diamond(this._body.position, i));
     }
   }
 }

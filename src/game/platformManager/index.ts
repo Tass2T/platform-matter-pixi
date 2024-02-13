@@ -4,53 +4,53 @@ import Platform from "../platform/index.js";
 import Diamond from "../diamond/index.js";
 
 export default class PlatformManager {
-  engine: MATTER.Engine;
-  platFormList: Array<Platform> = [];
-  diamondList: Array<Diamond> = [];
-  gameSpeed: number = config.SPEED;
+  _engine: MATTER.Engine;
+  _platFormList: Array<Platform> = [];
+  _diamondList: Array<Diamond> = [];
+  _gameSpeed: number = config.SPEED;
   constructor(engineWorld: MATTER.Engine) {
-    this.engine = engineWorld;
+    this._engine = engineWorld;
     this.createInitialPlatForms();
     this.createAdditionnalPlatforms();
     this.registerPlatformAndDiamonds();
   }
 
   getGamespeed() {
-    return this.gameSpeed;
+    return this._gameSpeed;
   }
 
   getAllObjects(): Array<Diamond | Platform> {
-    return [...this.platFormList, ...this.diamondList];
+    return [...this._platFormList, ...this._diamondList];
   }
 
   increaseGamespeed() {
-    this.gameSpeed += 0.1;
+    this._gameSpeed += 0.1;
   }
 
   createInitialPlatForms() {
     const ground = new Platform("standard", config.platForm.start, true);
-    this.diamondList.push(...ground.getDiamondList());
-    this.platFormList.push(ground);
+    this._diamondList.push(...ground.getDiamondList());
+    this._platFormList.push(ground);
   }
 
   createAdditionnalPlatforms() {
     for (let i = 1; i <= 5; i++) {
       const platForm = new Platform(
         "standard",
-        this.platFormList[this.platFormList.length - 1].getRightCoord() +
+        this._platFormList[this._platFormList.length - 1].getRightCoord() +
           this.setAjustedGap()
       );
-      this.platFormList.push(platForm);
-      this.diamondList.push(...platForm.getDiamondList());
+      this._platFormList.push(platForm);
+      this._diamondList.push(...platForm.getDiamondList());
     }
   }
 
   registerPlatformAndDiamonds() {
-    this.platFormList.forEach((platform) => {
-      MATTER.Composite.add(this.engine.world, platform.getBody());
+    this._platFormList.forEach((platform) => {
+      MATTER.Composite.add(this._engine.world, platform.getBody());
 
       platform.getDiamondList().forEach((diamond) => {
-        MATTER.Composite.add(this.engine.world, diamond.getBody());
+        MATTER.Composite.add(this._engine.world, diamond.getBody());
       });
     });
   }
@@ -60,42 +60,42 @@ export default class PlatformManager {
   }
 
   setGameSpeed(newValue: number): void {
-    this.gameSpeed = newValue;
+    this._gameSpeed = newValue;
   }
 
   getFarfestXCoord(): number {
     let result = 0;
 
-    for (let i = 0; i < this.platFormList.length; i++) {
-      if (this.platFormList[i].getRightCoord() > result)
-        result = this.platFormList[i].getRightCoord();
+    for (let i = 0; i < this._platFormList.length; i++) {
+      if (this._platFormList[i].getRightCoord() > result)
+        result = this._platFormList[i].getRightCoord();
     }
 
     return result;
   }
 
   movePlatforms(): void {
-    this.platFormList.forEach((platForm) => {
+    this._platFormList.forEach((platForm) => {
       if (platForm.hasDisappeared()) {
         const x = this.getFarfestXCoord();
 
         platForm.moveToRight(x + this.setAjustedGap());
       } else {
-        platForm.moveLeft(this.gameSpeed);
+        platForm.moveLeft(this._gameSpeed);
       }
     });
   }
 
   getPlatformList() {
-    return this.platFormList;
+    return this._platFormList;
   }
 
   getDiamondList() {
-    return this.diamondList;
+    return this._diamondList;
   }
 
   syncDiamonds() {
-    this.diamondList.forEach((diamond) => {
+    this._diamondList.forEach((diamond) => {
       diamond.syncPosition();
     });
   }
