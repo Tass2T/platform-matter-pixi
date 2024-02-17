@@ -22,14 +22,14 @@ export default class Platform extends VisibleObjects {
     this._body.label = "standard";
 
     this._sprite = new PIXI.Graphics();
+    this._sprite.pivot.set(0.5);
     this._sprite.beginFill(0x9900ff);
     this._sprite.drawRect(
       this._body.position.x,
       this._body.position.y,
-      config.platForm.standard.width,
-      config.platForm.standard.height
+      config.platForm[type].width,
+      config.platForm[type].height
     );
-    this._sprite.pivot.set(0.5);
 
     this.prepareDiamond();
   }
