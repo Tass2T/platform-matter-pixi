@@ -1,6 +1,5 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
-import config from "../../../gameConfig.js";
 import Player from "../player";
 import PlatformManager from "../platformManager/index.js";
 

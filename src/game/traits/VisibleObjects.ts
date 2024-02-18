@@ -5,6 +5,8 @@ export default class VisibleObjects {
   _body: MATTER.Body;
   _sprite: PIXI.Graphics;
   _isVisible: boolean = true;
+  _bodyWidth: number;
+  _bodyHeight: number;
   constructor() {}
 
   getBody(): MATTER.Body {
@@ -16,7 +18,8 @@ export default class VisibleObjects {
   }
 
   syncSpriteWithBody(): void {
-    this._sprite.position.set(this._body.position.x, this._body.position.y);
+    this._sprite.position.x = this._body.position.x - this._bodyWidth / 2;
+    this._sprite.position.y = this._body.position.y - this._bodyHeight / 2;
   }
 
   update() {

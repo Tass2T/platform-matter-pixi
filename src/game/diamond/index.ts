@@ -21,15 +21,14 @@ export default class Diamond extends VisibleObjects {
       config.diamond.side,
       { isStatic: true, isSensor: true }
     );
+    this._bodyHeight = config.diamond.side;
+    this._bodyWidth = config.diamond.side;
 
     this._sprite = new PIXI.Graphics();
-    this._sprite.beginFill(0x9900ff);
-    this._sprite.drawRect(
-      this._body.position.x,
-      this._body.position.y,
-      config.diamond.side,
-      config.diamond.side
+    this._sprite.beginFill(
+      "#" + Math.floor(Math.random() * 16777215).toString(16)
     );
+    this._sprite.drawRect(0, 0, config.diamond.side, config.diamond.side);
   }
 
   getPosition(): MATTER.Vector {
@@ -42,6 +41,8 @@ export default class Diamond extends VisibleObjects {
 
   setHasBeenTaken(value: boolean) {
     this._hasBeenTaken = value;
+    if (value) this._sprite.visible = false;
+    else this._sprite.visible = true;
   }
 
   syncPosition(): void {

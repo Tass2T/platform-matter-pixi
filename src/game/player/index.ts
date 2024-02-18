@@ -10,11 +10,14 @@ export default class Player extends VisibleObjects {
     super();
     this._body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50, {
       inertia: -Infinity,
+      mass: config.player.mass,
     });
+    this._bodyHeight = 50;
+    this._bodyWidth = 50;
 
     this._sprite = new PIXI.Graphics();
     this._sprite.beginFill(0x9900ff);
-    this._sprite.drawRect(this._body.position.x, this._body.position.y, 50, 50);
+    this._sprite.drawRect(0, 0, 50, 50);
   }
 
   jump(): void {

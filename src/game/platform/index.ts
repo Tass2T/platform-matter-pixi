@@ -8,11 +8,11 @@ export default class Platform extends VisibleObjects {
   _diamondList: Array<Diamond> = [];
   constructor(type: string, xStart: number, first = false) {
     super();
-    const randomHeight = config.HEIGHT * this.ajustedHeight();
+    const randomHeight = window.innerHeight * this.ajustedHeight();
 
     this._body = MATTER.Bodies.rectangle(
       xStart,
-      first ? config.HEIGHT / 2 : randomHeight,
+      first ? window.innerHeight / 2 : randomHeight,
       config.platForm[type].width,
       config.platForm[type].height,
       {
@@ -20,12 +20,14 @@ export default class Platform extends VisibleObjects {
       }
     );
     this._body.label = "standard";
+    this._bodyHeight = config.platForm[type].height;
+    this._bodyWidth = config.platForm[type].width;
 
     this._sprite = new PIXI.Graphics();
-    this._sprite.beginFill(0x9900ff);
+    this._sprite.beginFill("#964B00");
     this._sprite.drawRect(
-      this._body.position.x,
-      this._body.position.y,
+      0,
+      0,
       config.platForm[type].width,
       config.platForm[type].height
     );
