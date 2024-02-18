@@ -12,7 +12,7 @@ export default class Level {
   _levelContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
-    this.initphysicEngine();
+    this._physicEngine = MATTER.Engine.create();
     this.initMouseListener();
     this._platformManager = new PlatformManager(this._physicEngine);
 
@@ -31,29 +31,6 @@ export default class Level {
       this._levelContainer.addChild(item.getSprite());
     });
     this._levelContainer.addChild(this._player.getSprite());
-  }
-
-  initphysicEngine() {
-    this._physicEngine = MATTER.Engine.create();
-
-    if (Number(import.meta.env.VITE_SHOW_PHYSICAL_RENDERER)) {
-      this._physicRenderer = MATTER.Render.create({
-        element: document.body,
-        engine: this._physicEngine,
-      });
-
-      this._physicRenderer.canvas.height = config.HEIGHT;
-      this._physicRenderer.canvas.width = config.WIDTH;
-
-      // run the renderer
-      MATTER.Render.run(this._physicRenderer);
-    }
-
-    // create runner
-    const runner = MATTER.Runner.create();
-
-    // run the engine
-    MATTER.Runner.run(runner, this._physicEngine);
   }
 
   initMouseListener() {

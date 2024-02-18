@@ -22,7 +22,6 @@ export default class Platform extends VisibleObjects {
     this._body.label = "standard";
 
     this._sprite = new PIXI.Graphics();
-    this._sprite.pivot.set(0.5);
     this._sprite.beginFill(0x9900ff);
     this._sprite.drawRect(
       this._body.position.x,

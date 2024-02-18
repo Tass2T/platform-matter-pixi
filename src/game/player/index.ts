@@ -1,13 +1,13 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
+import VisibleObjects from "../traits/VisibleObjects.js";
 
-export default class Player {
-  _body: MATTER.Body;
-  _sprite: PIXI.Graphics;
+export default class Player extends VisibleObjects {
   _jumpCount: number = config.player.jumpNumber;
 
   constructor() {
+    super();
     this._body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50, {
       inertia: -Infinity,
     });
@@ -15,10 +15,6 @@ export default class Player {
     this._sprite = new PIXI.Graphics();
     this._sprite.beginFill(0x9900ff);
     this._sprite.drawRect(this._body.position.x, this._body.position.y, 50, 50);
-  }
-
-  getBody(): MATTER.Body {
-    return this._body;
   }
 
   jump(): void {
@@ -37,18 +33,5 @@ export default class Player {
 
   hasFallen(): boolean {
     return this._body.position.y >= config.HEIGHT;
-  }
-
-  syncBodyAndSprite() {
-    this._sprite.position.x = this._body.position.x;
-    this._sprite.position.y = this._body.position.y;
-  }
-
-  getSprite() {
-    return this._sprite;
-  }
-
-  update(): void {
-    this.syncBodyAndSprite();
   }
 }
