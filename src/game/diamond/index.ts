@@ -25,9 +25,7 @@ export default class Diamond extends VisibleObjects {
     this._bodyWidth = config.diamond.side;
 
     this._sprite = new PIXI.Graphics();
-    this._sprite.beginFill(
-      "#" + Math.floor(Math.random() * 16777215).toString(16)
-    );
+    this._sprite.beginFill(0xff33ee);
     this._sprite.drawRect(0, 0, config.diamond.side, config.diamond.side);
   }
 
