@@ -5,19 +5,44 @@ import VisibleObjects from "../traits/VisibleObjects.js";
 
 export default class Player extends VisibleObjects {
   _jumpCount: number = config.player.jumpNumber;
+  _playerSpritesheet: PIXI.Spritesheet;
 
-  constructor() {
+  constructor(
+    physicEngineWorld: MATTER.World,
+    parentContainer: PIXI.Container
+  ) {
     super();
-    this._body = MATTER.Bodies.rectangle(config.player.xAxisStart, 0, 50, 50, {
-      inertia: -Infinity,
-      mass: config.player.mass,
-    });
+    this._body = MATTER.Bodies.rectangle(
+      config.player.xAxisStart,
+      config.HEIGHT / 2,
+      50,
+      50,
+      {
+        inertia: -Infinity,
+        mass: config.player.mass,
+      }
+    );
     this._bodyHeight = 50;
     this._bodyWidth = 50;
+    MATTER.Composite.add(physicEngineWorld, this._body);
 
-    this._sprite = new PIXI.Graphics();
-    this._sprite.beginFill(0x9900ff);
-    this._sprite.drawRect(0, 0, 50, 50);
+    this.initSprite(parentContainer);
+  }
+
+  async initSprite(parentContainer: PIXI.Container) {
+    this._playerSpritesheet = await PIXI.Assets.load(
+      "playerSpritesheetMap.json"
+    );
+
+    this._isLoading = false;
+
+    this._sprite = new PIXI.AnimatedSprite(
+      this._playerSpritesheet.animations["run"]
+    );
+    this._sprite.animationSpeed = 0.1;
+    this._sprite.play();
+
+    parentContainer.addChild(this._sprite);
   }
 
   jump(): void {

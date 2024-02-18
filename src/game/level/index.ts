@@ -15,9 +15,7 @@ export default class Level {
     this.initMouseListener();
     this._platformManager = new PlatformManager(this._physicEngine);
 
-    this._player = new Player();
-
-    MATTER.Composite.add(this._physicEngine.world, [this._player.getBody()]);
+    this._player = new Player(this._physicEngine.world, this._levelContainer);
     this.addAllItems();
   }
 
@@ -29,7 +27,6 @@ export default class Level {
     this._platformManager.getAllObjects().forEach((item) => {
       this._levelContainer.addChild(item.getSprite());
     });
-    this._levelContainer.addChild(this._player.getSprite());
   }
 
   initMouseListener() {

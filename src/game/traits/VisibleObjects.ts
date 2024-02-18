@@ -3,17 +3,18 @@ import * as PIXI from "pixi.js";
 
 export default class VisibleObjects {
   _body: MATTER.Body;
-  _sprite: PIXI.Graphics;
+  _sprite: PIXI.Graphics | PIXI.AnimatedSprite;
   _isVisible: boolean = true;
   _bodyWidth: number;
   _bodyHeight: number;
+  _isLoading: boolean = true;
   constructor() {}
 
   getBody(): MATTER.Body {
     return this._body;
   }
 
-  getSprite(): PIXI.Graphics {
+  getSprite(): PIXI.Graphics | PIXI.AnimatedSprite {
     return this._sprite;
   }
 
@@ -23,6 +24,6 @@ export default class VisibleObjects {
   }
 
   update() {
-    this.syncSpriteWithBody();
+    if (this._sprite && this._body) this.syncSpriteWithBody();
   }
 }

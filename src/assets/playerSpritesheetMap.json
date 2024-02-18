@@ -48,6 +48,6 @@
     "image": "playerSpritesheet.png",
     "format": "RGBA8888",
     "size": { "w": 600, "h": 150 },
-    "scale": "1"
+    "scale": "2"
   }
 }
