@@ -1,0 +1,53 @@
+{
+  "frames": {
+    "run-one": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "run-two": {
+      "frame": {
+        "x": 150,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "run-three": {
+      "frame": {
+        "x": 300,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "run-four": {
+      "frame": {
+        "x": 450,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    }
+  },
+  "animations": {
+    "run": ["run-one", "run-two", "run-three", "run-four"]
+  },
+  "meta": {
+    "image": "playerSpritesheet.png",
+    "format": "RGBA8888",
+    "size": { "w": 600, "h": 150 },
+    "scale": "1"
+  }
+}
