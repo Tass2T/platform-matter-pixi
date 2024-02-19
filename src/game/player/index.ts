@@ -19,7 +19,6 @@ export default class Player extends VisibleObjects {
       50,
       {
         inertia: -Infinity,
-        mass: config.player.mass,
       }
     );
     this._bodyHeight = 50;
@@ -58,6 +57,6 @@ export default class Player extends VisibleObjects {
   }
 
   hasFallen(): boolean {
-    return this._body.position.y >= config.HEIGHT;
+    return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
   }
 }

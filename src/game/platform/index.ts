@@ -38,8 +38,8 @@ export default class Platform extends VisibleObjects {
   ajustedHeight(): number {
     let randomNumber = Math.random();
 
-    if (randomNumber <= 0.2) randomNumber += 0.2;
-    if (randomNumber >= 0.8) randomNumber -= 0.2;
+    if (randomNumber <= 0.2) randomNumber += 0.3;
+    if (randomNumber >= 0.7) randomNumber -= 0.4;
     return randomNumber;
   }
 
