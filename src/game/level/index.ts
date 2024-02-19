@@ -21,6 +21,7 @@ export default class Level {
     this._levelContainer.addChild(sprite);
 
     this._physicEngine = MATTER.Engine.create();
+    this._physicEngine.gravity.scale = 0.003;
     this.initMouseListener();
     this._platformManager = new PlatformManager(this._physicEngine);
 
