@@ -5,7 +5,7 @@ export default {
   player: {
     xAxisStart: 150,
     jumpNumber: 2,
-    jumpSpeed: 14,
+    jumpSpeed: 20,
     mass: 2,
   },
   platForm: {

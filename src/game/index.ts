@@ -10,10 +10,13 @@ export default class Game {
     this.#pixiApp = new PIXI.Application({
       height: config.HEIGHT,
       width: config.WIDTH,
-      background: "#aabbff",
     });
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
-    initAssetsBundles();
+    this.initGame();
+  }
+
+  async initGame() {
+    await initAssetsBundles();
     this._level = new Level();
     this.#pixiApp.stage.addChild(this._level.getLevelContainer());
     this.#pixiApp.ticker.maxFPS = 60;
