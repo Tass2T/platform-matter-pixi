@@ -11,6 +11,15 @@ export default class Level {
   _levelContainer: PIXI.Container = new PIXI.Container();
 
   constructor() {
+    this.initLevel();
+  }
+
+  async initLevel() {
+    const texture = await PIXI.Assets.load("backdrop");
+    const sprite = new PIXI.Sprite(texture);
+
+    this._levelContainer.addChild(sprite);
+
     this._physicEngine = MATTER.Engine.create();
     this.initMouseListener();
     this._platformManager = new PlatformManager(this._physicEngine);
@@ -62,12 +71,14 @@ export default class Level {
   }
 
   update() {
-    MATTER.Engine.update(this._physicEngine);
-    this._player.update();
-    this.checkIfPlayerFell();
-    this.checkForCollisionWithDiamond();
-    this.checkForCollisionWithPlatform();
-    this._platformManager.update();
+    if (this._physicEngine) {
+      MATTER.Engine.update(this._physicEngine);
+      this._player.update();
+      this.checkIfPlayerFell();
+      this.checkForCollisionWithDiamond();
+      this.checkForCollisionWithPlatform();
+      this._platformManager.update();
+    }
   }
 
   destroy() {

@@ -30,9 +30,7 @@ export default class Player extends VisibleObjects {
   }
 
   async initSprite(parentContainer: PIXI.Container) {
-    this._playerSpritesheet = await PIXI.Assets.load(
-      "player/playerSpritesheetMap.json"
-    );
+    this._playerSpritesheet = await PIXI.Assets.load("player");
 
     this._isLoading = false;
 

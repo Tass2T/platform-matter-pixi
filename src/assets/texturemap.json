@@ -1,5 +1,14 @@
 {
-  "landscape": {
-    "background": "background/fond.png"
-  }
+  "bundles": [
+    {
+      "name": "level",
+      "assets": [
+        { "name": "backdrop", "srcs": "background/fond.png" },
+        {
+          "name": "player",
+          "srcs": "player/playerSpritesheetMap.json"
+        }
+      ]
+    }
+  ]
 }
