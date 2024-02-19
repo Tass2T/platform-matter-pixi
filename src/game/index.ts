@@ -1,6 +1,7 @@
 import Level from "./level";
 import * as PIXI from "pixi.js";
 import config from "../../gameConfig.js";
+import { initAssetsBundles } from "../utils/loaderUtils.js";
 
 export default class Game {
   #pixiApp: PIXI.Application;
@@ -12,6 +13,7 @@ export default class Game {
       background: "#aabbff",
     });
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
+    initAssetsBundles();
     this._level = new Level();
     this.#pixiApp.stage.addChild(this._level.getLevelContainer());
     this.#pixiApp.ticker.maxFPS = 60;
