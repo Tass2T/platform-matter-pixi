@@ -15,14 +15,14 @@ export default class Player extends VisibleObjects {
     this._body = MATTER.Bodies.rectangle(
       config.player.xAxisStart,
       config.HEIGHT / 2,
-      50,
+      75,
       50,
       {
         inertia: -Infinity,
       }
     );
-    this._bodyHeight = 50;
-    this._bodyWidth = 50;
+    this._bodyHeight = 75;
+    this._bodyWidth = 75;
     MATTER.Composite.add(physicEngineWorld, this._body);
 
     this.initSprite(parentContainer);
