@@ -22,7 +22,7 @@ export default class Player extends VisibleObjects {
       }
     );
     this._bodyHeight = 75;
-    this._bodyWidth = 75;
+    this._bodyWidth = 50;
     MATTER.Composite.add(physicEngineWorld, this._body);
 
     this.initSprite(parentContainer);
