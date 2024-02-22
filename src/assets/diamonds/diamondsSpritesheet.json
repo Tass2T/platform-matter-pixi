@@ -1,0 +1,94 @@
+{
+  "frames": {
+    "idle-one": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "idle-two": {
+      "frame": {
+        "x": 150,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "idle-three": {
+      "frame": {
+        "x": 300,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "idle-four": {
+      "frame": {
+        "x": 450,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "taken-one": {
+      "frame": {
+        "x": 0,
+        "y": 150,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "taken-two": {
+      "frame": {
+        "x": 150,
+        "y": 150,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "taken-three": {
+      "frame": {
+        "x": 300,
+        "y": 150,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    },
+    "taken-four": {
+      "frame": {
+        "x": 450,
+        "y": 150,
+        "w": 150,
+        "h": 150
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
+      "sourceSize": { "w": 150, "h": 150 }
+    }
+  },
+  "animations": {
+    "idle": ["idle-one", "idle-two", "idle-three", "idle-four"],
+    "taken": ["taken-one", "taken-two", "taken-three", "taken-four"]
+  },
+  "meta": {
+    "image": "diamondsSpritesheet.png",
+    "format": "RGBA8888",
+    "size": { "w": 600, "h": 300 },
+    "scale": "2"
+  }
+}

@@ -36,8 +36,8 @@ export default class Player extends VisibleObjects {
     this._sprite = new PIXI.AnimatedSprite(
       this._playerSpritesheet.animations["run"]
     );
-    this._sprite.animationSpeed = 0.2;
-    this._sprite.play();
+
+    this.animateSprite();
 
     parentContainer.addChild(this._sprite);
   }

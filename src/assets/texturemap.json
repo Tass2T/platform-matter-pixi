@@ -7,7 +7,12 @@
         {
           "name": "player",
           "srcs": "player/playerSpritesheetMap.json"
-        }
+        },
+        {
+          "name": "platform",
+          "srcs": "platform/platform.png"
+        },
+        { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" }
       ]
     }
   ]

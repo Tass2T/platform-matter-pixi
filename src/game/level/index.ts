@@ -23,20 +23,16 @@ export default class Level {
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = 0.003;
     this.initMouseListener();
-    this._platformManager = new PlatformManager(this._physicEngine);
+    this._platformManager = new PlatformManager(
+      this._physicEngine,
+      this._levelContainer
+    );
 
     this._player = new Player(this._physicEngine.world, this._levelContainer);
-    this.addAllItems();
   }
 
   getLevelContainer(): PIXI.Container {
     return this._levelContainer;
-  }
-
-  addAllItems() {
-    this._platformManager.getAllObjects().forEach((item) => {
-      this._levelContainer.addChild(item.getSprite());
-    });
   }
 
   initMouseListener() {
@@ -55,15 +51,17 @@ export default class Level {
   }
 
   checkForCollisionWithDiamond() {
-    this._platformManager.getDiamondList().forEach((diamond) => {
-      const collision = MATTER.Collision.collides(
-        this._player.getBody(),
-        diamond.getBody()
-      );
-      if (collision?.collided && !diamond.getHasBeenTaken()) {
-        diamond.setHasBeenTaken(true);
-        this._platformManager.increaseGamespeed();
-      }
+    this._platformManager.getPlatformList().forEach((platForm) => {
+      platForm.getDiamondList().forEach((diamond) => {
+        const collision = MATTER.Collision.collides(
+          this._player.getBody(),
+          diamond.getBody()
+        );
+        if (collision?.collided && !diamond.getHasBeenTaken()) {
+          diamond.setHasBeenTaken(true);
+          this._platformManager.increaseGamespeed();
+        }
+      });
     });
   }
 

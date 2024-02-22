@@ -1,4 +1,5 @@
 import * as MATTER from "matter-js";
+import * as PIXI from "pixi.js";
 import config from "../../../gameConfig.js";
 import Platform from "../platform/index.js";
 import Diamond from "../diamond/index.js";
@@ -8,10 +9,10 @@ export default class PlatformManager {
   _platFormList: Array<Platform> = [];
   _diamondList: Array<Diamond> = [];
   _gameSpeed: number = config.SPEED;
-  constructor(engineWorld: MATTER.Engine) {
+  constructor(engineWorld: MATTER.Engine, parentContainer: PIXI.Container) {
     this._engine = engineWorld;
-    this.createInitialPlatForms();
-    this.createAdditionnalPlatforms();
+    this.createInitialPlatForms(parentContainer);
+    this.createAdditionnalPlatforms(parentContainer);
     this.registerPlatformAndDiamonds();
   }
 
@@ -27,18 +28,24 @@ export default class PlatformManager {
     this._gameSpeed += 0.1;
   }
 
-  createInitialPlatForms() {
-    const ground = new Platform("standard", config.platForm.start, true);
+  createInitialPlatForms(levelContainer: PIXI.Container) {
+    const ground = new Platform(
+      "standard",
+      config.platForm.start,
+      levelContainer,
+      true
+    );
     this._diamondList.push(...ground.getDiamondList());
     this._platFormList.push(ground);
   }
 
-  createAdditionnalPlatforms() {
+  createAdditionnalPlatforms(levelContainer: PIXI.Container) {
     for (let i = 1; i <= 5; i++) {
       const platForm = new Platform(
         "standard",
         this._platFormList[this._platFormList.length - 1].getRightCoord() +
-          this.setAjustedGap()
+          this.setAjustedGap(),
+        levelContainer
       );
       this._platFormList.push(platForm);
       this._diamondList.push(...platForm.getDiamondList());
@@ -94,12 +101,6 @@ export default class PlatformManager {
     return this._diamondList;
   }
 
-  syncDiamonds() {
-    this._diamondList.forEach((diamond) => {
-      diamond.update();
-    });
-  }
-
   syncPlatforms() {
     this._platFormList.forEach((platform) => {
       platform.update();
@@ -109,6 +110,5 @@ export default class PlatformManager {
   update() {
     this.movePlatforms();
     this.syncPlatforms();
-    this.syncDiamonds();
   }
 }

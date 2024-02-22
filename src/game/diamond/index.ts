@@ -7,7 +7,12 @@ export default class Diamond extends VisibleObjects {
   _parentPos: MATTER.Vector;
   _orderIndex: number;
   _hasBeenTaken: boolean;
-  constructor(platFormPos: MATTER.Vector, pos: number) {
+  _spritesheet: PIXI.Spritesheet;
+  constructor(
+    levelContainer: PIXI.Container,
+    platFormPos: MATTER.Vector,
+    pos: number
+  ) {
     super();
     this._parentPos = platFormPos;
     this._orderIndex = pos;
@@ -24,9 +29,21 @@ export default class Diamond extends VisibleObjects {
     this._bodyHeight = config.diamond.side;
     this._bodyWidth = config.diamond.side;
 
-    this._sprite = new PIXI.Graphics();
-    this._sprite.beginFill(0xff33ee);
-    this._sprite.drawRect(0, 0, config.diamond.side, config.diamond.side);
+    this.initAssets(levelContainer);
+  }
+
+  async initAssets(levelContainer: PIXI.Container) {
+    this._spritesheet = await PIXI.Assets.load("diamonds");
+
+    this._sprite = new PIXI.AnimatedSprite(
+      this._spritesheet.animations["idle"]
+    );
+    this._sprite.width = this._bodyWidth;
+    this._sprite.height = this._bodyHeight;
+
+    this.animateSprite(0.08);
+
+    levelContainer.addChild(this._sprite);
   }
 
   getPosition(): MATTER.Vector {
@@ -38,9 +55,14 @@ export default class Diamond extends VisibleObjects {
   }
 
   setHasBeenTaken(value: boolean) {
-    this._hasBeenTaken = value;
-    if (value) this._sprite.visible = false;
-    else this._sprite.visible = true;
+    if (this._sprite) {
+      this._hasBeenTaken = value;
+      if (value) {
+        this._sprite.visible = false;
+      } else {
+        this._sprite.visible = true;
+      }
+    }
   }
 
   syncPosition(): void {

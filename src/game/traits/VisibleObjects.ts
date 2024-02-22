@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 
 export default class VisibleObjects {
   _body: MATTER.Body;
-  _sprite: PIXI.Graphics | PIXI.AnimatedSprite;
+  _sprite: PIXI.AnimatedSprite | PIXI.Sprite;
   _isVisible: boolean = true;
   _bodyWidth: number;
   _bodyHeight: number;
@@ -14,13 +14,22 @@ export default class VisibleObjects {
     return this._body;
   }
 
-  getSprite(): PIXI.Graphics | PIXI.AnimatedSprite {
+  getSprite(): PIXI.AnimatedSprite | PIXI.Sprite {
     return this._sprite;
   }
 
   syncSpriteWithBody(): void {
-    this._sprite.position.x = this._body.position.x - this._bodyWidth / 2;
-    this._sprite.position.y = this._body.position.y - this._bodyHeight / 2;
+    if (this._sprite && this._body) {
+      this._sprite.position.x = this._body.position.x - this._bodyWidth / 2;
+      this._sprite.position.y = this._body.position.y - this._bodyHeight / 2;
+    }
+  }
+
+  animateSprite(customSpeed: number = 0): void {
+    if (this._sprite instanceof PIXI.AnimatedSprite) {
+      this._sprite.animationSpeed = customSpeed || 0.2;
+      this._sprite.play();
+    }
   }
 
   update() {
