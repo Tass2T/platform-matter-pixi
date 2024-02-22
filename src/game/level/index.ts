@@ -36,7 +36,13 @@ export default class Level {
   }
 
   initMouseListener() {
-    window.addEventListener("pointerdown", () => this._player.jump());
+    window.addEventListener("keydown", (e) => this.makePlayerJump(e));
+  }
+
+  makePlayerJump(e: KeyboardEvent) {
+    if (e.repeat) return;
+
+    if (e.code === "Space") this._player.jump();
   }
 
   checkForCollisionWithPlatform() {
@@ -81,6 +87,6 @@ export default class Level {
   }
 
   destroy() {
-    window.removeEventListener("pointerdown", () => this._player.jump());
+    window.removeEventListener("keydown", () => this._player.jump());
   }
 }
