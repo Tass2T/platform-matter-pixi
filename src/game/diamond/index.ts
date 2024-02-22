@@ -57,10 +57,19 @@ export default class Diamond extends VisibleObjects {
   setHasBeenTaken(value: boolean) {
     if (this._sprite) {
       this._hasBeenTaken = value;
-      if (value) {
-        this._sprite.visible = false;
+      if (this._hasBeenTaken) {
+        this._sprite.textures = this._spritesheet.animations["taken"];
+        this._sprite.animationSpeed = 0.3;
+        this._sprite.loop = false;
+        this._sprite.onComplete = () => (this._sprite.visible = false);
+
+        this._sprite.gotoAndPlay(0);
       } else {
         this._sprite.visible = true;
+        this._sprite.loop = true;
+        this._sprite.textures = this._spritesheet.animations["idle"];
+        this._sprite.animationspeed = 0.08;
+        this._sprite.gotoAndPlay(0);
       }
     }
   }
