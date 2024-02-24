@@ -13,11 +13,11 @@ export default class Platform extends VisibleObjects {
     first = false
   ) {
     super();
-    const randomHeight = window.innerHeight * this.ajustedHeight();
+    const randomHeight = config.HEIGHT * this.ajustedHeight();
 
     this._body = MATTER.Bodies.rectangle(
       xStart,
-      first ? window.innerHeight / 2 : randomHeight,
+      first ? config.HEIGHT / 2 : randomHeight,
       config.platForm[type].width,
       config.platForm[type].height,
       {

@@ -14,7 +14,7 @@ export default class Player extends VisibleObjects {
     super();
     this._body = MATTER.Bodies.rectangle(
       config.player.xAxisStart,
-      config.HEIGHT / 2,
+      config.HEIGHT / 3,
       75,
       40,
       {
