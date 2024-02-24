@@ -34,7 +34,7 @@ export default class Level {
 
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = 0.003;
-    this.initMouseListener();
+    this.initKeyListener();
     this._platformManager = new PlatformManager(
       this._physicEngine,
       this._gameContainer
@@ -84,14 +84,19 @@ export default class Level {
     return this._levelContainer;
   }
 
-  initMouseListener() {
+  initKeyListener() {
     window.addEventListener("keydown", (e) => this.makePlayerJump(e));
+    window.addEventListener("keyup", (e) => this.stopPlayerJump(e));
   }
 
   makePlayerJump(e: KeyboardEvent) {
     if (e.repeat) return;
 
-    if (e.code === "Space") this._player.jump();
+    if (e.code === "Space") this._player.addVelocity();
+  }
+
+  stopPlayerJump(e: KeyboardEvent) {
+    if (e.code === "Space") this._player.stopVelocity();
   }
 
   checkForCollisionWithPlatform() {
@@ -137,6 +142,7 @@ export default class Level {
   }
 
   destroy() {
-    window.removeEventListener("keydown", () => this._player.jump());
+    window.removeEventListener("keydown", (e) => this._player.addVelocity(e));
+    window.removeEventListener("keyup", (e) => this.stopPlayerJump(e));
   }
 }

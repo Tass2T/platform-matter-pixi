@@ -6,6 +6,8 @@ import VisibleObjects from "../traits/VisibleObjects.js";
 export default class Player extends VisibleObjects {
   _jumpCount: number = config.player.jumpNumber;
   _playerSpritesheet: PIXI.Spritesheet;
+  _velocity: number = config.baseJumpSpeed;
+  _interval: number;
 
   constructor(
     physicEngineWorld: MATTER.World,
@@ -44,18 +46,27 @@ export default class Player extends VisibleObjects {
     parentContainer.addChild(this._sprite);
   }
 
-  jump(): void {
-    if (this._jumpCount > 0) {
-      MATTER.Body.setVelocity(this._body, {
-        x: 0,
-        y: -config.player.jumpSpeed,
-      });
-      this._jumpCount--;
-    }
+  addVelocity(): void {
+    this._interval = setInterval(() => {
+      if (this._velocity > 0) {
+        MATTER.Body.setVelocity(this._body, {
+          x: 0,
+          y: -config.player.baseJumpSpeed,
+        });
+        this._velocity -= 0.5;
+        if (this._velocity < 0) this._velocity = 0;
+      }
+    }, 0);
+  }
+
+  stopVelocity(): void {
+    clearInterval(this._interval);
+    this._interval = 0;
+    this._velocity = 0;
   }
 
   resetJump(): void {
-    this._jumpCount = config.player.jumpNumber;
+    if (!this._interval) this._velocity = config.player.baseJumpSpeed;
   }
 
   hasFallen(): boolean {
