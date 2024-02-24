@@ -1,0 +1,80 @@
+{
+  "frames": {
+    "glitter-one": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    },
+    "glitter-two": {
+      "frame": {
+        "x": 0,
+        "y": 500,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    },
+    "glitter-three": {
+      "frame": {
+        "x": 0,
+        "y": 1000,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    },
+    "glitter-four": {
+      "frame": {
+        "x": 0,
+        "y": 1500,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    },
+    "glitter-five": {
+      "frame": {
+        "x": 0,
+        "y": 2000,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    },
+    "glitter-six": {
+      "frame": {
+        "x": 0,
+        "y": 2500,
+        "w": 1100,
+        "h": 500
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1100, "h": 500 },
+      "sourceSize": { "w": 1100, "h": 500 }
+    }
+  },
+  "animations": {
+    "glitter": [
+      "glitter-one",
+      "glitter-two",
+      "glitter-three",
+      "glitter-four",
+      "glitter-five",
+      "glitter-six"
+    ]
+  },
+  "meta": {
+    "image": "merspritesheet.png",
+    "format": "RGBA8888",
+    "size": { "w": 1100, "h": 3000 },
+    "scale": "1"
+  }
+}

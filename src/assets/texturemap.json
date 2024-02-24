@@ -5,6 +5,10 @@
       "assets": [
         { "name": "backdrop", "srcs": "background/fond.png" },
         {
+          "name": "seaProp",
+          "srcs": "background/seaSpritesheet.json"
+        },
+        {
           "name": "player",
           "srcs": "player/playerSpritesheetMap.json"
         },
@@ -12,7 +16,11 @@
           "name": "platform",
           "srcs": "platform/platform.png"
         },
-        { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" }
+        { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" },
+        {
+          "name": "props1",
+          "srcs": "background/props/1.png"
+        }
       ]
     }
   ]

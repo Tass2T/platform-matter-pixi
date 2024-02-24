@@ -2,6 +2,7 @@ import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
 import Player from "../player";
 import PlatformManager from "../platformManager/index.js";
+import config from "../../../gameConfig.js";
 
 export default class Level {
   _physicEngine: MATTER.Engine;
@@ -9,26 +10,67 @@ export default class Level {
   _player: Player;
   _platformManager: PlatformManager;
   _levelContainer: PIXI.Container = new PIXI.Container();
+  _backgroundContainer: PIXI.Container = new PIXI.Container();
+  _propsContainer: PIXI.Container = new PIXI.Container();
+  _gameContainer: PIXI.Container = new PIXI.Container();
+  _propsList: Array<PIXI.Sprite> = [];
 
   constructor() {
     this.initLevel();
   }
 
   async initLevel() {
-    const texture = await PIXI.Assets.load("backdrop");
-    const sprite = new PIXI.Sprite(texture);
+    this._backgroundContainer.zIndex = 1;
+    this._propsContainer.zIndex = 2;
+    this._gameContainer.zIndex = 3;
+    this._levelContainer.addChild(
+      this._backgroundContainer,
+      this._propsContainer,
+      this._gameContainer
+    );
 
-    this._levelContainer.addChild(sprite);
+    this.setBackground();
+    this.setProps();
 
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = 0.003;
     this.initMouseListener();
     this._platformManager = new PlatformManager(
       this._physicEngine,
-      this._levelContainer
+      this._gameContainer
     );
 
-    this._player = new Player(this._physicEngine.world, this._levelContainer);
+    this._player = new Player(this._physicEngine.world, this._gameContainer);
+  }
+
+  async setBackground() {
+    const texture = await PIXI.Assets.load("backdrop");
+    const skySprite = new PIXI.Sprite(texture);
+
+    const seaTextures = await PIXI.Assets.load("seaProp");
+    const seaSprite = new PIXI.AnimatedSprite(
+      seaTextures.animations["glitter"]
+    );
+    seaSprite.anchor.set(0.5, 1);
+    seaSprite.position.set(config.WIDTH / 2, config.HEIGHT * 1.2);
+    seaSprite.animationSpeed = 0.1;
+    seaSprite.play();
+    this._backgroundContainer.addChild(skySprite, seaSprite);
+  }
+
+  async setProps() {
+    const texture = await PIXI.Assets.load("props1");
+    const sprite = new PIXI.Sprite(texture);
+    sprite.x = config.WIDTH / 3;
+    sprite.zIndex = -1;
+    this._propsList.push(sprite);
+    this._propsContainer.addChild(sprite);
+  }
+
+  updateProps() {
+    this._propsList.forEach((prop) => {
+      prop.position.x -= 0.01 * this._platformManager.getGamespeed();
+    });
   }
 
   getLevelContainer(): PIXI.Container {
@@ -83,6 +125,7 @@ export default class Level {
       this.checkForCollisionWithDiamond();
       this.checkForCollisionWithPlatform();
       this._platformManager.update();
+      this.updateProps();
     }
   }
 
