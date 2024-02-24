@@ -7,7 +7,7 @@
         "w": 150,
         "h": 150
       },
-      "spriteSourceSize": { "x": 40, "y": 0, "w": 110, "h": 150 },
+      "spriteSourceSize": { "x": 40, "y": 30, "w": 100, "h": 60 },
       "sourceSize": { "w": 150, "h": 150 }
     },
     "run-two": {
@@ -17,7 +17,7 @@
         "w": 150,
         "h": 150
       },
-      "spriteSourceSize": { "x": 40, "y": 0, "w": 110, "h": 150 },
+      "spriteSourceSize": { "x": 40, "y": 30, "w": 100, "h": 60 },
       "sourceSize": { "w": 150, "h": 150 }
     },
     "run-three": {
@@ -27,7 +27,7 @@
         "w": 150,
         "h": 150
       },
-      "spriteSourceSize": { "x": 40, "y": 0, "w": 110, "h": 150 },
+      "spriteSourceSize": { "x": 40, "y": 30, "w": 100, "h": 60 },
       "sourceSize": { "w": 150, "h": 150 }
     },
     "run-four": {
@@ -37,7 +37,7 @@
         "w": 150,
         "h": 150
       },
-      "spriteSourceSize": { "x": 40, "y": 0, "w": 110, "h": 150 },
+      "spriteSourceSize": { "x": 40, "y": 30, "w": 100, "h": 60 },
       "sourceSize": { "w": 150, "h": 150 }
     }
   },

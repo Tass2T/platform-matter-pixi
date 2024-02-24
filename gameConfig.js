@@ -1,7 +1,7 @@
 export default {
   HEIGHT: 700,
   WIDTH: 1100,
-  SPEED: 6,
+  SPEED: 4,
   player: {
     xAxisStart: 150,
     jumpNumber: 2,

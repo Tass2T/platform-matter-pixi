@@ -15,13 +15,13 @@ export default class Player extends VisibleObjects {
     this._body = MATTER.Bodies.rectangle(
       config.player.xAxisStart,
       config.HEIGHT / 3,
-      75,
       40,
+      60,
       {
         inertia: -Infinity,
       }
     );
-    this._bodyHeight = 75;
+    this._bodyHeight = 60;
     this._bodyWidth = 40;
     MATTER.Composite.add(physicEngineWorld, this._body);
 
@@ -36,6 +36,7 @@ export default class Player extends VisibleObjects {
     this._sprite = new PIXI.AnimatedSprite(
       this._playerSpritesheet.animations["run"]
     );
+    this._sprite.height = this._bodyHeight;
 
     this.animateSprite();
 
