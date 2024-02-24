@@ -59,12 +59,19 @@ export default class Level {
   }
 
   async setProps() {
-    const texture = await PIXI.Assets.load("props1");
-    const sprite = new PIXI.Sprite(texture);
-    sprite.x = config.WIDTH / 3;
-    sprite.zIndex = -1;
-    this._propsList.push(sprite);
-    this._propsContainer.addChild(sprite);
+    const textures = await PIXI.Assets.load(["props2", "props1"]);
+    console.log(textures);
+
+    let index = 0;
+    for (const [key] of Object.entries(textures)) {
+      const sprite = new PIXI.Sprite(textures[key]);
+      sprite.x = config.WIDTH / 3;
+      sprite.anchor.set(0.5, 1);
+      sprite.position.set(index, config.HEIGHT);
+      index = index + config.WIDTH;
+      this._propsList.push(sprite);
+      this._propsContainer.addChild(sprite);
+    }
   }
 
   updateProps() {

@@ -19,6 +19,10 @@
         { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" },
         {
           "name": "props1",
+          "srcs": "background/props/0.png"
+        },
+        {
+          "name": "props2",
           "srcs": "background/props/1.png"
         }
       ]
