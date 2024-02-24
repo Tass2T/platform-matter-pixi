@@ -1,11 +1,12 @@
 export default {
   HEIGHT: 700,
   WIDTH: 1100,
-  SPEED: 4,
+  SPEED: 6,
   player: {
     xAxisStart: 150,
     jumpNumber: 2,
-    jumpSpeed: 20,
+    baseJumpSpeed: 12,
+    velocityLoss: 0.3,
     mass: 2,
   },
   platForm: {
