@@ -40,6 +40,7 @@ export default class Diamond extends VisibleObjects {
     );
     this._sprite.width = this._bodyWidth;
     this._sprite.height = this._bodyHeight;
+    this._sprite.anchor.set(0.5, 0.5);
 
     this.animateSprite(0.08);
 

@@ -20,8 +20,8 @@ export default class VisibleObjects {
 
   syncSpriteWithBody(): void {
     if (this._sprite && this._body) {
-      this._sprite.position.x = this._body.position.x - this._bodyWidth / 2;
-      this._sprite.position.y = this._body.position.y - this._bodyHeight / 2;
+      this._sprite.position.x = this._body.position.x;
+      this._sprite.position.y = this._body.position.y;
     }
   }
 

@@ -16,12 +16,12 @@ export default class Player extends VisibleObjects {
       config.player.xAxisStart,
       config.HEIGHT / 3,
       40,
-      60,
+      70,
       {
         inertia: -Infinity,
       }
     );
-    this._bodyHeight = 60;
+    this._bodyHeight = 70;
     this._bodyWidth = 40;
     MATTER.Composite.add(physicEngineWorld, this._body);
 
@@ -37,6 +37,7 @@ export default class Player extends VisibleObjects {
       this._playerSpritesheet.animations["run"]
     );
     this._sprite.height = this._bodyHeight;
+    this._sprite.anchor.set(0.5, 0.5);
 
     this.animateSprite();
 

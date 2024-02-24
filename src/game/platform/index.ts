@@ -35,6 +35,7 @@ export default class Platform extends VisibleObjects {
     const texture = await PIXI.Assets.load("platform");
 
     this._sprite = new PIXI.Sprite(texture);
+    this._sprite.anchor.set(0.4, 0.15);
     this._sprite.width = this._bodyWidth;
     levelContainer.addChild(this._sprite);
 
