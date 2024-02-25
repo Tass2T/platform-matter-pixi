@@ -12,8 +12,10 @@ export default class Level {
   _levelContainer: PIXI.Container = new PIXI.Container();
   _backgroundContainer: PIXI.Container = new PIXI.Container();
   _propsContainer: PIXI.Container = new PIXI.Container();
+  _frontPropsContainer: PIXI.Container = new PIXI.Container();
   _gameContainer: PIXI.Container = new PIXI.Container();
   _propsList: Array<PIXI.Sprite> = [];
+  _frontPropsList: Array<PIXI.Sprite> = [];
 
   constructor() {
     this.initLevel();
@@ -22,15 +24,18 @@ export default class Level {
   async initLevel() {
     this._backgroundContainer.zIndex = 1;
     this._propsContainer.zIndex = 2;
-    this._gameContainer.zIndex = 3;
+    this._frontPropsContainer.zIndex = 3;
+    this._gameContainer.zIndex = 4;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
+      this._frontPropsContainer,
       this._gameContainer
     );
 
     this.setBackground();
     this.setProps();
+    this.setFrontProps();
 
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = 0.003;
@@ -58,9 +63,8 @@ export default class Level {
     this._backgroundContainer.addChild(skySprite, seaSprite);
   }
 
-  async setProps() {
+  async setProps(): Promise<void> {
     const textures = await PIXI.Assets.load(["props2", "props1"]);
-    console.log(textures);
 
     let index = 0;
     for (const [key] of Object.entries(textures)) {
@@ -74,9 +78,43 @@ export default class Level {
     }
   }
 
+  async setFrontProps(): Promise<void> {
+    const textures = await PIXI.Assets.load(["tree1", "tree2"]);
+
+    let index = 0;
+    const frontPropsWidth = 500;
+    const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 2;
+    const texturesKeys = Object.keys(textures);
+
+    for (let i = 0; i < propsNeeded; i++) {
+      const sprite = new PIXI.Sprite(
+        textures[texturesKeys[Math.floor(Math.random() * texturesKeys.length)]]
+      );
+      sprite.width = frontPropsWidth;
+      sprite.anchor.set(0.5, 0.7);
+      sprite.position.set(index, config.HEIGHT);
+      this._frontPropsList.push(sprite);
+      this._frontPropsContainer.addChild(sprite);
+      index += frontPropsWidth - 100;
+    }
+  }
+
   updateProps() {
     this._propsList.forEach((prop) => {
       prop.position.x -= 0.01 * this._platformManager.getGamespeed();
+    });
+  }
+
+  updateFrontProps() {
+    this._frontPropsList.forEach((prop) => {
+      prop.position.x -= this._platformManager.getGamespeed();
+
+      if (prop.position.x + prop.width / 2 < 0) {
+        // A REVOIR C'EST HORRIBLE
+        prop.position.x =
+          (this._frontPropsList.length - 1) * prop.width -
+          this._frontPropsList.length * 100;
+      }
     });
   }
 
@@ -138,6 +176,7 @@ export default class Level {
       this.checkForCollisionWithPlatform();
       this._platformManager.update();
       this.updateProps();
+      this.updateFrontProps();
     }
   }
 

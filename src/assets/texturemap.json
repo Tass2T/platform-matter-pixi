@@ -24,6 +24,14 @@
         {
           "name": "props2",
           "srcs": "background/props/1.png"
+        },
+        {
+          "name": "tree1",
+          "srcs": "background/frontProps/tree1.png"
+        },
+        {
+          "name": "tree2",
+          "srcs": "background/frontProps/tree2.png"
         }
       ]
     }

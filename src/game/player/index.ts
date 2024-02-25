@@ -53,7 +53,7 @@ export default class Player extends VisibleObjects {
           x: 0,
           y: -config.player.baseJumpSpeed,
         });
-        this._velocity -= 0.5;
+        this._velocity -= config.player.velocityLoss;
         if (this._velocity < 0) this._velocity = 0;
       }
     }, 0);
