@@ -79,7 +79,7 @@ export default class Level {
   }
 
   async setFrontProps(): Promise<void> {
-    const textures = await PIXI.Assets.load(["tree1", "tree2"]);
+    const textures = await PIXI.Assets.load(["tree1", "tree2", "tree3"]);
 
     let index = 0;
     const frontPropsWidth = 500;

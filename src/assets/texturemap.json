@@ -32,6 +32,10 @@
         {
           "name": "tree2",
           "srcs": "background/frontProps/tree2.png"
+        },
+        {
+          "name": "tree3",
+          "srcs": "background/frontProps/tree3.png"
         }
       ]
     }
