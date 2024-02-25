@@ -38,7 +38,7 @@ export default class Level {
     this.setFrontProps();
 
     this._physicEngine = MATTER.Engine.create();
-    this._physicEngine.gravity.scale = 0.003;
+    this._physicEngine.gravity.scale = 0.006;
     this.initKeyListener();
     this._platformManager = new PlatformManager(
       this._physicEngine,
@@ -130,7 +130,7 @@ export default class Level {
   makePlayerJump(e: KeyboardEvent) {
     if (e.repeat) return;
 
-    if (e.code === "Space") this._player.addVelocity();
+    if (e.code === "Space") this._player.setIsJumping(true);
   }
 
   stopPlayerJump(e: KeyboardEvent) {

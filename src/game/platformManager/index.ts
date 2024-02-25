@@ -25,7 +25,7 @@ export default class PlatformManager {
   }
 
   increaseGamespeed() {
-    this._gameSpeed += 0.1;
+    this._gameSpeed += 0.05;
   }
 
   createInitialPlatForms(levelContainer: PIXI.Container) {
@@ -63,7 +63,7 @@ export default class PlatformManager {
   }
 
   setAjustedGap(): number {
-    return config.platForm.gap * (Math.random() * 3) + 1;
+    return config.platForm.gap * (Math.random() * 3) + this._gameSpeed;
   }
 
   setGameSpeed(newValue: number): void {

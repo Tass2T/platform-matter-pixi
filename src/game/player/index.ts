@@ -4,7 +4,7 @@ import config from "../../../gameConfig.js";
 import VisibleObjects from "../traits/VisibleObjects.js";
 
 export default class Player extends VisibleObjects {
-  _jumpCount: number = config.player.jumpNumber;
+  _isJumping: boolean = false;
   _playerSpritesheet: PIXI.Spritesheet;
   _velocity: number = config.baseJumpSpeed;
   _interval: number;
@@ -46,30 +46,41 @@ export default class Player extends VisibleObjects {
     parentContainer.addChild(this._sprite);
   }
 
+  setIsJumping(value: boolean): void {
+    this._isJumping = value;
+  }
+
   addVelocity(): void {
-    this._interval = setInterval(() => {
-      if (this._velocity > 0) {
-        MATTER.Body.setVelocity(this._body, {
-          x: 0,
-          y: -config.player.baseJumpSpeed,
-        });
-        this._velocity -= config.player.velocityLoss;
-        if (this._velocity < 0) this._velocity = 0;
-      }
-    }, 0);
+    if (this._velocity > 0) {
+      MATTER.Body.setVelocity(this._body, {
+        x: 0,
+        y: -config.player.baseJumpSpeed,
+      });
+      this._velocity -= config.player.velocityLoss;
+      if (this._velocity < 0) this._velocity = 0;
+    }
   }
 
   stopVelocity(): void {
-    clearInterval(this._interval);
     this._interval = 0;
     this._velocity = 0;
+    this.setIsJumping(false);
   }
 
   resetJump(): void {
-    if (!this._interval) this._velocity = config.player.baseJumpSpeed;
+    if (this._isJumping) {
+      this._velocity = config.player.baseJumpSpeed;
+    }
   }
 
   hasFallen(): boolean {
     return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
+  }
+
+  update() {
+    if (this._sprite && this._body) {
+      this.syncSpriteWithBody();
+      if (this._isJumping) this.addVelocity();
+    }
   }
 }

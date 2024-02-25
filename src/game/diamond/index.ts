@@ -21,7 +21,9 @@ export default class Diamond extends VisibleObjects {
       platFormPos.x -
         config.platForm.standard.width / 2 +
         (config.diamond.side + config.diamond.gap) * pos,
-      platFormPos.y - config.diamond.height,
+      this._orderIndex % 2 === 0
+        ? platFormPos.y + 10
+        : platFormPos.y - config.diamond.height,
       config.diamond.side,
       config.diamond.side,
       { isStatic: true, isSensor: true }
@@ -81,7 +83,10 @@ export default class Diamond extends VisibleObjects {
         this._parentPos.x -
         config.platForm.standard.width / 2 +
         (config.diamond.side + config.diamond.gap) * this._orderIndex,
-      y: this._parentPos.y - config.diamond.height,
+      y:
+        this._orderIndex % 2 === 0
+          ? this._parentPos.y - config.diamond.height - 15
+          : this._parentPos.y - config.diamond.height,
     });
   }
 

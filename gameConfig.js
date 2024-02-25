@@ -5,8 +5,8 @@ export default {
   player: {
     xAxisStart: 150,
     jumpNumber: 2,
-    baseJumpSpeed: 10,
-    velocityLoss: 0.3,
+    baseJumpSpeed: 12,
+    velocityLoss: 0.4,
     mass: 2,
   },
   platForm: {
