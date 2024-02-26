@@ -13,6 +13,7 @@ export default class Game {
       antialias: false,
       useContextAlpha: false,
     });
+    this.#pixiApp.stage.interactiveChildren = false;
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
     this.initGame();
   }
