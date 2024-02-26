@@ -10,6 +10,8 @@ export default class Game {
     this.#pixiApp = new PIXI.Application({
       height: config.HEIGHT,
       width: config.WIDTH,
+      antialias: false,
+      useContextAlpha: false,
     });
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
     this.initGame();
