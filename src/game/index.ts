@@ -11,8 +11,9 @@ export default class Game {
       height: config.HEIGHT,
       width: config.WIDTH,
       antialias: false,
-      useContextAlpha: false,
+      premultipliedAlpha: false,
     });
+    this.#pixiApp.stage.interactiveChildren = false;
     document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
     this.initGame();
   }

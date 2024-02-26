@@ -22,6 +22,7 @@ export default class Level {
   }
 
   async initLevel() {
+    await PIXI.Assets.loadBundle("level");
     this._backgroundContainer.zIndex = 1;
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
