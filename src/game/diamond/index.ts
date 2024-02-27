@@ -71,7 +71,7 @@ export default class Diamond extends VisibleObjects {
         this._sprite.visible = true;
         this._sprite.loop = true;
         this._sprite.textures = this._spritesheet.animations["idle"];
-        this._sprite.animationspeed = 0.08;
+        this._sprite.animationSpeed = 0.08;
         this._sprite.gotoAndPlay(0);
       }
     }

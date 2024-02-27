@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 
 export default class VisibleObjects {
   _body: MATTER.Body;
-  _sprite: PIXI.AnimatedSprite | PIXI.Sprite;
+  _sprite: PIXI.AnimatedSprite;
   _isVisible: boolean = true;
   _bodyWidth: number;
   _bodyHeight: number;
@@ -14,7 +14,7 @@ export default class VisibleObjects {
     return this._body;
   }
 
-  getSprite(): PIXI.AnimatedSprite | PIXI.Sprite {
+  getSprite(): PIXI.AnimatedSprite {
     return this._sprite;
   }
 
