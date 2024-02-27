@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import Player from "../player";
 import PlatformManager from "../platformManager/index.js";
 import config from "../../../gameConfig.js";
+import ScoreBoard from "../scoreBoard/index.js";
 
 export default class Level {
   _physicEngine: MATTER.Engine;
@@ -14,8 +15,10 @@ export default class Level {
   _propsContainer: PIXI.Container = new PIXI.Container();
   _frontPropsContainer: PIXI.Container = new PIXI.Container();
   _gameContainer: PIXI.Container = new PIXI.Container();
+  _scoreContainer: PIXI.Container = new PIXI.Container();
   _propsList: Array<PIXI.Sprite> = [];
   _frontPropsList: Array<PIXI.Sprite> = [];
+  _scoreBoard: ScoreBoard;
 
   constructor() {
     this.initLevel();
@@ -27,11 +30,13 @@ export default class Level {
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
+    this._scoreContainer.zIndex = 5;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
       this._frontPropsContainer,
-      this._gameContainer
+      this._gameContainer,
+      this._scoreContainer
     );
 
     this.setBackground();
@@ -47,6 +52,7 @@ export default class Level {
     );
 
     this._player = new Player(this._physicEngine.world, this._gameContainer);
+    this._scoreBoard = new ScoreBoard(this._scoreContainer);
   }
 
   async setBackground() {
@@ -158,6 +164,8 @@ export default class Level {
         );
         if (collision?.collided && !diamond.getHasBeenTaken()) {
           diamond.setHasBeenTaken(true);
+          this._scoreBoard.addToScore(config.diamond.points);
+
           this._platformManager.increaseGamespeed();
         }
       });
@@ -178,11 +186,12 @@ export default class Level {
       this._platformManager.update();
       this.updateProps();
       this.updateFrontProps();
+      this._scoreBoard.update();
     }
   }
 
   destroy() {
-    window.removeEventListener("keydown", (e) => this._player.addVelocity(e));
+    window.removeEventListener("keydown", () => this._player.addVelocity());
     window.removeEventListener("keyup", (e) => this.stopPlayerJump(e));
   }
 }

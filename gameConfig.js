@@ -22,5 +22,6 @@ export default {
     height: 50,
     nb: 4,
     gap: 30,
+    points: 500,
   },
 };
