@@ -14,7 +14,7 @@
         },
         {
           "name": "platform",
-          "srcs": "platform/platform.png"
+          "srcs": "platform/platformMap.json"
         },
         { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" },
         {

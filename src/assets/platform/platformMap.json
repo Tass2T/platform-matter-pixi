@@ -1,0 +1,23 @@
+{
+  "frames": {
+    "state1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 134
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 391, "h": 134 },
+      "sourceSize": { "w": 391, "h": 134 }
+    }
+  },
+  "animations": {
+    "move": ["state1"]
+  },
+  "meta": {
+    "image": "platform.png",
+    "format": "RGBA8888",
+    "size": { "w": 391, "h": 134 },
+    "scale": "1"
+  }
+}
