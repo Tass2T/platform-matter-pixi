@@ -8,6 +8,9 @@ export default class Diamond extends VisibleObjects {
   _orderIndex: number;
   _hasBeenTaken: boolean;
   _spritesheet: PIXI.Spritesheet;
+  _scoreText: PIXI.BitmapText;
+  _scoreTextFont: PIXI.BitmapFont;
+  _pointsContainer: PIXI.Container = new PIXI.Container();
   constructor(
     levelContainer: PIXI.Container,
     platFormPos: MATTER.Vector,
@@ -32,6 +35,7 @@ export default class Diamond extends VisibleObjects {
     this._bodyWidth = config.diamond.side;
 
     this.initAssets(levelContainer);
+    this.initScoreContainer();
   }
 
   async initAssets(levelContainer: PIXI.Container) {
@@ -47,6 +51,23 @@ export default class Diamond extends VisibleObjects {
     this.animateSprite(0.08);
 
     levelContainer.addChild(this._sprite);
+    this._sprite.addChild(this._pointsContainer);
+  }
+
+  initScoreContainer() {
+    this._scoreTextFont = PIXI.BitmapFont.from("scoreFont", {
+      fontFamily: "Arial",
+      fontSize: 45,
+      strokeThickness: 3,
+      fill: "#972296",
+    });
+
+    this._scoreText = new PIXI.BitmapText(`${config.diamond.points} !!`, {
+      fontName: "scoreFont",
+    });
+    this._pointsContainer.position.set(-70, 0);
+    this._pointsContainer.visible = false;
+    this._pointsContainer.addChild(this._scoreText);
   }
 
   getPosition(): MATTER.Vector {
@@ -67,12 +88,15 @@ export default class Diamond extends VisibleObjects {
         this._sprite.onComplete = () => (this._sprite.visible = false);
 
         this._sprite.gotoAndPlay(0);
+        this._pointsContainer.visible = true;
       } else {
         this._sprite.visible = true;
         this._sprite.loop = true;
         this._sprite.textures = this._spritesheet.animations["idle"];
         this._sprite.animationSpeed = 0.08;
         this._sprite.gotoAndPlay(0);
+        this._pointsContainer.position.y = 0;
+        this._pointsContainer.visible = false;
       }
     }
   }
@@ -90,8 +114,15 @@ export default class Diamond extends VisibleObjects {
     });
   }
 
+  syncScorePosition() {
+    if (this._hasBeenTaken) {
+      this._pointsContainer.position.y -= 5;
+    }
+  }
+
   update(): void {
     this.syncPosition();
     this.syncSpriteWithBody();
+    this.syncScorePosition();
   }
 }
