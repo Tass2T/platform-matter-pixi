@@ -4,6 +4,7 @@ import Player from "../player";
 import PlatformManager from "../platformManager/index.js";
 import config from "../../../gameConfig.js";
 import ScoreBoard from "../scoreBoard/index.js";
+import GameOverScreen from "../gameOver/index.js";
 
 export default class Level {
   _physicEngine: MATTER.Engine;
@@ -16,9 +17,12 @@ export default class Level {
   _frontPropsContainer: PIXI.Container = new PIXI.Container();
   _gameContainer: PIXI.Container = new PIXI.Container();
   _scoreContainer: PIXI.Container = new PIXI.Container();
+  _gameOverContainer: PIXI.Container = new PIXI.Container();
   _propsList: Array<PIXI.Sprite> = [];
   _frontPropsList: Array<PIXI.Sprite> = [];
   _scoreBoard: ScoreBoard;
+  _gameState: "Game" | "GameOver" = "Game";
+  _gameOverScreen: GameOverScreen;
 
   constructor() {
     this.initLevel();
@@ -31,14 +35,17 @@ export default class Level {
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
     this._scoreContainer.zIndex = 5;
+    this._gameOverContainer.zIndex = 6;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
       this._frontPropsContainer,
       this._gameContainer,
-      this._scoreContainer
+      this._scoreContainer,
+      this._gameOverContainer
     );
 
+    this.prepareGameOver();
     this.setBackground();
     this.setProps();
     this.setFrontProps();
@@ -155,6 +162,10 @@ export default class Level {
     });
   }
 
+  prepareGameOver() {
+    this._gameOverScreen = new GameOverScreen(this._gameOverContainer);
+  }
+
   checkForCollisionWithDiamond() {
     this._platformManager.getPlatformList().forEach((platForm) => {
       platForm.getDiamondList().forEach((diamond) => {
@@ -173,20 +184,26 @@ export default class Level {
   }
 
   checkIfPlayerFell(): void {
-    if (this._player.hasFallen()) this._platformManager.setGameSpeed(0);
+    if (this._player.hasFallen()) {
+      this._platformManager.setGameSpeed(0);
+      this._gameState = "GameOver";
+      this._gameOverScreen.appear();
+    }
   }
 
   update() {
     if (this._physicEngine) {
       MATTER.Engine.update(this._physicEngine);
-      this._player.update();
-      this.checkIfPlayerFell();
-      this.checkForCollisionWithDiamond();
-      this.checkForCollisionWithPlatform();
-      this._platformManager.update();
-      this.updateProps();
-      this.updateFrontProps();
-      this._scoreBoard.update();
+      if (this._gameState === "Game") {
+        this._player.update();
+        this.checkForCollisionWithDiamond();
+        this.checkForCollisionWithPlatform();
+        this._platformManager.update();
+        this.updateProps();
+        this.updateFrontProps();
+        this._scoreBoard.update();
+        this.checkIfPlayerFell();
+      }
     }
   }
 

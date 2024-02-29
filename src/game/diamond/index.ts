@@ -62,7 +62,7 @@ export default class Diamond extends VisibleObjects {
       fill: "#972296",
     });
 
-    this._scoreText = new PIXI.BitmapText(`${config.diamond.points} !!`, {
+    this._scoreText = new PIXI.BitmapText(`${config.diamond.points}`, {
       fontName: "scoreFont",
     });
     this._pointsContainer.position.set(-70, 0);
