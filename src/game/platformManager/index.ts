@@ -25,7 +25,7 @@ export default class PlatformManager {
   }
 
   increaseGamespeed() {
-    this._gameSpeed += 0.05;
+    if (this._gameSpeed < config.MAXSPEED) this._gameSpeed += 0.05;
   }
 
   createInitialPlatForms(levelContainer: PIXI.Container) {
