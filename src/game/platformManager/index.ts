@@ -81,14 +81,14 @@ export default class PlatformManager {
     return result;
   }
 
-  movePlatforms(): void {
+  movePlatforms(delta: number): void {
     this._platFormList.forEach((platForm) => {
       if (platForm.hasDisappeared()) {
         const x = this.getFarfestXCoord();
 
         platForm.moveToRight(x + this.setAjustedGap());
       } else {
-        platForm.moveLeft(this._gameSpeed);
+        platForm.moveLeft(this._gameSpeed * delta);
       }
     });
   }
@@ -107,8 +107,8 @@ export default class PlatformManager {
     });
   }
 
-  update() {
-    this.movePlatforms();
+  update(delta: number) {
+    this.movePlatforms(delta);
     this.syncPlatforms();
   }
 }

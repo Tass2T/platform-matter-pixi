@@ -29,6 +29,6 @@ export default class Game {
   }
 
   update(delta: number) {
-    this._level.update();
+    this._level.update(delta);
   }
 }
