@@ -13,11 +13,10 @@ export default class Platform extends VisibleObjects {
     first = false
   ) {
     super();
-    const randomHeight = config.HEIGHT * this.ajustedHeight();
 
     this._body = MATTER.Bodies.rectangle(
       xStart,
-      first ? config.HEIGHT / 2 : randomHeight,
+      first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
       config.platForm[type].width,
       config.platForm[type].height,
       {
@@ -40,6 +39,10 @@ export default class Platform extends VisibleObjects {
     levelContainer.addChild(this._sprite);
 
     this.prepareDiamond(levelContainer);
+  }
+
+  getAdjustedHeight(): number {
+    return config.HEIGHT * this.ajustedHeight();
   }
 
   ajustedHeight(): number {
