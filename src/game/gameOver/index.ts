@@ -4,9 +4,11 @@ import config from "../../../gameConfig.js";
 export default class GameOverScreen {
   _parentContainer: Container;
   _background: Graphics;
-  constructor(parentContainer: Container) {
+  _counter: number;
+  _resetFunction: Function;
+  constructor(parentContainer: Container, resetFunction: Function) {
     this._parentContainer = parentContainer;
-
+    this._resetFunction = resetFunction;
     this._parentContainer.visible = false;
     this.initGraphics();
   }
@@ -21,5 +23,27 @@ export default class GameOverScreen {
 
   appear() {
     this._parentContainer.visible = true;
+    this._counter = 0;
+  }
+
+  disappear() {
+    this._parentContainer.visible = false;
+  }
+
+  resetLevel() {
+    this._resetFunction();
+  }
+
+  incrementConter(value: number): void {
+    this._counter += value;
+  }
+
+  update(inputArrays: Array<String>) {
+    if (inputArrays.includes("Space")) {
+      this.incrementConter(1);
+    } else if (this._counter > 0) {
+      this.incrementConter(-1);
+    }
+    if (this._counter === 100) this.resetLevel();
   }
 }
