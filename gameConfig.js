@@ -1,7 +1,7 @@
 export default {
   HEIGHT: 800,
   WIDTH: 1300,
-  SPEED: 10,
+  SPEED: 6,
   GRAVITY: 1.2,
   MAXSPEED: 15,
   player: {

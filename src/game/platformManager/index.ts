@@ -101,14 +101,14 @@ export default class PlatformManager {
     return this._diamondList;
   }
 
-  syncPlatforms() {
+  syncPlatforms(delta: number) {
     this._platFormList.forEach((platform) => {
-      platform.update();
+      platform.update(delta);
     });
   }
 
   update(delta: number) {
     this.movePlatforms(delta);
-    this.syncPlatforms();
+    this.syncPlatforms(delta);
   }
 }

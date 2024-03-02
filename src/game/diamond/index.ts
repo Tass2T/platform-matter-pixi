@@ -114,15 +114,15 @@ export default class Diamond extends VisibleObjects {
     });
   }
 
-  syncScorePosition() {
+  syncScorePosition(delta: number) {
     if (this._hasBeenTaken) {
-      this._pointsContainer.position.y -= 5;
+      this._pointsContainer.position.y -= 5 * delta;
     }
   }
 
-  update(): void {
+  update(delta: number): void {
     this.syncPosition();
     this.syncSpriteWithBody();
-    this.syncScorePosition();
+    this.syncScorePosition(delta);
   }
 }
