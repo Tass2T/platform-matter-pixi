@@ -18,6 +18,11 @@ export default class VisibleObjects {
     return this._sprite;
   }
 
+  setBodyPosition(x: number, y: number) {
+    this._body.position.x = x;
+    this._body.position.y = y;
+  }
+
   syncSpriteWithBody(): void {
     if (this._sprite && this._body) {
       this._sprite.position.x = this._body.position.x;
