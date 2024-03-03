@@ -132,6 +132,15 @@ export default class Level {
     });
   }
 
+  resetFrontProps() {
+    const frontPropsWidth = 500;
+    let index = 0;
+    this._frontPropsContainer.children.forEach((prop) => {
+      prop.position.x = index;
+      index += frontPropsWidth - 100;
+    });
+  }
+
   async initLevel() {
     await PIXI.Assets.loadBundle("level");
 
@@ -211,6 +220,7 @@ export default class Level {
   resetLevel = (): void => {
     this._scoreBoard.resetScore();
     this.resetProps();
+    this.resetFrontProps();
   };
 
   update(delta: number) {
