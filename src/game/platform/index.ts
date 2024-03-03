@@ -92,9 +92,11 @@ export default class Platform extends VisibleObjects {
     }
   }
 
-  setXAxisPosition(value: number): void {
-    this._body.position.x = value;
-    this._sprite.position.x = value;
+  setPosition(x: number, y: number): void {
+    this._body.position.x = x;
+    this._body.position.y = y;
+    this._sprite.position.x = x;
+    this._sprite.position.y = y;
   }
 
   update(delta: number): void {

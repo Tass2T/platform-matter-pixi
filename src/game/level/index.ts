@@ -212,6 +212,7 @@ export default class Level {
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
+      this._player.setAsleep();
       this._gameState = "GameOver";
       this._gameOverScreen.appear();
     }
@@ -222,13 +223,16 @@ export default class Level {
     this.resetProps();
     this.resetFrontProps();
     this._platformManager.resetPlatforms();
-    this._player.resetPos();
+    this._platformManager.setGameSpeed(config.SPEED);
+    this._player.reset();
+    this._gameOverScreen.disappear();
+    this._gameState = "Game";
   };
 
   update(delta: number) {
     if (this._physicEngine) {
-      MATTER.Engine.update(this._physicEngine, delta);
       if (this._gameState === "Game") {
+        MATTER.Engine.update(this._physicEngine, delta);
         this._player.update();
         this.checkForCollisionWithDiamond();
         this.checkForCollisionWithPlatform();
@@ -237,7 +241,7 @@ export default class Level {
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
-      } else {
+      } else if (this._gameState === "GameOver") {
         this._gameOverScreen.update(this._inputManager.getPressedInputs());
       }
     }

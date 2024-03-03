@@ -6,6 +6,7 @@ export default class GameOverScreen {
   _background: Graphics;
   _counter: number;
   _resetFunction: Function;
+  _isResetting: boolean = false;
   constructor(parentContainer: Container, resetFunction: Function) {
     this._parentContainer = parentContainer;
     this._resetFunction = resetFunction;
@@ -23,6 +24,7 @@ export default class GameOverScreen {
 
   appear() {
     this._parentContainer.visible = true;
+    this._isResetting = false;
     this._counter = 0;
   }
 
@@ -31,6 +33,8 @@ export default class GameOverScreen {
   }
 
   resetLevel() {
+    this._counter = 0;
+    this._isResetting = true;
     this._resetFunction();
   }
 
@@ -39,11 +43,13 @@ export default class GameOverScreen {
   }
 
   update(inputArrays: Array<String>) {
-    if (inputArrays.includes("Space")) {
-      this.incrementConter(1);
-    } else if (this._counter > 0) {
-      this.incrementConter(-1);
+    if (!this._isResetting) {
+      if (inputArrays.includes("Space")) {
+        this.incrementConter(1);
+      } else if (this._counter > 0) {
+        this.incrementConter(-1);
+      }
+      if (this._counter === 100) this.resetLevel();
     }
-    if (this._counter === 100) this.resetLevel();
   }
 }

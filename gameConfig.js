@@ -7,7 +7,7 @@ export default {
   player: {
     xAxisStart: 150,
     baseJumpSpeed: 220,
-    velocityLoss: 10,
+    velocityLoss: 11,
   },
   platForm: {
     gap: 100,

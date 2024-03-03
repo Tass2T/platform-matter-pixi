@@ -7,7 +7,6 @@ export default class Player extends VisibleObjects {
   _isJumping: boolean = false;
   _playerSpritesheet: PIXI.Spritesheet;
   _velocity: number = config.baseJumpSpeed;
-  _interval: number;
 
   constructor(
     physicEngineWorld: MATTER.World,
@@ -62,7 +61,6 @@ export default class Player extends VisibleObjects {
   }
 
   stopVelocity(): void {
-    this._interval = 0;
     this._velocity = 0;
     this.setIsJumping(false);
   }
@@ -77,10 +75,21 @@ export default class Player extends VisibleObjects {
     return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
   }
 
-  resetPos() {
-    this._body.position.x = 70;
-    this._body.position.y = 40;
-    this.syncSpriteWithBody();
+  setAsleep(): void {
+    this._body.isSleeping = true;
+  }
+
+  reset() {
+    this._body.position.x = config.player.xAxisStart;
+    this._body.position.y = config.HEIGHT / 3;
+    this._sprite.position.x = this._body.position.x;
+    this._sprite.position.y = this._body.position.y;
+    this._body.isSleeping = false;
+    this._isJumping = false;
+    MATTER.Body.setVelocity(this._body, {
+      x: 0,
+      y: 0,
+    });
   }
 
   update() {

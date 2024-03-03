@@ -49,7 +49,10 @@ export default class PlatformManager {
           ? config.platForm.start
           : this._platFormList[i - 1].getRightCoord() + this.setAjustedGap();
 
-      this._platFormList[i].setXAxisPosition(x);
+      const y =
+        i === 0 ? config.HEIGHT / 2 : this._platFormList[i].getAdjustedHeight();
+
+      this._platFormList[i].setPosition(x, y);
       this._platFormList[i]._diamondList.forEach((diamond) => {
         diamond.syncPosition();
         diamond.setHasBeenTaken(false);
