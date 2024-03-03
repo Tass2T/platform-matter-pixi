@@ -5,6 +5,7 @@ import PlatformManager from "../platformManager/index.js";
 import config from "../../../gameConfig.js";
 import ScoreBoard from "../scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
+import InputManager from "../../utils/inputManager.js";
 
 export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
@@ -21,6 +22,7 @@ export default class Level {
   _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
   _gameOverScreen: GameOverScreen;
+  _inputManager: InputManager = new InputManager();
 
   constructor() {
     this._backgroundContainer.zIndex = 1;
@@ -76,7 +78,6 @@ export default class Level {
     let index = 0;
     for (const [key] of Object.entries(textures)) {
       const sprite = new PIXI.Sprite(textures[key]);
-      sprite.x = config.WIDTH / 3;
       sprite.anchor.set(0.5, 1);
       sprite.position.set(index, config.HEIGHT);
       index = index + config.WIDTH;
@@ -168,13 +169,6 @@ export default class Level {
     });
   }
 
-  prepareGameOver() {
-    this._gameOverScreen = new GameOverScreen(
-      this._gameOverContainer,
-      () => {}
-    );
-  }
-
   checkForCollisionWithDiamond() {
     this._platformManager.getPlatformList().forEach((platForm) => {
       platForm.getDiamondList().forEach((diamond) => {
@@ -192,6 +186,13 @@ export default class Level {
     });
   }
 
+  prepareGameOver() {
+    this._gameOverScreen = new GameOverScreen(
+      this._gameOverContainer,
+      this.resetLevel
+    );
+  }
+
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
@@ -199,6 +200,10 @@ export default class Level {
       this._gameOverScreen.appear();
     }
   }
+
+  resetLevel = (): void => {
+    this._scoreBoard.resetScore();
+  };
 
   update(delta: number) {
     if (this._physicEngine) {
@@ -212,6 +217,8 @@ export default class Level {
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
+      } else {
+        this._gameOverScreen.update(this._inputManager.getPressedInputs());
       }
     }
   }
