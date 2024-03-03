@@ -7,10 +7,9 @@ import ScoreBoard from "../scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
 
 export default class Level {
+  _gameState: "Menu" | "Game" | "GameOver" = "Menu";
   _physicEngine: MATTER.Engine;
   _physicRenderer: MATTER.Render;
-  _player: Player;
-  _platformManager: PlatformManager;
   _levelContainer: PIXI.Container = new PIXI.Container();
   _backgroundContainer: PIXI.Container = new PIXI.Container();
   _propsContainer: PIXI.Container = new PIXI.Container();
@@ -18,18 +17,12 @@ export default class Level {
   _gameContainer: PIXI.Container = new PIXI.Container();
   _scoreContainer: PIXI.Container = new PIXI.Container();
   _gameOverContainer: PIXI.Container = new PIXI.Container();
-  _propsList: Array<PIXI.Sprite> = [];
-  _frontPropsList: Array<PIXI.Sprite> = [];
+  _player: Player;
+  _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
-  _gameState: "Game" | "GameOver" = "Game";
   _gameOverScreen: GameOverScreen;
 
   constructor() {
-    this.initLevel();
-  }
-
-  async initLevel() {
-    await PIXI.Assets.loadBundle("level");
     this._backgroundContainer.zIndex = 1;
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
@@ -45,21 +38,18 @@ export default class Level {
       this._gameOverContainer
     );
 
-    this.prepareGameOver();
+    this.initEngine();
+
     this.setBackground();
-    this.setProps();
-    this.setFrontProps();
 
+    this.prepareGameOver();
+
+    this.initLevel();
+  }
+
+  initEngine() {
     this._physicEngine = MATTER.Engine.create();
-    this._physicEngine.gravity.scale = 0.006;
-    this.initKeyListener();
-    this._platformManager = new PlatformManager(
-      this._physicEngine,
-      this._gameContainer
-    );
-
-    this._player = new Player(this._physicEngine.world, this._gameContainer);
-    this._scoreBoard = new ScoreBoard(this._scoreContainer);
+    this._physicEngine.gravity.scale = config.GRAVITY;
   }
 
   async setBackground() {
@@ -75,6 +65,9 @@ export default class Level {
     seaSprite.animationSpeed = 0.1;
     seaSprite.play();
     this._backgroundContainer.addChild(skySprite, seaSprite);
+
+    this.setProps();
+    this.setFrontProps();
   }
 
   async setProps(): Promise<void> {
@@ -87,7 +80,6 @@ export default class Level {
       sprite.anchor.set(0.5, 1);
       sprite.position.set(index, config.HEIGHT);
       index = index + config.WIDTH;
-      this._propsList.push(sprite);
       this._propsContainer.addChild(sprite);
     }
   }
@@ -107,27 +99,41 @@ export default class Level {
       sprite.width = frontPropsWidth;
       sprite.anchor.set(0.5, 0.7);
       sprite.position.set(index, config.HEIGHT);
-      this._frontPropsList.push(sprite);
       this._frontPropsContainer.addChild(sprite);
       index += frontPropsWidth - 100;
     }
   }
 
   updateProps() {
-    this._propsList.forEach((prop) => {
-      prop.position.x -= 0.01 * this._platformManager.getGamespeed();
+    this._propsContainer.children.forEach((prop) => {
+      prop.getBounds().x -= 0.01 * this._platformManager.getGamespeed();
     });
   }
 
-  updateFrontProps() {
-    this._frontPropsList.forEach((prop) => {
-      prop.position.x -= this._platformManager.getGamespeed();
+  async initLevel() {
+    await PIXI.Assets.loadBundle("level");
 
-      if (prop.position.x + prop.width / 2 < 0) {
+    this.initKeyListener();
+    this._platformManager = new PlatformManager(
+      this._physicEngine,
+      this._gameContainer
+    );
+
+    this._player = new Player(this._physicEngine.world, this._gameContainer);
+    this._scoreBoard = new ScoreBoard(this._scoreContainer);
+    this._gameState = "Game";
+  }
+
+  updateFrontProps(delta: number) {
+    this._frontPropsContainer.children.forEach((prop) => {
+      prop.position.x -= this._platformManager.getGamespeed() * delta;
+
+      if (prop.position.x + prop.getBounds().width / 2 < 0) {
         // A REVOIR C'EST HORRIBLE
         prop.position.x =
-          (this._frontPropsList.length - 1) * prop.width -
-          this._frontPropsList.length * 100;
+          (this._frontPropsContainer.children.length - 1) *
+            prop.getBounds().width -
+          this._frontPropsContainer.children.length * 100;
       }
     });
   }
@@ -163,7 +169,10 @@ export default class Level {
   }
 
   prepareGameOver() {
-    this._gameOverScreen = new GameOverScreen(this._gameOverContainer);
+    this._gameOverScreen = new GameOverScreen(
+      this._gameOverContainer,
+      () => {}
+    );
   }
 
   checkForCollisionWithDiamond() {
@@ -191,16 +200,16 @@ export default class Level {
     }
   }
 
-  update() {
+  update(delta: number) {
     if (this._physicEngine) {
-      MATTER.Engine.update(this._physicEngine);
+      MATTER.Engine.update(this._physicEngine, delta);
       if (this._gameState === "Game") {
         this._player.update();
         this.checkForCollisionWithDiamond();
         this.checkForCollisionWithPlatform();
-        this._platformManager.update();
+        this._platformManager.update(delta);
         this.updateProps();
-        this.updateFrontProps();
+        this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
       }

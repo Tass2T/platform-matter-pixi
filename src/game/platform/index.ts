@@ -92,10 +92,10 @@ export default class Platform extends VisibleObjects {
     }
   }
 
-  update(): void {
+  update(delta: number): void {
     if (this._sprite && this._body) {
       this.syncSpriteWithBody();
-      this._diamondList.forEach((diamond) => diamond.update());
+      this._diamondList.forEach((diamond) => diamond.update(delta));
     }
   }
 }
