@@ -221,6 +221,8 @@ export default class Level {
     this._scoreBoard.resetScore();
     this.resetProps();
     this.resetFrontProps();
+    this._platformManager.resetPlatforms();
+    this._player.resetPos();
   };
 
   update(delta: number) {

@@ -42,8 +42,27 @@ export default class PlatformManager {
     }
   }
 
+  resetPlatforms(): void {
+    for (let i = 0; i < this._platFormList.length; i++) {
+      const x =
+        i === 0
+          ? config.platForm.start
+          : this._platFormList[i - 1].getRightCoord() + this.setAjustedGap();
+
+      this._platFormList[i].setXAxisPosition(x);
+      this._platFormList[i]._diamondList.forEach((diamond) => {
+        diamond.syncPosition();
+        diamond.setHasBeenTaken(false);
+        diamond.syncSpriteWithBody();
+      });
+    }
+  }
+
   setAjustedGap(): number {
-    return config.platForm.gap * (Math.random() * 3) + this._gameSpeed;
+    return (
+      config.platForm.gap * (Math.random() * 3) +
+      (this._gameSpeed ? this._gameSpeed : config.SPEED)
+    );
   }
 
   getFarfestXCoord(): number {

@@ -77,6 +77,12 @@ export default class Player extends VisibleObjects {
     return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
   }
 
+  resetPos() {
+    this._body.position.x = 70;
+    this._body.position.y = 40;
+    this.syncSpriteWithBody();
+  }
+
   update() {
     if (this._sprite && this._body) {
       this.syncSpriteWithBody();
