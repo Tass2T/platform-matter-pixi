@@ -37,7 +37,7 @@ export default class ScoreBoard {
   resetScore() {
     this._actualPlayerScore = 0;
     this._displayedPlayerScore = 0;
-    this._scoreText.text = `${this._displayedPlayerScore}`;
+    if (this._scoreText) this._scoreText.text = `${this._displayedPlayerScore}`;
   }
 
   update(): void {
