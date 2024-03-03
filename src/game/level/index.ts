@@ -62,8 +62,9 @@ export default class Level {
     const seaSprite = new PIXI.AnimatedSprite(
       seaTextures.animations["glitter"]
     );
-    seaSprite.anchor.set(0.5, 1);
-    seaSprite.position.set(config.WIDTH / 2, config.HEIGHT * 1.2);
+    seaSprite.anchor.set(0, 1);
+    seaSprite.width = config.WIDTH;
+    seaSprite.position.set(0, config.HEIGHT * 1.2);
     seaSprite.animationSpeed = 0.1;
     seaSprite.play();
     this._backgroundContainer.addChild(skySprite, seaSprite);
@@ -105,9 +106,29 @@ export default class Level {
     }
   }
 
-  updateProps() {
+  updateProps(delta: number) {
     this._propsContainer.children.forEach((prop) => {
-      prop.getBounds().x -= 0.01 * this._platformManager.getGamespeed();
+      prop.position.x -= 0.05 * this._platformManager.getGamespeed() * delta;
+    });
+  }
+
+  updateFrontProps(delta: number) {
+    this._frontPropsContainer.children.forEach((prop) => {
+      prop.position.x -= this._platformManager.getGamespeed() * delta;
+
+      if (prop.position.x + prop.getBounds().width / 2 < 0) {
+        // A REVOIR C'EST HORRIBLE
+        prop.position.x =
+          (this._frontPropsContainer.children.length - 1) *
+            prop.getBounds().width -
+          this._frontPropsContainer.children.length * 100;
+      }
+    });
+  }
+
+  resetProps() {
+    this._propsContainer.children.forEach((prop, index) => {
+      prop.position.set(index + config.WIDTH * index, config.HEIGHT);
     });
   }
 
@@ -123,20 +144,6 @@ export default class Level {
     this._player = new Player(this._physicEngine.world, this._gameContainer);
     this._scoreBoard = new ScoreBoard(this._scoreContainer);
     this._gameState = "Game";
-  }
-
-  updateFrontProps(delta: number) {
-    this._frontPropsContainer.children.forEach((prop) => {
-      prop.position.x -= this._platformManager.getGamespeed() * delta;
-
-      if (prop.position.x + prop.getBounds().width / 2 < 0) {
-        // A REVOIR C'EST HORRIBLE
-        prop.position.x =
-          (this._frontPropsContainer.children.length - 1) *
-            prop.getBounds().width -
-          this._frontPropsContainer.children.length * 100;
-      }
-    });
   }
 
   getLevelContainer(): PIXI.Container {
@@ -203,6 +210,7 @@ export default class Level {
 
   resetLevel = (): void => {
     this._scoreBoard.resetScore();
+    this.resetProps();
   };
 
   update(delta: number) {
@@ -213,7 +221,7 @@ export default class Level {
         this.checkForCollisionWithDiamond();
         this.checkForCollisionWithPlatform();
         this._platformManager.update(delta);
-        this.updateProps();
+        this.updateProps(delta);
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
