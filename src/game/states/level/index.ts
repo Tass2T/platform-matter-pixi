@@ -1,11 +1,11 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
-import Player from "../player";
-import PlatformManager from "../platformManager/index.js";
-import config from "../../../gameConfig.js";
-import ScoreBoard from "../scoreBoard/index.js";
+import Player from "../../player/index.js";
+import PlatformManager from "../../platformManager/index.js";
+import config from "../../../../gameConfig.js";
+import ScoreBoard from "../../scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
-import InputManager from "../../utils/inputManager.js";
+import InputManager from "../../../utils/inputManager.js";
 
 export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
@@ -221,7 +221,6 @@ export default class Level {
 
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
-      console.log("checkIfPlayerFell");
       this._platformManager.setGameSpeed(0);
       this._gameState = "GameOver";
       this._gameOverScreen.appear();

@@ -1,4 +1,4 @@
-import Level from "./level";
+import Level from "./states/level/index.js";
 import * as PIXI from "pixi.js";
 import config from "../../gameConfig.js";
 import { initAssetsBundles } from "../utils/loaderUtils.js";
