@@ -29,18 +29,20 @@ export default class Level {
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
-    this._scoreContainer.zIndex = 5;
-    this._gameOverContainer.zIndex = 6;
+    this._gameOverContainer.zIndex = 5;
+    this._scoreContainer.zIndex = 6;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
       this._frontPropsContainer,
       this._gameContainer,
-      this._scoreContainer,
-      this._gameOverContainer
+      this._gameOverContainer,
+      this._scoreContainer
     );
 
     this.initEngine();
+
+    this._scoreBoard = new ScoreBoard(this._scoreContainer);
 
     this.setBackground();
 
@@ -159,7 +161,6 @@ export default class Level {
     );
 
     this._player = new Player(this._physicEngine.world, this._gameContainer);
-    this._scoreBoard = new ScoreBoard(this._scoreContainer);
     this._gameState = "Game";
   }
 
@@ -213,7 +214,8 @@ export default class Level {
   prepareGameOver() {
     this._gameOverScreen = new GameOverScreen(
       this._gameOverContainer,
-      this.resetLevel
+      this.resetLevel,
+      this._scoreBoard
     );
   }
 

@@ -6,6 +6,7 @@ import VisibleObjects from "../traits/VisibleObjects.js";
 
 export default class Platform extends VisibleObjects {
   _diamondList: Array<Diamond> = [];
+  _isFirst: boolean;
   constructor(
     type: string,
     xStart: number,
@@ -13,7 +14,7 @@ export default class Platform extends VisibleObjects {
     first = false
   ) {
     super();
-
+    this._isFirst = first ? true : false;
     this._body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
@@ -87,7 +88,7 @@ export default class Platform extends VisibleObjects {
   prepareDiamond(levelContainer: PIXI.Container) {
     for (let i = 1; i <= config.diamond.nb; i++) {
       this._diamondList.push(
-        new Diamond(levelContainer, this._body.position, i)
+        new Diamond(levelContainer, this._body.position, i, this._isFirst)
       );
     }
   }

@@ -1,5 +1,6 @@
 import { Container, Graphics } from "pixi.js";
 import config from "../../../gameConfig.js";
+import ScoreBoard from "../scoreBoard/index.js";
 
 export default class GameOverScreen {
   _parentContainer: Container;
@@ -7,7 +8,13 @@ export default class GameOverScreen {
   _counter: number;
   _resetFunction: Function;
   _isResetting: boolean = false;
-  constructor(parentContainer: Container, resetFunction: Function) {
+  _scoreBoard: ScoreBoard;
+  constructor(
+    parentContainer: Container,
+    resetFunction: Function,
+    scoreBoard: ScoreBoard
+  ) {
+    this._scoreBoard = scoreBoard;
     this._parentContainer = parentContainer;
     this._resetFunction = resetFunction;
     this._parentContainer.visible = false;

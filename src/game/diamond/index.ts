@@ -11,14 +11,19 @@ export default class Diamond extends VisibleObjects {
   _scoreText: PIXI.BitmapText;
   _scoreTextFont: PIXI.BitmapFont;
   _pointsContainer: PIXI.Container = new PIXI.Container();
+  _boundWithFirstPlatform: boolean;
   constructor(
     levelContainer: PIXI.Container,
     platFormPos: MATTER.Vector,
-    pos: number
+    pos: number,
+    firstPlatform: boolean
   ) {
     super();
     this._parentPos = platFormPos;
     this._orderIndex = pos;
+    this._boundWithFirstPlatform = firstPlatform;
+
+    if (this._boundWithFirstPlatform) this._hasBeenTaken = true;
 
     this._body = MATTER.Bodies.rectangle(
       platFormPos.x -
@@ -49,6 +54,7 @@ export default class Diamond extends VisibleObjects {
     this._sprite.anchor.set(0.5, 0.5);
 
     this.animateSprite(0.08);
+    if (this._boundWithFirstPlatform) this._sprite.visible = false;
 
     levelContainer.addChild(this._sprite);
     this._sprite.addChild(this._pointsContainer);
