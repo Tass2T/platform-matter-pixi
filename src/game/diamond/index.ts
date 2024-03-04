@@ -78,6 +78,11 @@ export default class Diamond extends VisibleObjects {
     return this._hasBeenTaken;
   }
 
+  hide() {
+    this._hasBeenTaken = true;
+    this._sprite.visible = false;
+  }
+
   setHasBeenTaken(value: boolean) {
     if (this._sprite) {
       this._hasBeenTaken = value;
