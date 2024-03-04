@@ -1,7 +1,7 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
-import config from "../../../gameConfig.js";
-import VisibleObjects from "../traits/VisibleObjects.js";
+import config from "../../../../gameConfig.js";
+import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Player extends VisibleObjects {
   _isJumping: boolean = false;

@@ -1,5 +1,5 @@
 import { Container, BitmapFont, BitmapText } from "pixi.js";
-import config from "../../../gameConfig.js";
+import config from "../../../../gameConfig.js";
 
 export default class ScoreBoard {
   _displayedPlayerScore: number = 0;

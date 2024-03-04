@@ -1,6 +1,6 @@
 import { Container, Graphics } from "pixi.js";
 import config from "../../../../gameConfig.js";
-import ScoreBoard from "../../scoreBoard/index.js";
+import ScoreBoard from "../../components/scoreBoard/index.js";
 
 export default class GameOverScreen {
   _parentContainer: Container;

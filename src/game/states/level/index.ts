@@ -1,9 +1,9 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
-import Player from "../../player/index.js";
-import PlatformManager from "../../platformManager/index.js";
+import Player from "../../components/player/index.js";
+import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";
-import ScoreBoard from "../../scoreBoard/index.js";
+import ScoreBoard from "../../components/scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
 import InputManager from "../../../utils/inputManager.js";
 

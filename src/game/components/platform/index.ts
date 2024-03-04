@@ -1,8 +1,8 @@
 import * as MATTER from "matter-js";
 import * as PIXI from "pixi.js";
-import config from "../../../gameConfig.js";
+import config from "../../../../gameConfig.js";
 import Diamond from "../diamond/index.js";
-import VisibleObjects from "../traits/VisibleObjects.js";
+import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Platform extends VisibleObjects {
   _diamondList: Array<Diamond> = [];
