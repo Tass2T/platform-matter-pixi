@@ -52,6 +52,14 @@ export default class Level {
   initEngine() {
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = config.GRAVITY;
+
+    if (config.PHYSIC_DEBUG_MODE) {
+      var render = MATTER.Render.create({
+        element: document.body,
+        engine: this._physicEngine,
+      });
+      MATTER.Render.run(render);
+    }
   }
 
   async setBackground() {
@@ -211,8 +219,8 @@ export default class Level {
 
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
+      console.log("checkIfPlayerFell");
       this._platformManager.setGameSpeed(0);
-      this._player.setAsleep();
       this._gameState = "GameOver";
       this._gameOverScreen.appear();
     }
@@ -227,6 +235,7 @@ export default class Level {
     this._player.reset();
     this._gameOverScreen.disappear();
     this._gameState = "Game";
+    console.log(this._physicEngine);
   };
 
   update(delta: number) {

@@ -22,11 +22,11 @@ export default class Player extends VisibleObjects {
         inertia: -Infinity,
       }
     );
+    this._body.label = "player";
     this._bodyHeight = 70;
     this._bodyWidth = 40;
-    MATTER.Composite.add(physicEngineWorld, this._body);
-
     this.initSprite(parentContainer);
+    MATTER.Composite.add(physicEngineWorld, this._body);
   }
 
   async initSprite(parentContainer: PIXI.Container) {
@@ -75,21 +75,11 @@ export default class Player extends VisibleObjects {
     return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
   }
 
-  setAsleep(): void {
-    this._body.isSleeping = true;
-  }
-
   reset() {
-    this._body.position.x = config.player.xAxisStart;
-    this._body.position.y = config.HEIGHT / 3;
-    this._sprite.position.x = this._body.position.x;
-    this._sprite.position.y = this._body.position.y;
-    this._body.isSleeping = false;
-    this._isJumping = false;
-    MATTER.Body.setVelocity(this._body, {
-      x: 0,
-      y: 0,
-    });
+    const x = config.player.xAxisStart;
+    const y = config.HEIGHT / 3;
+    MATTER.Body.setPosition(this._body, { x, y });
+    this._sprite.position.set(x, y);
   }
 
   update() {

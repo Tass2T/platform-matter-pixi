@@ -44,7 +44,7 @@ export default class GameOverScreen {
 
   update(inputArrays: Array<String>) {
     if (!this._isResetting) {
-      if (inputArrays.includes("Space")) {
+      if (inputArrays.includes("KeyR")) {
         this.incrementConter(1);
       } else if (this._counter > 0) {
         this.incrementConter(-1);

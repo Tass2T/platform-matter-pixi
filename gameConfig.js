@@ -1,9 +1,10 @@
 export default {
-  HEIGHT: 800,
-  WIDTH: 1300,
+  HEIGHT: 700,
+  WIDTH: 1200,
   SPEED: 6,
   GRAVITY: 1.2,
   MAXSPEED: 15,
+  PHYSIC_DEBUG_MODE: false,
   player: {
     xAxisStart: 150,
     baseJumpSpeed: 220,
