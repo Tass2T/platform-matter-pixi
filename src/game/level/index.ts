@@ -5,6 +5,7 @@ import PlatformManager from "../platformManager/index.js";
 import config from "../../../gameConfig.js";
 import ScoreBoard from "../scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
+import InputManager from "../../utils/inputManager.js";
 
 export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
@@ -21,6 +22,7 @@ export default class Level {
   _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
   _gameOverScreen: GameOverScreen;
+  _inputManager: InputManager = new InputManager();
 
   constructor() {
     this._backgroundContainer.zIndex = 1;
@@ -50,6 +52,14 @@ export default class Level {
   initEngine() {
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = config.GRAVITY;
+
+    if (config.PHYSIC_DEBUG_MODE) {
+      var render = MATTER.Render.create({
+        element: document.body,
+        engine: this._physicEngine,
+      });
+      MATTER.Render.run(render);
+    }
   }
 
   async setBackground() {
@@ -60,8 +70,9 @@ export default class Level {
     const seaSprite = new PIXI.AnimatedSprite(
       seaTextures.animations["glitter"]
     );
-    seaSprite.anchor.set(0.5, 1);
-    seaSprite.position.set(config.WIDTH / 2, config.HEIGHT * 1.2);
+    seaSprite.anchor.set(0, 1);
+    seaSprite.width = config.WIDTH;
+    seaSprite.position.set(0, config.HEIGHT * 1.2);
     seaSprite.animationSpeed = 0.1;
     seaSprite.play();
     this._backgroundContainer.addChild(skySprite, seaSprite);
@@ -76,7 +87,6 @@ export default class Level {
     let index = 0;
     for (const [key] of Object.entries(textures)) {
       const sprite = new PIXI.Sprite(textures[key]);
-      sprite.x = config.WIDTH / 3;
       sprite.anchor.set(0.5, 1);
       sprite.position.set(index, config.HEIGHT);
       index = index + config.WIDTH;
@@ -104,9 +114,38 @@ export default class Level {
     }
   }
 
-  updateProps() {
+  updateProps(delta: number) {
     this._propsContainer.children.forEach((prop) => {
-      prop.getBounds().x -= 0.01 * this._platformManager.getGamespeed();
+      prop.position.x -= 0.05 * this._platformManager.getGamespeed() * delta;
+    });
+  }
+
+  updateFrontProps(delta: number) {
+    this._frontPropsContainer.children.forEach((prop) => {
+      prop.position.x -= this._platformManager.getGamespeed() * delta;
+
+      if (prop.position.x + prop.getBounds().width / 2 < 0) {
+        // A REVOIR C'EST HORRIBLE
+        prop.position.x =
+          (this._frontPropsContainer.children.length - 1) *
+            prop.getBounds().width -
+          this._frontPropsContainer.children.length * 100;
+      }
+    });
+  }
+
+  resetProps() {
+    this._propsContainer.children.forEach((prop, index) => {
+      prop.position.set(index + config.WIDTH * index, config.HEIGHT);
+    });
+  }
+
+  resetFrontProps() {
+    const frontPropsWidth = 500;
+    let index = 0;
+    this._frontPropsContainer.children.forEach((prop) => {
+      prop.position.x = index;
+      index += frontPropsWidth - 100;
     });
   }
 
@@ -122,20 +161,6 @@ export default class Level {
     this._player = new Player(this._physicEngine.world, this._gameContainer);
     this._scoreBoard = new ScoreBoard(this._scoreContainer);
     this._gameState = "Game";
-  }
-
-  updateFrontProps(delta: number) {
-    this._frontPropsContainer.children.forEach((prop) => {
-      prop.position.x -= this._platformManager.getGamespeed() * delta;
-
-      if (prop.position.x + prop.getBounds().width / 2 < 0) {
-        // A REVOIR C'EST HORRIBLE
-        prop.position.x =
-          (this._frontPropsContainer.children.length - 1) *
-            prop.getBounds().width -
-          this._frontPropsContainer.children.length * 100;
-      }
-    });
   }
 
   getLevelContainer(): PIXI.Container {
@@ -168,13 +193,6 @@ export default class Level {
     });
   }
 
-  prepareGameOver() {
-    this._gameOverScreen = new GameOverScreen(
-      this._gameOverContainer,
-      () => {}
-    );
-  }
-
   checkForCollisionWithDiamond() {
     this._platformManager.getPlatformList().forEach((platForm) => {
       platForm.getDiamondList().forEach((diamond) => {
@@ -192,26 +210,48 @@ export default class Level {
     });
   }
 
+  prepareGameOver() {
+    this._gameOverScreen = new GameOverScreen(
+      this._gameOverContainer,
+      this.resetLevel
+    );
+  }
+
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
+      console.log("checkIfPlayerFell");
       this._platformManager.setGameSpeed(0);
       this._gameState = "GameOver";
       this._gameOverScreen.appear();
     }
   }
 
+  resetLevel = (): void => {
+    this._scoreBoard.resetScore();
+    this.resetProps();
+    this.resetFrontProps();
+    this._platformManager.resetPlatforms();
+    this._platformManager.setGameSpeed(config.SPEED);
+    this._player.reset();
+    this._gameOverScreen.disappear();
+    this._gameState = "Game";
+    console.log(this._physicEngine);
+  };
+
   update(delta: number) {
     if (this._physicEngine) {
-      MATTER.Engine.update(this._physicEngine, delta);
       if (this._gameState === "Game") {
+        MATTER.Engine.update(this._physicEngine, delta);
         this._player.update();
         this.checkForCollisionWithDiamond();
         this.checkForCollisionWithPlatform();
         this._platformManager.update(delta);
-        this.updateProps();
+        this.updateProps(delta);
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
+      } else if (this._gameState === "GameOver") {
+        this._gameOverScreen.update(this._inputManager.getPressedInputs());
       }
     }
   }

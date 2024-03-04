@@ -7,7 +7,6 @@ export default class Player extends VisibleObjects {
   _isJumping: boolean = false;
   _playerSpritesheet: PIXI.Spritesheet;
   _velocity: number = config.baseJumpSpeed;
-  _interval: number;
 
   constructor(
     physicEngineWorld: MATTER.World,
@@ -23,11 +22,11 @@ export default class Player extends VisibleObjects {
         inertia: -Infinity,
       }
     );
+    this._body.label = "player";
     this._bodyHeight = 70;
     this._bodyWidth = 40;
-    MATTER.Composite.add(physicEngineWorld, this._body);
-
     this.initSprite(parentContainer);
+    MATTER.Composite.add(physicEngineWorld, this._body);
   }
 
   async initSprite(parentContainer: PIXI.Container) {
@@ -62,7 +61,6 @@ export default class Player extends VisibleObjects {
   }
 
   stopVelocity(): void {
-    this._interval = 0;
     this._velocity = 0;
     this.setIsJumping(false);
   }
@@ -75,6 +73,13 @@ export default class Player extends VisibleObjects {
 
   hasFallen(): boolean {
     return this._body.position.y >= config.HEIGHT || this._body.position.x <= 0;
+  }
+
+  reset() {
+    const x = config.player.xAxisStart;
+    const y = config.HEIGHT / 3;
+    MATTER.Body.setPosition(this._body, { x, y });
+    this._sprite.position.set(x, y);
   }
 
   update() {

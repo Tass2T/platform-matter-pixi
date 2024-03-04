@@ -92,6 +92,11 @@ export default class Platform extends VisibleObjects {
     }
   }
 
+  setPosition(x: number, y: number): void {
+    MATTER.Body.setPosition(this._body, { x, y });
+    this._sprite.position.set(x, y);
+  }
+
   update(delta: number): void {
     if (this._sprite && this._body) {
       this.syncSpriteWithBody();

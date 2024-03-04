@@ -14,7 +14,8 @@ export default class Game {
       premultipliedAlpha: false,
     });
     this.#pixiApp.stage.interactiveChildren = false;
-    document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
+    if (!config.PHYSIC_DEBUG_MODE)
+      document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
     this.initGame();
   }
 
