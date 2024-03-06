@@ -1,5 +1,11 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import {
+  BitmapText,
+  Container,
+  Spritesheet,
+  Assets,
+  AnimatedSprite,
+} from "pixi.js";
 import config from "../../../../gameConfig.js";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
@@ -7,13 +13,12 @@ export default class Diamond extends VisibleObjects {
   _parentPos: MATTER.Vector;
   _orderIndex: number;
   _hasBeenTaken: boolean;
-  _spritesheet: PIXI.Spritesheet;
-  _scoreText: PIXI.BitmapText;
-  _scoreTextFont: PIXI.BitmapFont;
-  _pointsContainer: PIXI.Container = new PIXI.Container();
+  _spritesheet: Spritesheet;
+  _scoreText: BitmapText;
+  _pointsContainer: Container = new Container();
   _boundWithFirstPlatform: boolean;
   constructor(
-    levelContainer: PIXI.Container,
+    levelContainer: Container,
     platFormPos: MATTER.Vector,
     pos: number,
     firstPlatform: boolean
@@ -43,12 +48,10 @@ export default class Diamond extends VisibleObjects {
     this.initScoreContainer();
   }
 
-  async initAssets(levelContainer: PIXI.Container) {
-    this._spritesheet = await PIXI.Assets.load("diamonds");
+  async initAssets(levelContainer: Container) {
+    this._spritesheet = await Assets.load("diamonds");
 
-    this._sprite = new PIXI.AnimatedSprite(
-      this._spritesheet.animations["idle"]
-    );
+    this._sprite = new AnimatedSprite(this._spritesheet.animations["idle"]);
     this._sprite.width = this._bodyWidth;
     this._sprite.height = this._bodyHeight;
     this._sprite.anchor.set(0.5, 0.5);
@@ -61,15 +64,14 @@ export default class Diamond extends VisibleObjects {
   }
 
   initScoreContainer() {
-    this._scoreTextFont = PIXI.BitmapFont.from("scoreFont", {
-      fontFamily: "Arial",
-      fontSize: 45,
-      strokeThickness: 3,
-      fill: "#972296",
-    });
-
-    this._scoreText = new PIXI.BitmapText(`${config.diamond.points}`, {
-      fontName: "scoreFont",
+    this._scoreText = new BitmapText({
+      text: `${config.diamond.points}`,
+      style: {
+        fontFamily: "Arial",
+        fontSize: 45,
+        fill: "white",
+        stroke: { width: 3 },
+      },
     });
     this._pointsContainer.position.set(-70, 0);
     this._pointsContainer.visible = false;

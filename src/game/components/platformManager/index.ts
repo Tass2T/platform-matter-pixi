@@ -1,5 +1,5 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import { Container } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import Platform from "../platform/index.js";
 
@@ -7,7 +7,7 @@ export default class PlatformManager {
   _engine: MATTER.Engine;
   _platFormList: Array<Platform> = [];
   _gameSpeed: number = config.SPEED;
-  constructor(engineWorld: MATTER.Engine, parentContainer: PIXI.Container) {
+  constructor(engineWorld: MATTER.Engine, parentContainer: Container) {
     this._engine = engineWorld;
     this.createPlatforms(parentContainer);
   }
@@ -28,7 +28,7 @@ export default class PlatformManager {
     this._gameSpeed = newValue;
   }
 
-  createPlatforms(levelContainer: PIXI.Container) {
+  createPlatforms(levelContainer: Container) {
     for (let i = 1; i <= 6; i++) {
       const x =
         i === 1

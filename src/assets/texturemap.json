@@ -3,39 +3,39 @@
     {
       "name": "level",
       "assets": [
-        { "name": "backdrop", "srcs": "background/fond.png" },
+        { "alias": "backdrop", "src": "background/fond.png" },
         {
-          "name": "seaProp",
-          "srcs": "background/seaSpritesheet.json"
+          "alias": "seaProp",
+          "src": "background/seaSpritesheet.json"
         },
         {
-          "name": "player",
-          "srcs": "player/playerSpritesheetMap.json"
+          "alias": "player",
+          "src": "player/playerSpritesheetMap.json"
         },
         {
-          "name": "platform",
-          "srcs": "platform/platformMap.json"
+          "alias": "platform",
+          "src": "platform/platformMap.json"
         },
-        { "name": "diamonds", "srcs": "diamonds/diamondsSpritesheet.json" },
+        { "alias": "diamonds", "src": "diamonds/diamondsSpritesheet.json" },
         {
-          "name": "props1",
-          "srcs": "background/props/0.png"
-        },
-        {
-          "name": "props2",
-          "srcs": "background/props/1.png"
+          "alias": "props1",
+          "src": "background/props/0.png"
         },
         {
-          "name": "tree1",
-          "srcs": "background/frontProps/tree1.png"
+          "alias": "props2",
+          "src": "background/props/1.png"
         },
         {
-          "name": "tree2",
-          "srcs": "background/frontProps/tree2.png"
+          "alias": "tree1",
+          "src": "background/frontProps/tree1.png"
         },
         {
-          "name": "tree3",
-          "srcs": "background/frontProps/tree3.png"
+          "alias": "tree2",
+          "src": "background/frontProps/tree2.png"
+        },
+        {
+          "alias": "tree3",
+          "src": "background/frontProps/tree3.png"
         }
       ]
     }
