@@ -68,9 +68,9 @@ export default class Diamond extends VisibleObjects {
       text: `${config.diamond.points}`,
       style: {
         fontFamily: "Arial",
-        fontSize: 45,
-        fill: "white",
-        stroke: { width: 3 },
+        fontSize: 15,
+        fill: "purple",
+        stroke: { width: 1 },
       },
     });
     this._pointsContainer.position.set(-70, 0);
