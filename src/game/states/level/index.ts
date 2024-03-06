@@ -1,5 +1,5 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import { Container, Assets, Sprite, AnimatedSprite } from "pixi.js";
 import Player from "../../components/player/index.js";
 import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";
@@ -11,13 +11,13 @@ export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
   _physicEngine: MATTER.Engine;
   _physicRenderer: MATTER.Render;
-  _levelContainer: PIXI.Container = new PIXI.Container();
-  _backgroundContainer: PIXI.Container = new PIXI.Container();
-  _propsContainer: PIXI.Container = new PIXI.Container();
-  _frontPropsContainer: PIXI.Container = new PIXI.Container();
-  _gameContainer: PIXI.Container = new PIXI.Container();
-  _scoreContainer: PIXI.Container = new PIXI.Container();
-  _gameOverContainer: PIXI.Container = new PIXI.Container();
+  _levelContainer: Container = new Container();
+  _backgroundContainer: Container = new Container();
+  _propsContainer: Container = new Container();
+  _frontPropsContainer: Container = new Container();
+  _gameContainer: Container = new Container();
+  _scoreContainer: Container = new Container();
+  _gameOverContainer: Container = new Container();
   _player: Player;
   _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
@@ -65,13 +65,11 @@ export default class Level {
   }
 
   async setBackground() {
-    const texture = await PIXI.Assets.load("backdrop");
-    const skySprite = new PIXI.Sprite(texture);
+    const texture = await Assets.load("backdrop");
+    const skySprite = new Sprite(texture);
 
-    const seaTextures = await PIXI.Assets.load("seaProp");
-    const seaSprite = new PIXI.AnimatedSprite(
-      seaTextures.animations["glitter"]
-    );
+    const seaTextures = await Assets.load("seaProp");
+    const seaSprite = new AnimatedSprite(seaTextures.animations["glitter"]);
     seaSprite.anchor.set(0, 1);
     seaSprite.width = config.WIDTH;
     seaSprite.position.set(0, config.HEIGHT * 1.2);
@@ -84,11 +82,11 @@ export default class Level {
   }
 
   async setProps(): Promise<void> {
-    const textures = await PIXI.Assets.load(["props2", "props1"]);
+    const textures = await Assets.load(["props2", "props1"]);
 
     let index = 0;
     for (const [key] of Object.entries(textures)) {
-      const sprite = new PIXI.Sprite(textures[key]);
+      const sprite = new Sprite(textures[key]);
       sprite.anchor.set(0.5, 1);
       sprite.position.set(index, config.HEIGHT);
       index = index + config.WIDTH;
@@ -97,7 +95,7 @@ export default class Level {
   }
 
   async setFrontProps(): Promise<void> {
-    const textures = await PIXI.Assets.load(["tree1", "tree2", "tree3"]);
+    const textures = await Assets.load(["tree1", "tree2", "tree3"]);
 
     let index = 0;
     const frontPropsWidth = 500;
@@ -105,7 +103,7 @@ export default class Level {
     const texturesKeys = Object.keys(textures);
 
     for (let i = 0; i < propsNeeded; i++) {
-      const sprite = new PIXI.Sprite(
+      const sprite = new Sprite(
         textures[texturesKeys[Math.floor(Math.random() * texturesKeys.length)]]
       );
       sprite.width = frontPropsWidth;
@@ -152,7 +150,7 @@ export default class Level {
   }
 
   async initLevel() {
-    await PIXI.Assets.loadBundle("level");
+    await Assets.loadBundle("level");
 
     this.initKeyListener();
     this._platformManager = new PlatformManager(
@@ -164,7 +162,7 @@ export default class Level {
     this._gameState = "Game";
   }
 
-  getLevelContainer(): PIXI.Container {
+  getLevelContainer(): Container {
     return this._levelContainer;
   }
 

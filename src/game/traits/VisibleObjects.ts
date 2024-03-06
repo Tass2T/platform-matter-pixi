@@ -1,9 +1,9 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import { AnimatedSprite } from "pixi.js";
 
 export default class VisibleObjects {
   _body: MATTER.Body;
-  _sprite: PIXI.AnimatedSprite;
+  _sprite: AnimatedSprite;
   _isVisible: boolean = true;
   _bodyWidth: number;
   _bodyHeight: number;
@@ -14,7 +14,7 @@ export default class VisibleObjects {
     return this._body;
   }
 
-  getSprite(): PIXI.AnimatedSprite {
+  getSprite(): AnimatedSprite {
     return this._sprite;
   }
 
@@ -31,7 +31,7 @@ export default class VisibleObjects {
   }
 
   animateSprite(customSpeed: number = 0): void {
-    if (this._sprite instanceof PIXI.AnimatedSprite) {
+    if (this._sprite instanceof AnimatedSprite) {
       this._sprite.animationSpeed = customSpeed || 0.2;
       this._sprite.play();
     }

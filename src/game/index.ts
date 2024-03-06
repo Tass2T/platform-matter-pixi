@@ -1,21 +1,25 @@
 import Level from "./states/level/index.js";
-import * as PIXI from "pixi.js";
+import { Application } from "pixi.js";
 import config from "../../gameConfig.js";
 import { initAssetsBundles } from "../utils/loaderUtils.js";
 
 export default class Game {
-  #pixiApp: PIXI.Application;
+  #pixiApp: Application;
   _level: Level;
   constructor() {
-    this.#pixiApp = new PIXI.Application({
-      height: config.HEIGHT,
-      width: config.WIDTH,
-      antialias: false,
-      premultipliedAlpha: false,
-    });
+    this.#pixiApp = new Application();
+    async () => {
+      await this.#pixiApp.init({
+        height: config.HEIGHT,
+        width: config.WIDTH,
+        antialias: false,
+        premultipliedAlpha: false,
+      });
+    };
+
     this.#pixiApp.stage.interactiveChildren = false;
     if (!config.PHYSIC_DEBUG_MODE)
-      document.body.appendChild(this.#pixiApp.view as HTMLCanvasElement);
+      document.body.appendChild(this.#pixiApp.canvas as HTMLCanvasElement);
     this.initGame();
   }
 
@@ -24,8 +28,8 @@ export default class Game {
     this._level = new Level();
     this.#pixiApp.stage.addChild(this._level.getLevelContainer());
     this.#pixiApp.ticker.maxFPS = 60;
-    this.#pixiApp.ticker.add((delta) => {
-      this.update(delta);
+    this.#pixiApp.ticker.add((ticker) => {
+      this.update(ticker.deltaTime);
     });
   }
 
