@@ -10,6 +10,7 @@ import config from "../../../../gameConfig.js";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Diamond extends VisibleObjects {
+  _diamondContainer: Container = new Container();
   _parentPos: MATTER.Vector;
   _orderIndex: number;
   _hasBeenTaken: boolean;
@@ -24,6 +25,7 @@ export default class Diamond extends VisibleObjects {
     firstPlatform: boolean
   ) {
     super();
+    levelContainer.addChild(this._diamondContainer);
     this._parentPos = platFormPos;
     this._orderIndex = pos;
     this._boundWithFirstPlatform = firstPlatform;
@@ -44,11 +46,10 @@ export default class Diamond extends VisibleObjects {
     this._bodyHeight = config.diamond.side;
     this._bodyWidth = config.diamond.side;
 
-    this.initAssets(levelContainer);
-    this.initScoreContainer();
+    this.initAssets();
   }
 
-  async initAssets(levelContainer: Container) {
+  async initAssets() {
     this._spritesheet = await Assets.load("diamonds");
 
     this._sprite = new AnimatedSprite(this._spritesheet.animations["idle"]);
@@ -59,8 +60,9 @@ export default class Diamond extends VisibleObjects {
     this.animateSprite(0.08);
     if (this._boundWithFirstPlatform) this._sprite.visible = false;
 
-    levelContainer.addChild(this._sprite);
-    this._sprite.addChild(this._pointsContainer);
+    this._diamondContainer.addChild(this._sprite);
+
+    this.initScoreContainer();
   }
 
   initScoreContainer() {
@@ -68,14 +70,15 @@ export default class Diamond extends VisibleObjects {
       text: `${config.diamond.points}`,
       style: {
         fontFamily: "Arial",
-        fontSize: 15,
+        fontSize: 18,
         fill: "purple",
         stroke: { width: 1 },
       },
     });
-    this._pointsContainer.position.set(-70, 0);
+    this._pointsContainer.position.set(-40, 0);
     this._pointsContainer.visible = false;
     this._pointsContainer.addChild(this._scoreText);
+    this._diamondContainer.addChild(this._pointsContainer);
   }
 
   getPosition(): MATTER.Vector {
@@ -127,9 +130,14 @@ export default class Diamond extends VisibleObjects {
     });
   }
 
+  syncSpriteWithBody() {
+    this._diamondContainer.position.x = this._body.position.x;
+    this._diamondContainer.position.y = this._body.position.y;
+  }
+
   syncScorePosition(delta: number) {
     if (this._hasBeenTaken) {
-      this._pointsContainer.position.y -= 5 * delta;
+      this._pointsContainer.position.y -= 3 * delta;
     }
   }
 
