@@ -1,21 +1,19 @@
-import { Container, BitmapFont, BitmapText } from "pixi.js";
+import { Container, BitmapText } from "pixi.js";
 import config from "../../../../gameConfig.js";
 
 export default class ScoreBoard {
   _displayedPlayerScore: number = 0;
   _actualPlayerScore: number = 0;
-  _scoreFont: BitmapFont | null = null;
   _scoreText: BitmapText | null = null;
   constructor(parentContainer: Container) {
-    this._scoreFont = BitmapFont.from("TitleFont", {
-      fontFamily: "Arial",
-      fontSize: 26,
-      strokeThickness: 2,
-      fill: "white",
-    });
-
-    this._scoreText = new BitmapText(`${this._displayedPlayerScore}`, {
-      fontName: "TitleFont",
+    this._scoreText = new BitmapText({
+      text: `${this._displayedPlayerScore}`,
+      style: {
+        fontFamily: "Arial",
+        fontSize: 26,
+        fill: "white",
+        stroke: { width: 2 },
+      },
     });
     this._scoreText.position.set(config.WIDTH - 150, 20);
     parentContainer.addChild(this._scoreText);

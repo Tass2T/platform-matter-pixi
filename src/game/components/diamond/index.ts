@@ -1,24 +1,31 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import {
+  BitmapText,
+  Container,
+  Spritesheet,
+  Assets,
+  AnimatedSprite,
+} from "pixi.js";
 import config from "../../../../gameConfig.js";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Diamond extends VisibleObjects {
+  _diamondContainer: Container = new Container();
   _parentPos: MATTER.Vector;
   _orderIndex: number;
   _hasBeenTaken: boolean;
-  _spritesheet: PIXI.Spritesheet;
-  _scoreText: PIXI.BitmapText;
-  _scoreTextFont: PIXI.BitmapFont;
-  _pointsContainer: PIXI.Container = new PIXI.Container();
+  _spritesheet: Spritesheet;
+  _scoreText: BitmapText;
+  _pointsContainer: Container = new Container();
   _boundWithFirstPlatform: boolean;
   constructor(
-    levelContainer: PIXI.Container,
+    levelContainer: Container,
     platFormPos: MATTER.Vector,
     pos: number,
     firstPlatform: boolean
   ) {
     super();
+    levelContainer.addChild(this._diamondContainer);
     this._parentPos = platFormPos;
     this._orderIndex = pos;
     this._boundWithFirstPlatform = firstPlatform;
@@ -39,16 +46,13 @@ export default class Diamond extends VisibleObjects {
     this._bodyHeight = config.diamond.side;
     this._bodyWidth = config.diamond.side;
 
-    this.initAssets(levelContainer);
-    this.initScoreContainer();
+    this.initAssets();
   }
 
-  async initAssets(levelContainer: PIXI.Container) {
-    this._spritesheet = await PIXI.Assets.load("diamonds");
+  async initAssets() {
+    this._spritesheet = await Assets.load("diamonds");
 
-    this._sprite = new PIXI.AnimatedSprite(
-      this._spritesheet.animations["idle"]
-    );
+    this._sprite = new AnimatedSprite(this._spritesheet.animations["idle"]);
     this._sprite.width = this._bodyWidth;
     this._sprite.height = this._bodyHeight;
     this._sprite.anchor.set(0.5, 0.5);
@@ -56,24 +60,25 @@ export default class Diamond extends VisibleObjects {
     this.animateSprite(0.08);
     if (this._boundWithFirstPlatform) this._sprite.visible = false;
 
-    levelContainer.addChild(this._sprite);
-    this._sprite.addChild(this._pointsContainer);
+    this._diamondContainer.addChild(this._sprite);
+
+    this.initScoreContainer();
   }
 
   initScoreContainer() {
-    this._scoreTextFont = PIXI.BitmapFont.from("scoreFont", {
-      fontFamily: "Arial",
-      fontSize: 45,
-      strokeThickness: 3,
-      fill: "#972296",
+    this._scoreText = new BitmapText({
+      text: `${config.diamond.points}`,
+      style: {
+        fontFamily: "Arial",
+        fontSize: 18,
+        fill: "purple",
+        stroke: { width: 1 },
+      },
     });
-
-    this._scoreText = new PIXI.BitmapText(`${config.diamond.points}`, {
-      fontName: "scoreFont",
-    });
-    this._pointsContainer.position.set(-70, 0);
+    this._pointsContainer.position.set(-40, 0);
     this._pointsContainer.visible = false;
     this._pointsContainer.addChild(this._scoreText);
+    this._diamondContainer.addChild(this._pointsContainer);
   }
 
   getPosition(): MATTER.Vector {
@@ -125,9 +130,14 @@ export default class Diamond extends VisibleObjects {
     });
   }
 
+  syncSpriteWithBody() {
+    this._diamondContainer.position.x = this._body.position.x;
+    this._diamondContainer.position.y = this._body.position.y;
+  }
+
   syncScorePosition(delta: number) {
     if (this._hasBeenTaken) {
-      this._pointsContainer.position.y -= 5 * delta;
+      this._pointsContainer.position.y -= 3 * delta;
     }
   }
 

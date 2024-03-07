@@ -1,17 +1,14 @@
 import * as MATTER from "matter-js";
-import * as PIXI from "pixi.js";
+import { Spritesheet, Container, Assets, AnimatedSprite } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Player extends VisibleObjects {
   _isJumping: boolean = false;
-  _playerSpritesheet: PIXI.Spritesheet;
+  _playerSpritesheet: Spritesheet;
   _velocity: number = config.baseJumpSpeed;
 
-  constructor(
-    physicEngineWorld: MATTER.World,
-    parentContainer: PIXI.Container
-  ) {
+  constructor(physicEngineWorld: MATTER.World, parentContainer: Container) {
     super();
     this._body = MATTER.Bodies.rectangle(
       config.player.xAxisStart,
@@ -29,12 +26,12 @@ export default class Player extends VisibleObjects {
     MATTER.Composite.add(physicEngineWorld, this._body);
   }
 
-  async initSprite(parentContainer: PIXI.Container) {
-    this._playerSpritesheet = await PIXI.Assets.load("player");
+  async initSprite(parentContainer: Container) {
+    this._playerSpritesheet = await Assets.load("player");
 
     this._isLoading = false;
 
-    this._sprite = new PIXI.AnimatedSprite(
+    this._sprite = new AnimatedSprite(
       this._playerSpritesheet.animations["run"]
     );
     this._sprite.height = this._bodyHeight;

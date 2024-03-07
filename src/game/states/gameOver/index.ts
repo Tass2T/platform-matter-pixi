@@ -22,9 +22,9 @@ export default class GameOverScreen {
   }
 
   initGraphics() {
-    this._background = new Graphics();
-    this._background.beginFill(0x000000);
-    this._background.drawRect(0, 0, config.WIDTH, config.HEIGHT);
+    this._background = new Graphics()
+      .rect(0, 0, config.WIDTH, config.HEIGHT)
+      .fill("black");
     this._background.alpha = 0.7;
     this._parentContainer.addChild(this._background);
   }
