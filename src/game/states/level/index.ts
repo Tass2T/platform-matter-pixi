@@ -1,5 +1,5 @@
 import * as MATTER from "matter-js";
-import { Container, Assets, Sprite, AnimatedSprite } from "pixi.js";
+import { Container, Assets, Sprite, AnimatedSprite, Graphics } from "pixi.js";
 import Player from "../../components/player/index.js";
 import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";
@@ -29,8 +29,8 @@ export default class Level {
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
-    this._gameOverContainer.zIndex = 5;
-    this._scoreContainer.zIndex = 6;
+    this._scoreContainer.zIndex = 5;
+    this._gameOverContainer.zIndex = 6;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
@@ -250,7 +250,10 @@ export default class Level {
         this._scoreBoard.update();
         this.checkIfPlayerFell();
       } else if (this._gameState === "GameOver") {
-        this._gameOverScreen.update(this._inputManager.getPressedInputs());
+        this._gameOverScreen.update(
+          this._inputManager.getPressedInputs(),
+          delta
+        );
       }
     }
   }
