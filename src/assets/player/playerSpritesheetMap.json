@@ -84,7 +84,7 @@
   },
   "animations": {
     "run": ["run-one", "run-two", "run-three", "run-four"],
-    "jump": ["jump-one", "jump-two", "jump-three", "jump-four"]
+    "jump": ["jump-one"]
   },
   "meta": {
     "image": "playerSpritesheet.png",
