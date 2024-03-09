@@ -44,6 +44,21 @@ export default class Player extends VisibleObjects {
 
   setIsJumping(value: boolean): void {
     this._isJumping = value;
+
+    if (this._isJumping) {
+      this.startJumpAnimation();
+    } else {
+      this.startRunAnimation();
+    }
+  }
+
+  startRunAnimation() {
+    this._sprite.textures = this._playerSpritesheet.animations["run"];
+    this._sprite.gotoAndPlay(0);
+  }
+
+  startJumpAnimation() {
+    this._sprite.textures = this._playerSpritesheet.animations["jump"];
   }
 
   addVelocity(): void {
