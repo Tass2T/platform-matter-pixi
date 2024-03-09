@@ -10,12 +10,12 @@ export default class ScoreBoard {
       text: `${this._displayedPlayerScore}`,
       style: {
         fontFamily: "Arial",
-        fontSize: 26,
+        fontSize: 36,
         fill: "white",
-        stroke: { width: 2 },
+        stroke: { width: 1 },
       },
     });
-    this._scoreText.position.set(config.WIDTH - 150, 20);
+    this._scoreText.position.set(config.WIDTH - 250, 20);
     parentContainer.addChild(this._scoreText);
   }
 

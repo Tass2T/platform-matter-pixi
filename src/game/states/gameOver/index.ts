@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, Graphics, BitmapText } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 
@@ -10,10 +10,14 @@ export default class GameOverScreen {
   _isResetting: boolean = false;
   _scoreBoard: ScoreBoard;
   _curtainContainer: Container = new Container();
+  _scoreContainer: Container = new Container();
+  _yellowRectScreen: Graphics;
   _greenRectScreen: Graphics;
-  _blackRectScreen: Graphics;
   _curtainInPlace: boolean = false;
   _moveCurtains: boolean = false;
+  _moveScore: boolean = false;
+  _scoreText: BitmapText;
+
   constructor(
     parentContainer: Container,
     resetFunction: Function,
@@ -27,6 +31,31 @@ export default class GameOverScreen {
   }
 
   initCurtains() {
+    this._yellowRectScreen = new Graphics()
+      .rect(
+        config.WIDTH / 2,
+        config.HEIGHT / 2,
+        config.WIDTH + config.WIDTH / 2,
+        config.HEIGHT + config.HEIGHT / 2
+      )
+      .fill("#e7e700");
+    this._yellowRectScreen.zIndex = 1;
+
+    this._scoreText = new BitmapText({
+      text: "0",
+      style: {
+        fontFamily: "Caveat SemiBold",
+        fontSize: 56,
+        fill: "white",
+        letterSpacing: 2,
+      },
+    });
+
+    this._scoreText.zIndex = 2;
+    this._scoreText.position.set(config.WIDTH + 80, config.HEIGHT / 2.5);
+    this._scoreText.visible = false;
+    this._scoreText.skew.y = -0.01;
+
     this._greenRectScreen = new Graphics()
       .rect(
         config.WIDTH / 2,
@@ -34,20 +63,12 @@ export default class GameOverScreen {
         config.WIDTH + config.WIDTH / 2,
         config.HEIGHT + config.HEIGHT / 2
       )
-      .fill("#e8ff00");
-    this._greenRectScreen.zIndex = 1;
-    this._blackRectScreen = new Graphics()
-      .rect(
-        config.WIDTH / 2,
-        config.HEIGHT / 2,
-        config.WIDTH + config.WIDTH / 2,
-        config.HEIGHT + config.HEIGHT / 2
-      )
-      .fill("#1bbf0a");
-    this._blackRectScreen.zIndex = 2;
+      .fill("#12c200");
+    this._greenRectScreen.zIndex = 3;
     this._curtainContainer.addChild(
-      this._blackRectScreen,
-      this._greenRectScreen
+      this._greenRectScreen,
+      this._yellowRectScreen,
+      this._scoreText
     );
     this._curtainContainer.pivot.set(this._curtainContainer.width / 2, 0);
     this._curtainContainer.rotation += 50.06;
@@ -56,13 +77,12 @@ export default class GameOverScreen {
     this._parentContainer.addChild(this._curtainContainer);
   }
 
-  appear() {
+  appear(playerScore: number) {
     this._parentContainer.visible = true;
     this._isResetting = false;
-    this._counter = 0;
-  }
 
-  startAnimation() {}
+    this._scoreText.text = playerScore ? `${playerScore}` : "0";
+  }
 
   disappear() {
     this._parentContainer.visible = false;
@@ -80,14 +100,23 @@ export default class GameOverScreen {
 
   moveCurtainContainer(delta: number) {
     if (this._curtainContainer.position.x > 0)
-      this._curtainContainer.position.x -= 150 * delta;
+      this._curtainContainer.position.x -= 180 * delta;
     else this._moveCurtains = true;
   }
 
   moveCurtains(delta: number) {
-    if (this._greenRectScreen.rotation > -0.1) {
-      this._greenRectScreen.rotation -= 0.02 * delta;
+    if (this._yellowRectScreen.rotation > -0.06) {
+      this._yellowRectScreen.rotation -= 0.005 * delta;
+    } else {
+      this._moveCurtains = false;
+      this._moveScore = true;
+      this._scoreText.visible = true;
     }
+  }
+
+  moveScore(delta: number) {
+    if (this._scoreText.position.x > config.WIDTH)
+      this._scoreText.position.x -= 20 * delta;
   }
 
   update(inputArrays: Array<String>, delta: number) {
@@ -100,6 +129,7 @@ export default class GameOverScreen {
       if (this._counter === 100) this.resetLevel();
       if (!this._curtainInPlace) this.moveCurtainContainer(delta);
       if (this._moveCurtains) this.moveCurtains(delta);
+      if (this._moveScore) this.moveScore(delta);
     }
   }
 }

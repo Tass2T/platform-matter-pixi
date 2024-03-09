@@ -221,7 +221,7 @@ export default class Level {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
       this._gameState = "GameOver";
-      this._gameOverScreen.appear();
+      this._gameOverScreen.appear(this._scoreBoard.getPlayerScore());
     }
   }
 
@@ -234,7 +234,6 @@ export default class Level {
     this._player.reset();
     this._gameOverScreen.disappear();
     this._gameState = "Game";
-    console.log(this._physicEngine);
   };
 
   update(delta: number) {
