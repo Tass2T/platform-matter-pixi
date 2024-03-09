@@ -17,6 +17,7 @@ export default class GameOverScreen {
   _moveCurtains: boolean = false;
   _moveScore: boolean = false;
   _scoreText: BitmapText;
+  _textMessage: BitmapText;
 
   constructor(
     parentContainer: Container,
@@ -26,8 +27,25 @@ export default class GameOverScreen {
     this._scoreBoard = scoreBoard;
     this._parentContainer = parentContainer;
     this._resetFunction = resetFunction;
+    this.setMessage();
     this._parentContainer.visible = false;
     this.initCurtains();
+  }
+
+  setMessage() {
+    this._textMessage = new BitmapText({
+      text: "Maintenez le bouton R pour relancer!!",
+      style: {
+        fontFamily: "Arial",
+        fontSize: 22,
+        fill: "white",
+        letterSpacing: 2,
+      },
+    });
+
+    this._textMessage.position.set(20, config.HEIGHT - 50);
+    this._textMessage.zIndex = 6;
+    this._parentContainer.addChild(this._textMessage);
   }
 
   initCurtains() {
@@ -44,7 +62,7 @@ export default class GameOverScreen {
     this._scoreText = new BitmapText({
       text: "0",
       style: {
-        fontFamily: "Caveat SemiBold",
+        fontFamily: "Arial",
         fontSize: 56,
         fill: "white",
         letterSpacing: 2,
