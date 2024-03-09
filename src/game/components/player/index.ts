@@ -43,12 +43,21 @@ export default class Player extends VisibleObjects {
   }
 
   setIsJumping(value: boolean): void {
-    this._isJumping = value;
+    window.requestAnimationFrame(() => {
+      this._isJumping = value;
+      if (this._isJumping) {
+        this._sprite.textures = this._playerSpritesheet.animations["jump"];
+        this._sprite.gotoAndStop(0);
+      } else {
+        this._sprite.textures = this._playerSpritesheet.animations["run"];
+        this._sprite.gotoAndPlay(0);
+      }
+    });
+  }
 
-    if (this._isJumping) {
-      this.startAnimation("jump");
-    } else {
-      this.startAnimation("run");
+  checkJumpAnimation() {
+    if (this._body.velocity.y > 0 && !this._sprite.playing) {
+      this.startAnimation("fall");
     }
   }
 
@@ -93,7 +102,10 @@ export default class Player extends VisibleObjects {
   update() {
     if (this._sprite && this._body) {
       this.syncSpriteWithBody();
-      if (this._isJumping) this.addVelocity();
+      if (this._isJumping) {
+        this.addVelocity();
+        this.checkJumpAnimation();
+      }
     }
   }
 }
