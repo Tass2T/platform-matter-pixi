@@ -5,7 +5,7 @@ import ScoreBoard from "../../components/scoreBoard/index.js";
 export default class GameOverScreen {
   _parentContainer: Container;
   _background: Graphics;
-  _counter: number;
+  _counter: number = 0;
   _resetFunction: Function;
   _isResetting: boolean = false;
   _scoreBoard: ScoreBoard;
@@ -37,14 +37,15 @@ export default class GameOverScreen {
       text: "Maintenez le bouton R pour relancer!!",
       style: {
         fontFamily: "Arial",
-        fontSize: 22,
+        fontSize: 26,
         fill: "white",
         letterSpacing: 2,
       },
     });
 
-    this._textMessage.position.set(20, config.HEIGHT - 50);
+    this._textMessage.position.set(20, config.HEIGHT - 60);
     this._textMessage.zIndex = 6;
+    this._textMessage.visible = false;
     this._parentContainer.addChild(this._textMessage);
   }
 
@@ -106,9 +107,25 @@ export default class GameOverScreen {
     this._parentContainer.visible = false;
   }
 
+  resetVariablesAndElements() {
+    this._curtainInPlace = false;
+    this._moveCurtains = false;
+    this._moveScore = false;
+
+    this._textMessage.visible = false;
+    this._scoreText.visible = false;
+
+    this._scoreText.position.x = config.WIDTH + 80;
+    this._curtainContainer.position.x = config.WIDTH;
+    this._curtainContainer.position.y = -28;
+    this._yellowRectScreen.rotation = 0;
+  }
+
   resetLevel() {
     this._counter = 0;
     this._isResetting = true;
+    this.resetVariablesAndElements();
+
     this._resetFunction();
   }
 
@@ -118,7 +135,7 @@ export default class GameOverScreen {
 
   moveCurtainContainer(delta: number) {
     if (this._curtainContainer.position.x > 0)
-      this._curtainContainer.position.x -= 180 * delta;
+      this._curtainContainer.position.x -= 120 * delta;
     else this._moveCurtains = true;
   }
 
@@ -135,6 +152,9 @@ export default class GameOverScreen {
   moveScore(delta: number) {
     if (this._scoreText.position.x > config.WIDTH)
       this._scoreText.position.x -= 20 * delta;
+    else {
+      this._textMessage.visible = true;
+    }
   }
 
   update(inputArrays: Array<String>, delta: number) {
