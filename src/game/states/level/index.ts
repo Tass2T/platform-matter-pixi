@@ -1,5 +1,5 @@
 import * as MATTER from "matter-js";
-import { Container, Assets, Sprite, AnimatedSprite, Graphics } from "pixi.js";
+import { Container, Assets, Sprite, AnimatedSprite } from "pixi.js";
 import Player from "../../components/player/index.js";
 import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";

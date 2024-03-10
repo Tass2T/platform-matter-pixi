@@ -1,4 +1,4 @@
-import { Container, Graphics, BitmapText } from "pixi.js";
+import { Container, Graphics, BitmapText, Assets, Sprite } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 
@@ -11,6 +11,7 @@ export default class GameOverScreen {
   _scoreBoard: ScoreBoard;
   _curtainContainer: Container = new Container();
   _scoreContainer: Container = new Container();
+  _illustrationContainer: Container = new Container();
   _yellowRectScreen: Graphics;
   _greenRectScreen: Graphics;
   _curtainInPlace: boolean = false;
@@ -30,6 +31,7 @@ export default class GameOverScreen {
     this.setMessage();
     this._parentContainer.visible = false;
     this.initCurtains();
+    this.initIllustration();
   }
 
   setMessage() {
@@ -47,6 +49,16 @@ export default class GameOverScreen {
     this._textMessage.zIndex = 6;
     this._textMessage.visible = false;
     this._parentContainer.addChild(this._textMessage);
+  }
+
+  async initIllustration() {
+    const illustrationAsset = await Assets.load("gameOverIllu");
+    const illuSprite = Sprite.from(illustrationAsset);
+    illuSprite.anchor.set(0.5);
+    illuSprite.position.set(config.WIDTH * 0.7, config.HEIGHT * 0.6);
+    this._illustrationContainer.addChild(illuSprite);
+    this._illustrationContainer.visible = false;
+    this._parentContainer.addChild(this._illustrationContainer);
   }
 
   initCurtains() {
@@ -82,7 +94,7 @@ export default class GameOverScreen {
         config.WIDTH + config.WIDTH / 2,
         config.HEIGHT + config.HEIGHT / 2
       )
-      .fill("#12c200");
+      .fill("#49c800");
     this._greenRectScreen.zIndex = 3;
     this._curtainContainer.addChild(
       this._greenRectScreen,
@@ -111,6 +123,7 @@ export default class GameOverScreen {
     this._curtainInPlace = false;
     this._moveCurtains = false;
     this._moveScore = false;
+    this._illustrationContainer.visible = false;
 
     this._textMessage.visible = false;
     this._scoreText.visible = false;
@@ -154,6 +167,7 @@ export default class GameOverScreen {
       this._scoreText.position.x -= 20 * delta;
     else {
       this._textMessage.visible = true;
+      this._illustrationContainer.visible = true;
     }
   }
 

@@ -36,6 +36,10 @@
         {
           "alias": "tree3",
           "src": "background/frontProps/tree3.png"
+        },
+        {
+          "alias": "gameOverIllu",
+          "src": "gameOver/gameOverIllu.png"
         }
       ]
     }
