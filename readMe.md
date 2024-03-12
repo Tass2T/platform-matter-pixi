@@ -1,6 +1,5 @@
 TODO:
 
-- add jump animation
 - add pause
 - add "menu" state
 - add sounds

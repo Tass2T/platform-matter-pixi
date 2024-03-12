@@ -1,4 +1,11 @@
-import { Container, Graphics, BitmapText, Assets, Sprite } from "pixi.js";
+import {
+  Container,
+  Graphics,
+  BitmapText,
+  Assets,
+  Sprite,
+  AnimatedSprite,
+} from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 
@@ -19,6 +26,14 @@ export default class GameOverScreen {
   _moveScore: boolean = false;
   _scoreText: BitmapText;
   _textMessage: BitmapText;
+  _illustration: {
+    illu: Sprite;
+    eyeAnim?: AnimatedSprite;
+  };
+  _textMessageBg: {
+    front: Graphics;
+    back: Graphics;
+  };
 
   constructor(
     parentContainer: Container,
@@ -45,19 +60,58 @@ export default class GameOverScreen {
       },
     });
 
-    this._textMessage.position.set(20, config.HEIGHT - 60);
-    this._textMessage.zIndex = 6;
+    this._textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85);
+    this._textMessage.zIndex = 12;
     this._textMessage.visible = false;
-    this._parentContainer.addChild(this._textMessage);
+
+    this._textMessageBg = {
+      front: new Graphics(),
+      back: new Graphics(),
+    };
+
+    this._textMessageBg.back
+      .rect(config.WIDTH * 0.05, config.HEIGHT * 0.85, 200, 50)
+      .fill("red");
+
+    this._textMessageBg.back.zIndex = 10;
+
+    this._parentContainer.addChild(this._textMessage, this._textMessageBg.back);
   }
 
   async initIllustration() {
-    const illustrationAsset = await Assets.load("gameOverIllu");
-    const illuSprite = Sprite.from(illustrationAsset);
-    illuSprite.anchor.set(0.5);
-    illuSprite.position.set(config.WIDTH * 0.7, config.HEIGHT * 0.6);
-    this._illustrationContainer.addChild(illuSprite);
+    this._illustration = {
+      illu: new Sprite(),
+    };
+    const illustrationAsset = await Assets.load([
+      "gameOverIllu",
+      "gameOverIlluEyes",
+    ]);
+    console.log(illustrationAsset);
+
+    this._illustration.illu = Sprite.from(illustrationAsset.gameOverIllu);
+
+    this._illustration.illu.anchor.set(0.5);
+    this._illustration.illu.position.set(
+      config.WIDTH * 0.7,
+      config.HEIGHT * 0.6
+    );
+    this._illustration.eyeAnim = new AnimatedSprite(
+      illustrationAsset.gameOverIlluEyes.animations["open"]
+    );
+    this._illustration.eyeAnim.zIndex = 3;
+    this._illustration.eyeAnim.anchor.set(0.5);
+    this._illustration.eyeAnim.position.set(
+      config.WIDTH * 0.7,
+      config.HEIGHT * 0.6
+    );
+    this._illustration.eyeAnim.loop = false;
+    this._illustration.eyeAnim.animationSpeed = 0.4;
+    this._illustrationContainer.addChild(
+      this._illustration.illu,
+      this._illustration.eyeAnim
+    );
     this._illustrationContainer.visible = false;
+
     this._parentContainer.addChild(this._illustrationContainer);
   }
 
@@ -168,6 +222,7 @@ export default class GameOverScreen {
     else {
       this._textMessage.visible = true;
       this._illustrationContainer.visible = true;
+      setTimeout(() => this._illustration.eyeAnim?.play(), 2000);
     }
   }
 
