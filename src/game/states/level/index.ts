@@ -29,8 +29,8 @@ export default class Level {
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
-    this._gameOverContainer.zIndex = 5;
-    this._scoreContainer.zIndex = 6;
+    this._scoreContainer.zIndex = 5;
+    this._gameOverContainer.zIndex = 6;
     this._levelContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
@@ -221,7 +221,7 @@ export default class Level {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
       this._gameState = "GameOver";
-      this._gameOverScreen.appear();
+      this._gameOverScreen.appear(this._scoreBoard.getPlayerScore());
     }
   }
 
@@ -234,7 +234,6 @@ export default class Level {
     this._player.reset();
     this._gameOverScreen.disappear();
     this._gameState = "Game";
-    console.log(this._physicEngine);
   };
 
   update(delta: number) {
@@ -250,7 +249,10 @@ export default class Level {
         this._scoreBoard.update();
         this.checkIfPlayerFell();
       } else if (this._gameState === "GameOver") {
-        this._gameOverScreen.update(this._inputManager.getPressedInputs());
+        this._gameOverScreen.update(
+          this._inputManager.getPressedInputs(),
+          delta
+        );
       }
     }
   }
