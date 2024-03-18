@@ -6,7 +6,7 @@ import Platform from "../platform/index.js";
 export default class PlatformManager {
   _engine: MATTER.Engine;
   _platFormList: Array<Platform> = [];
-  _gameSpeed: number = config.SPEED;
+  _gameSpeed: number = 0;
   constructor(engineWorld: MATTER.Engine, parentContainer: Container) {
     this._engine = engineWorld;
     this.createPlatforms(parentContainer);

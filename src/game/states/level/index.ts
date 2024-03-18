@@ -11,6 +11,8 @@ export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
   _physicEngine: MATTER.Engine;
   _physicRenderer: MATTER.Render;
+  _inputManager: InputManager = new InputManager();
+
   _levelContainer: Container = new Container();
   _backgroundContainer: Container = new Container();
   _propsContainer: Container = new Container();
@@ -18,11 +20,14 @@ export default class Level {
   _gameContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _gameOverContainer: Container = new Container();
+
+  _countdown: number = config.COUNTDOWN;
+  _seconds: number = 0;
+
   _player: Player;
   _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
   _gameOverScreen: GameOverScreen;
-  _inputManager: InputManager = new InputManager();
 
   constructor() {
     this._backgroundContainer.zIndex = 1;
@@ -236,6 +241,13 @@ export default class Level {
     this._gameState = "Game";
   };
 
+  doEverySecond() {
+    if (Math.floor(this._seconds) === 1) {
+      this._seconds = 0;
+      this._countdown--;
+    }
+  }
+
   update(delta: number) {
     if (this._physicEngine) {
       if (this._gameState === "Game") {
@@ -248,6 +260,11 @@ export default class Level {
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
+
+        if (this._countdown) {
+          this._seconds += (1 / 60) * delta;
+          this.doEverySecond();
+        }
       } else if (this._gameState === "GameOver") {
         this._gameOverScreen.update(
           this._inputManager.getPressedInputs(),
