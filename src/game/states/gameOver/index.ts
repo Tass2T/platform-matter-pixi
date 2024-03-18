@@ -10,29 +10,31 @@ import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 
 export default class GameOverScreen {
-  _parentContainer: Container;
-  _background: Graphics;
-  _counter: number = 0;
-  _resetFunction: Function;
-  _isResetting: boolean = false;
   _scoreBoard: ScoreBoard;
+
+  _parentContainer: Container;
   _curtainContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _illustrationContainer: Container = new Container();
-  _yellowRectScreen: Graphics;
-  _greenRectScreen: Graphics;
+
+  _yellowRectScreen: Graphics = new Graphics();
+  _greenRectScreen: Graphics = new Graphics();
+  _textMessageBg: Graphics = new Graphics();
+
+  _counter: number = 0;
+  _resetFunction: Function;
+
   _curtainInPlace: boolean = false;
   _moveCurtains: boolean = false;
   _moveScore: boolean = false;
+  _isResetting: boolean = false;
+
   _scoreText: BitmapText;
   _textMessage: BitmapText;
+
   _illustration: {
     illu: Sprite;
     eyeAnim?: AnimatedSprite;
-  };
-  _textMessageBg: {
-    front: Graphics;
-    back: Graphics;
   };
 
   constructor(
@@ -42,40 +44,59 @@ export default class GameOverScreen {
   ) {
     this._scoreBoard = scoreBoard;
     this._parentContainer = parentContainer;
-    this._resetFunction = resetFunction;
-    this.setMessage();
     this._parentContainer.visible = false;
+    this._resetFunction = resetFunction;
+
     this.initCurtains();
     this.initIllustration();
+    this.setMessage();
   }
 
-  setMessage() {
-    this._textMessage = new BitmapText({
-      text: "Maintenez le bouton R pour relancer!!",
+  initCurtains() {
+    this._yellowRectScreen
+      .rect(
+        config.WIDTH / 2,
+        config.HEIGHT / 2,
+        config.WIDTH + config.WIDTH / 2,
+        config.HEIGHT + config.HEIGHT / 2
+      )
+      .fill("#e7e700");
+    this._yellowRectScreen.zIndex = 1;
+
+    this._scoreText = new BitmapText({
+      text: "0",
       style: {
         fontFamily: "Arial",
-        fontSize: 26,
+        fontSize: 56,
         fill: "white",
         letterSpacing: 2,
       },
     });
 
-    this._textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85);
-    this._textMessage.zIndex = 12;
-    this._textMessage.visible = false;
+    this._scoreText.zIndex = 2;
+    this._scoreText.position.set(config.WIDTH + 80, config.HEIGHT / 2.5);
+    this._scoreText.visible = false;
+    this._scoreText.skew.y = -0.01;
 
-    this._textMessageBg = {
-      front: new Graphics(),
-      back: new Graphics(),
-    };
-
-    this._textMessageBg.back
-      .rect(config.WIDTH * 0.05, config.HEIGHT * 0.85, 200, 50)
-      .fill("red");
-
-    this._textMessageBg.back.zIndex = 10;
-
-    this._parentContainer.addChild(this._textMessage, this._textMessageBg.back);
+    this._greenRectScreen
+      .rect(
+        config.WIDTH / 2,
+        config.HEIGHT / 2,
+        config.WIDTH + config.WIDTH / 2,
+        config.HEIGHT + config.HEIGHT / 2
+      )
+      .fill("#49c800");
+    this._greenRectScreen.zIndex = 3;
+    this._curtainContainer.addChild(
+      this._greenRectScreen,
+      this._yellowRectScreen,
+      this._scoreText
+    );
+    this._curtainContainer.pivot.set(this._curtainContainer.width / 2, 0);
+    this._curtainContainer.rotation += 50.06;
+    this._curtainContainer.position.y = -28;
+    this._curtainContainer.position.x += this._curtainContainer.width;
+    this._parentContainer.addChild(this._curtainContainer);
   }
 
   async initIllustration() {
@@ -115,51 +136,22 @@ export default class GameOverScreen {
     this._parentContainer.addChild(this._illustrationContainer);
   }
 
-  initCurtains() {
-    this._yellowRectScreen = new Graphics()
-      .rect(
-        config.WIDTH / 2,
-        config.HEIGHT / 2,
-        config.WIDTH + config.WIDTH / 2,
-        config.HEIGHT + config.HEIGHT / 2
-      )
-      .fill("#e7e700");
-    this._yellowRectScreen.zIndex = 1;
-
-    this._scoreText = new BitmapText({
-      text: "0",
+  setMessage() {
+    this._textMessage = new BitmapText({
+      text: "Maintenez le bouton R pour relancer!!",
       style: {
         fontFamily: "Arial",
-        fontSize: 56,
+        fontSize: 26,
         fill: "white",
         letterSpacing: 2,
       },
     });
 
-    this._scoreText.zIndex = 2;
-    this._scoreText.position.set(config.WIDTH + 80, config.HEIGHT / 2.5);
-    this._scoreText.visible = false;
-    this._scoreText.skew.y = -0.01;
+    this._textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85);
+    this._textMessage.zIndex = 12;
+    this._textMessage.visible = false;
 
-    this._greenRectScreen = new Graphics()
-      .rect(
-        config.WIDTH / 2,
-        config.HEIGHT / 2,
-        config.WIDTH + config.WIDTH / 2,
-        config.HEIGHT + config.HEIGHT / 2
-      )
-      .fill("#49c800");
-    this._greenRectScreen.zIndex = 3;
-    this._curtainContainer.addChild(
-      this._greenRectScreen,
-      this._yellowRectScreen,
-      this._scoreText
-    );
-    this._curtainContainer.pivot.set(this._curtainContainer.width / 2, 0);
-    this._curtainContainer.rotation += 50.06;
-    this._curtainContainer.position.y = -28;
-    this._curtainContainer.position.x += this._curtainContainer.width;
-    this._parentContainer.addChild(this._curtainContainer);
+    this._parentContainer.addChild(this._textMessage, this._textMessageBg);
   }
 
   appear(playerScore: number) {
@@ -228,12 +220,12 @@ export default class GameOverScreen {
 
   update(inputArrays: Array<String>, delta: number) {
     if (!this._isResetting) {
+      if (this._counter === 100) this.resetLevel();
       if (inputArrays.includes("KeyR")) {
         this.incrementConter(1);
       } else if (this._counter > 0) {
         this.incrementConter(-1);
       }
-      if (this._counter === 100) this.resetLevel();
       if (!this._curtainInPlace) this.moveCurtainContainer(delta);
       if (this._moveCurtains) this.moveCurtains(delta);
       if (this._moveScore) this.moveScore(delta);
