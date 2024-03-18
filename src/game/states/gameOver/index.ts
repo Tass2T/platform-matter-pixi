@@ -24,9 +24,7 @@ export default class GameOverScreen {
   _counter: number = 0;
   _resetFunction: Function;
 
-  _curtainInPlace: boolean = false;
-  _moveCurtains: boolean = false;
-  _moveScore: boolean = false;
+  _animationProcess: number = 0;
   _isResetting: boolean = false;
 
   _scoreText: BitmapText;
@@ -166,9 +164,7 @@ export default class GameOverScreen {
   }
 
   resetVariablesAndElements() {
-    this._curtainInPlace = false;
-    this._moveCurtains = false;
-    this._moveScore = false;
+    this._animationProcess = 0;
     this._illustrationContainer.visible = false;
 
     this._textMessage.visible = false;
@@ -195,15 +191,14 @@ export default class GameOverScreen {
   moveCurtainContainer(delta: number) {
     if (this._curtainContainer.position.x > 0)
       this._curtainContainer.position.x -= 120 * delta;
-    else this._moveCurtains = true;
+    else this._animationProcess++;
   }
 
   moveCurtains(delta: number) {
     if (this._yellowRectScreen.rotation > -0.06) {
       this._yellowRectScreen.rotation -= 0.005 * delta;
     } else {
-      this._moveCurtains = false;
-      this._moveScore = true;
+      this._animationProcess++;
       this._scoreText.visible = true;
     }
   }
@@ -218,6 +213,22 @@ export default class GameOverScreen {
     }
   }
 
+  processAnim(delta: number) {
+    switch (this._animationProcess) {
+      case 0:
+        this.moveCurtainContainer(delta);
+        break;
+      case 1:
+        this.moveCurtains(delta);
+        break;
+      case 2:
+        this.moveScore(delta);
+        break;
+      default:
+        break;
+    }
+  }
+
   update(inputArrays: Array<String>, delta: number) {
     if (!this._isResetting) {
       if (this._counter === 100) this.resetLevel();
@@ -226,9 +237,7 @@ export default class GameOverScreen {
       } else if (this._counter > 0) {
         this.incrementConter(-1);
       }
-      if (!this._curtainInPlace) this.moveCurtainContainer(delta);
-      if (this._moveCurtains) this.moveCurtains(delta);
-      if (this._moveScore) this.moveScore(delta);
+      this.processAnim(delta);
     }
   }
 }
