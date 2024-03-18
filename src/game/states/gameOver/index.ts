@@ -105,7 +105,6 @@ export default class GameOverScreen {
       "gameOverIllu",
       "gameOverIlluEyes",
     ]);
-    console.log(illustrationAsset);
 
     this._illustration.illu = Sprite.from(illustrationAsset.gameOverIllu);
 
@@ -174,6 +173,8 @@ export default class GameOverScreen {
     this._curtainContainer.position.x = config.WIDTH;
     this._curtainContainer.position.y = -28;
     this._yellowRectScreen.rotation = 0;
+
+    this._illustration.eyeAnim?.gotoAndStop(0);
   }
 
   resetLevel() {
@@ -210,6 +211,7 @@ export default class GameOverScreen {
       this._textMessage.visible = true;
       this._illustrationContainer.visible = true;
       setTimeout(() => this._illustration.eyeAnim?.play(), 2000);
+      this._animationProcess++;
     }
   }
 
