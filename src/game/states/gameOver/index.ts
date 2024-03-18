@@ -16,6 +16,7 @@ export default class GameOverScreen {
   _curtainContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _illustrationContainer: Container = new Container();
+  _msgContainer: Container = new Container();
 
   _yellowRectScreen: Graphics = new Graphics();
   _greenRectScreen: Graphics = new Graphics();
@@ -29,6 +30,7 @@ export default class GameOverScreen {
 
   _scoreText: BitmapText;
   _textMessage: BitmapText;
+  _shadowTextMessage: BitmapText;
 
   _illustration: {
     illu: Sprite;
@@ -43,6 +45,12 @@ export default class GameOverScreen {
     this._scoreBoard = scoreBoard;
     this._parentContainer = parentContainer;
     this._parentContainer.visible = false;
+    this._parentContainer.addChild(
+      this._curtainContainer,
+      this._scoreContainer,
+      this._illustrationContainer,
+      this._msgContainer
+    );
     this._resetFunction = resetFunction;
 
     this.initCurtains();
@@ -94,7 +102,6 @@ export default class GameOverScreen {
     this._curtainContainer.rotation += 50.06;
     this._curtainContainer.position.y = -28;
     this._curtainContainer.position.x += this._curtainContainer.width;
-    this._parentContainer.addChild(this._curtainContainer);
   }
 
   async initIllustration() {
@@ -129,8 +136,6 @@ export default class GameOverScreen {
       this._illustration.eyeAnim
     );
     this._illustrationContainer.visible = false;
-
-    this._parentContainer.addChild(this._illustrationContainer);
   }
 
   setMessage() {
@@ -144,11 +149,31 @@ export default class GameOverScreen {
       },
     });
 
-    this._textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85);
-    this._textMessage.zIndex = 12;
-    this._textMessage.visible = false;
+    this._shadowTextMessage = new BitmapText({
+      text: "Maintenez le bouton R pour relancer!!",
+      style: {
+        fontFamily: "Arial",
+        fontSize: 26,
+        fill: 0x111111,
+        letterSpacing: 2,
+      },
+    });
 
-    this._parentContainer.addChild(this._textMessage, this._textMessageBg);
+    this._textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85);
+    this._shadowTextMessage.position.set(
+      config.WIDTH * 0.05,
+      config.HEIGHT * 0.85
+    );
+    this._textMessage.zIndex = 12;
+    this._shadowTextMessage.zIndex = 13;
+    this._textMessage.visible = false;
+    this._shadowTextMessage.visible = false;
+
+    this._msgContainer.addChild(
+      this._textMessage,
+      this._shadowTextMessage,
+      this._textMessageBg
+    );
   }
 
   appear(playerScore: number) {
@@ -167,6 +192,7 @@ export default class GameOverScreen {
     this._illustrationContainer.visible = false;
 
     this._textMessage.visible = false;
+    this._shadowTextMessage.visible = false;
     this._scoreText.visible = false;
 
     this._scoreText.position.x = config.WIDTH + 80;
@@ -209,6 +235,7 @@ export default class GameOverScreen {
       this._scoreText.position.x -= 20 * delta;
     else {
       this._textMessage.visible = true;
+      this._shadowTextMessage.visible = true;
       this._illustrationContainer.visible = true;
       setTimeout(() => this._illustration.eyeAnim?.play(), 2000);
       this._animationProcess++;
