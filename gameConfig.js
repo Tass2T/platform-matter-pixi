@@ -4,6 +4,7 @@ export default {
   SPEED: 6,
   GRAVITY: 1.2,
   MAXSPEED: 15,
+  COUNTDOWN: 3,
   PHYSIC_DEBUG_MODE: false,
   player: {
     xAxisStart: 150,
