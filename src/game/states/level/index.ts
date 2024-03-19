@@ -1,5 +1,5 @@
 import * as MATTER from "matter-js";
-import { Container, Assets, Sprite, AnimatedSprite } from "pixi.js";
+import { Container, Assets, Sprite, AnimatedSprite, BitmapText } from "pixi.js";
 import Player from "../../components/player/index.js";
 import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";
@@ -11,6 +11,8 @@ export default class Level {
   _gameState: "Menu" | "Game" | "GameOver" = "Menu";
   _physicEngine: MATTER.Engine;
   _physicRenderer: MATTER.Render;
+  _inputManager: InputManager = new InputManager();
+
   _levelContainer: Container = new Container();
   _backgroundContainer: Container = new Container();
   _propsContainer: Container = new Container();
@@ -18,11 +20,15 @@ export default class Level {
   _gameContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _gameOverContainer: Container = new Container();
+
+  _countdown: number = config.COUNTDOWN;
+  _displayedSecond: BitmapText;
+  _seconds: number = 0;
+
   _player: Player;
   _platformManager: PlatformManager;
   _scoreBoard: ScoreBoard;
   _gameOverScreen: GameOverScreen;
-  _inputManager: InputManager = new InputManager();
 
   constructor() {
     this._backgroundContainer.zIndex = 1;
@@ -114,6 +120,25 @@ export default class Level {
     }
   }
 
+  displayCountdown() {
+    this._displayedSecond = new BitmapText({
+      text: `${this._countdown}`,
+      style: {
+        fontFamily: "Arial",
+        fontSize: 50,
+        fill: "white",
+        stroke: { width: 4 },
+      },
+    });
+
+    this._displayedSecond.position.set(
+      config.WIDTH / 2 - this._displayedSecond.width / 2,
+      config.HEIGHT / 4
+    );
+    this._displayedSecond.zIndex = 20;
+    this._levelContainer.addChild(this._displayedSecond);
+  }
+
   updateProps(delta: number) {
     this._propsContainer.children.forEach((prop) => {
       prop.position.x -= 0.05 * this._platformManager.getGamespeed() * delta;
@@ -160,6 +185,7 @@ export default class Level {
 
     this._player = new Player(this._physicEngine.world, this._gameContainer);
     this._gameState = "Game";
+    this.displayCountdown();
   }
 
   getLevelContainer(): Container {
@@ -230,11 +256,25 @@ export default class Level {
     this.resetProps();
     this.resetFrontProps();
     this._platformManager.resetPlatforms();
-    this._platformManager.setGameSpeed(config.SPEED);
+    this._countdown = config.COUNTDOWN;
+    this._displayedSecond.text = `${this._countdown}`;
     this._player.reset();
     this._gameOverScreen.disappear();
     this._gameState = "Game";
   };
+
+  updateCountdown() {
+    if (Math.floor(this._seconds) === 1) {
+      this._seconds = 0;
+      this._countdown--;
+
+      if (this._countdown) this._displayedSecond.text = `${this._countdown}`;
+      else {
+        this._displayedSecond.text = "";
+        this._platformManager.setGameSpeed(config.SPEED);
+      }
+    }
+  }
 
   update(delta: number) {
     if (this._physicEngine) {
@@ -248,6 +288,11 @@ export default class Level {
         this.updateFrontProps(delta);
         this._scoreBoard.update();
         this.checkIfPlayerFell();
+
+        if (this._countdown) {
+          this._seconds += (1 / 60) * delta;
+          this.updateCountdown();
+        }
       } else if (this._gameState === "GameOver") {
         this._gameOverScreen.update(
           this._inputManager.getPressedInputs(),
