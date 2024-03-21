@@ -171,14 +171,6 @@ export default class GameOverScreen {
     this._textMessage.visible = false;
     this._shadowTextMessage.visible = false;
 
-    this._yellowCircle
-      .circle(config.WIDTH * 0.46, config.HEIGHT * 0.86, 30)
-      .fill(0xffff00);
-
-    this._yellowCircleMask
-      .circle(config.WIDTH * 0.46, config.HEIGHT * 0.86, 30)
-      .fill(0x000000);
-
     this._shadowTextMessage.mask = this._yellowCircleMask;
 
     this._msgContainer.addChild(
@@ -272,15 +264,38 @@ export default class GameOverScreen {
     }
   }
 
+  syncYellowCircle() {
+    this._yellowCircle.clear();
+    this._yellowCircleMask.clear();
+
+    this._yellowCircle
+      .circle(
+        config.WIDTH * 0.46,
+        config.HEIGHT * 0.86,
+        50 + Math.floor(this._counter * 6)
+      )
+      .fill(0xffff00);
+
+    this._yellowCircleMask
+      .circle(
+        config.WIDTH * 0.46,
+        config.HEIGHT * 0.86,
+        50 + Math.floor(this._counter * 6)
+      )
+      .fill(0x000000);
+  }
+
   update(inputArrays: Array<String>, delta: number) {
     if (!this._isResetting) {
-      if (this._counter === 100) this.resetLevel();
+      if (this._counter > 100) this.resetLevel();
       if (inputArrays.includes("KeyR")) {
-        this.incrementConter(1);
+        this.incrementConter(3 * delta);
       } else if (this._counter > 0) {
-        this.incrementConter(-1);
+        this.incrementConter(-3 * delta);
       }
       this.processAnim(delta);
+
+      this.syncYellowCircle();
     }
   }
 }
