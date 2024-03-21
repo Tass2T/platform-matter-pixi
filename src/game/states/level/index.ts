@@ -87,17 +87,18 @@ export default class Level {
     this.setFrontProps();
   }
 
-  async setProps(): Promise<void> {
-    const textures = await Assets.load(["props2", "props1"]);
+  setProps(): void {
+    ["props2", "props1"].forEach(async (prop, index) => {
+      const texture = await Assets.load(prop);
+      const sprite = new Sprite(texture);
 
-    let index = 0;
-    for (const [key] of Object.entries(textures)) {
-      const sprite = new Sprite(textures[key]);
       sprite.anchor.set(0.5, 1);
-      sprite.position.set(index, config.HEIGHT);
-      index = index + config.WIDTH;
+      sprite.position.set(
+        index > 0 ? index * config.WIDTH : index,
+        config.HEIGHT
+      );
       this._propsContainer.addChild(sprite);
-    }
+    });
   }
 
   async setFrontProps(): Promise<void> {
