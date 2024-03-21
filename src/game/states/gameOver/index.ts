@@ -21,6 +21,8 @@ export default class GameOverScreen {
   _yellowRectScreen: Graphics = new Graphics();
   _greenRectScreen: Graphics = new Graphics();
   _textMessageBg: Graphics = new Graphics();
+  _yellowCircle: Graphics = new Graphics();
+  _yellowCircleMask: Graphics = new Graphics();
 
   _counter: number = 0;
   _resetFunction: Function;
@@ -154,7 +156,7 @@ export default class GameOverScreen {
       style: {
         fontFamily: "Arial",
         fontSize: 26,
-        fill: 0x111111,
+        fill: 0x49c801,
         letterSpacing: 2,
       },
     });
@@ -169,10 +171,22 @@ export default class GameOverScreen {
     this._textMessage.visible = false;
     this._shadowTextMessage.visible = false;
 
+    this._yellowCircle
+      .circle(config.WIDTH * 0.46, config.HEIGHT * 0.86, 30)
+      .fill(0xffff00);
+
+    this._yellowCircleMask
+      .circle(config.WIDTH * 0.46, config.HEIGHT * 0.86, 30)
+      .fill(0x000000);
+
+    this._shadowTextMessage.mask = this._yellowCircleMask;
+
     this._msgContainer.addChild(
       this._textMessage,
       this._shadowTextMessage,
-      this._textMessageBg
+      this._textMessageBg,
+      this._yellowCircle,
+      this._yellowCircleMask
     );
   }
 
