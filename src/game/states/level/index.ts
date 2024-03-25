@@ -57,6 +57,10 @@ export default class Level {
     this.initLevel();
   }
 
+  getScoreBoard() {
+    return this._scoreBoard;
+  }
+
   initEngine() {
     this._physicEngine = MATTER.Engine.create();
     this._physicEngine.gravity.scale = config.GRAVITY;
@@ -277,28 +281,21 @@ export default class Level {
     }
   }
 
-  update(delta: number) {
-    if (this._physicEngine) {
-      if (this._gameState === "Game") {
-        MATTER.Engine.update(this._physicEngine, delta);
-        this._player.update();
-        this.checkForCollisionWithDiamond();
-        this.checkForCollisionWithPlatform();
-        this._platformManager.update(delta);
-        this.updateProps(delta);
-        this.updateFrontProps(delta);
-        this._scoreBoard.update();
-        this.checkIfPlayerFell();
+  update(delta: number, inputArrays: Array<String>) {
+    if (this._physicEngine && this._player) {
+      MATTER.Engine.update(this._physicEngine, delta);
+      this._player.update();
+      this.checkForCollisionWithDiamond();
+      this.checkForCollisionWithPlatform();
+      this._platformManager.update(delta);
+      this.updateProps(delta);
+      this.updateFrontProps(delta);
+      this._scoreBoard.update();
+      this.checkIfPlayerFell();
 
-        if (this._countdown) {
-          this._seconds += (1 / 60) * delta;
-          this.updateCountdown();
-        }
-      } else if (this._gameState === "GameOver") {
-        this._gameOverScreen.update(
-          this._inputManager.getPressedInputs(),
-          delta
-        );
+      if (this._countdown) {
+        this._seconds += (1 / 60) * delta;
+        this.updateCountdown();
       }
     }
   }

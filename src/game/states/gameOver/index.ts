@@ -285,7 +285,7 @@ export default class GameOverScreen {
       .fill(0x000000);
   }
 
-  update(inputArrays: Array<String>, delta: number) {
+  update(delta: number, inputArrays: Array<String>) {
     if (!this._isResetting) {
       if (this._counter > 100) this.resetLevel();
       if (inputArrays.includes("KeyR")) {
