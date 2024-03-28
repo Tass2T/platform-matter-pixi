@@ -2,10 +2,13 @@ import { Container, BitmapText } from "pixi.js";
 import config from "../../../../gameConfig.js";
 
 export default class ScoreBoard {
-  _displayedPlayerScore: number = 0;
-  _actualPlayerScore: number = 0;
+  _displayedPlayerScore = 0;
+  _actualPlayerScore = 0;
+  _currentContainer = new Container();
   _scoreText: BitmapText | null = null;
   constructor(parentContainer: Container) {
+    parentContainer.addChild(this._currentContainer);
+    this._currentContainer.zIndex = 1;
     this._scoreText = new BitmapText({
       text: `${this._displayedPlayerScore}`,
       style: {
@@ -16,7 +19,7 @@ export default class ScoreBoard {
       },
     });
     this._scoreText.position.set(config.WIDTH - 250, 20);
-    parentContainer.addChild(this._scoreText);
+    this._currentContainer.addChild(this._scoreText);
   }
 
   getPlayerScore(): number {
@@ -36,6 +39,10 @@ export default class ScoreBoard {
     this._actualPlayerScore = 0;
     this._displayedPlayerScore = 0;
     if (this._scoreText) this._scoreText.text = `${this._displayedPlayerScore}`;
+  }
+
+  setVisibility(value: boolean) {
+    this._currentContainer.visible = value;
   }
 
   update(): void {

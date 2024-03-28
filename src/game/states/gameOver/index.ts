@@ -8,11 +8,9 @@ import {
 } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
+import GameState from "../../traits/GameState.js";
 
-export default class GameOverScreen {
-  _scoreBoard: ScoreBoard;
-
-  _parentContainer: Container;
+export default class GameOverScreen extends GameState {
   _curtainContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _illustrationContainer: Container = new Container();
@@ -25,7 +23,6 @@ export default class GameOverScreen {
   _yellowCircleMask: Graphics = new Graphics();
 
   _counter: number = 0;
-  _resetFunction: Function;
 
   _animationProcess: number = 0;
   _isResetting: boolean = false;
@@ -41,19 +38,18 @@ export default class GameOverScreen {
 
   constructor(
     parentContainer: Container,
-    resetFunction: Function,
-    scoreBoard: ScoreBoard
+    scoreBoard: ScoreBoard,
+    changeState: Function
   ) {
-    this._scoreBoard = scoreBoard;
-    this._parentContainer = parentContainer;
-    this._parentContainer.visible = false;
-    this._parentContainer.addChild(
+    super(parentContainer, changeState, scoreBoard);
+    this.switchVisibility();
+    this._stateContainer.zIndex = 10;
+    this._stateContainer.addChild(
       this._curtainContainer,
       this._scoreContainer,
       this._illustrationContainer,
       this._msgContainer
     );
-    this._resetFunction = resetFunction;
 
     this.initCurtains();
     this.initIllustration();
@@ -184,13 +180,8 @@ export default class GameOverScreen {
 
   appear(playerScore: number) {
     this._parentContainer.visible = true;
-    this._isResetting = false;
 
     this._scoreText.text = playerScore ? `${playerScore}` : "0";
-  }
-
-  disappear() {
-    this._parentContainer.visible = false;
   }
 
   resetVariablesAndElements() {
@@ -209,12 +200,8 @@ export default class GameOverScreen {
     this._illustration.eyeAnim?.gotoAndStop(0);
   }
 
-  resetLevel() {
-    this._counter = 0;
-    this._isResetting = true;
-    this.resetVariablesAndElements();
-
-    this._resetFunction();
+  start() {
+    this.switchVisibility();
   }
 
   incrementConter(value: number): void {
@@ -272,7 +259,7 @@ export default class GameOverScreen {
       .circle(
         config.WIDTH * 0.46,
         config.HEIGHT * 0.86,
-        50 + Math.floor(this._counter * 6)
+        50 + Math.floor(this._counter * 8)
       )
       .fill(0xffff00);
 
@@ -280,22 +267,27 @@ export default class GameOverScreen {
       .circle(
         config.WIDTH * 0.46,
         config.HEIGHT * 0.86,
-        50 + Math.floor(this._counter * 6)
+        50 + Math.floor(this._counter * 8)
       )
       .fill(0x000000);
   }
 
-  update(inputArrays: Array<String>, delta: number) {
-    if (!this._isResetting) {
-      if (this._counter > 100) this.resetLevel();
-      if (inputArrays.includes("KeyR")) {
-        this.incrementConter(3 * delta);
-      } else if (this._counter > 0) {
-        this.incrementConter(-3 * delta);
-      }
-      this.processAnim(delta);
+  leaveScreen() {
+    this._counter = 0;
+    this.resetVariablesAndElements();
+    this.switchVisibility();
+    this._changeState("level");
+  }
 
-      this.syncYellowCircle();
+  update(delta: number, inputArrays: Array<String>) {
+    if (this._counter > 100) this.leaveScreen();
+    if (inputArrays.includes("KeyR")) {
+      this.incrementConter(3 * delta);
+    } else if (this._counter > 0) {
+      this.incrementConter(-3 * delta);
     }
+    this.processAnim(delta);
+
+    this.syncYellowCircle();
   }
 }
