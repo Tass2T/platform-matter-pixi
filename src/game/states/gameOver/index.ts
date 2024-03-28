@@ -286,9 +286,9 @@ export default class GameOverScreen extends GameState {
   update(delta: number, inputArrays: Array<String>) {
     if (this._counter > 100) this.leaveScreen();
     if (inputArrays.includes("Space")) {
-      this.incrementConter(3 * delta);
+      this.incrementConter(4 * delta);
     } else if (this._counter > 0) {
-      this.incrementConter(-3 * delta);
+      this.incrementConter(-4 * delta);
     }
     this.processAnim(delta);
 
