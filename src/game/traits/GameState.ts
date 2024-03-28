@@ -18,10 +18,6 @@ export default class GameState {
   }
 
   switchVisibility() {
-    console.log(this._stateContainer.visible);
-
     this._stateContainer.visible = !this._stateContainer.visible;
-
-    console.log(this._stateContainer.visible);
   }
 }

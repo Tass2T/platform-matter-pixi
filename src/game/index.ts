@@ -10,7 +10,7 @@ import ScoreBoard from "./components/scoreBoard/index.js";
 export default class Game {
   #pixiApp: Application;
   #inputManager: InputManager = new InputManager();
-  currentGameState: "menu" | "level" | "gameOver" = "level";
+  currentGameState: "menu" | "level" | "gameOver" = "menu";
   gameStates: {
     menu: Menu;
     level: Level;
