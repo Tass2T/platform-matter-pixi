@@ -8,19 +8,19 @@ import InputManager from "../utils/inputManager.js";
 import ScoreBoard from "./components/scoreBoard/index.js";
 
 export default class Game {
-  _pixiApp: Application;
-  _inputManager: InputManager = new InputManager();
-  _currentGameState: "menu" | "level" | "gameOver" = "level";
-  _gameStates: {
+  #pixiApp: Application;
+  #inputManager: InputManager = new InputManager();
+  currentGameState: "menu" | "level" | "gameOver" = "level";
+  #gameStates: {
     menu: Menu;
     level: Level;
     gameOver: GameOverScreen;
   };
-  _scoreBoard: ScoreBoard;
+  #scoreBoard: ScoreBoard;
   constructor() {
-    this._pixiApp = new Application();
+    this.#pixiApp = new Application();
 
-    this._pixiApp
+    this.#pixiApp
       .init({
         height: config.HEIGHT,
         width: config.WIDTH,
@@ -28,10 +28,10 @@ export default class Game {
         premultipliedAlpha: false,
       })
       .then(() => {
-        this._pixiApp.stage.interactiveChildren = false;
+        this.#pixiApp.stage.interactiveChildren = false;
 
         if (!config.PHYSIC_DEBUG_MODE)
-          document.body.appendChild(this._pixiApp.canvas as HTMLCanvasElement);
+          document.body.appendChild(this.#pixiApp.canvas as HTMLCanvasElement);
         this.initGame();
       });
   }
@@ -39,32 +39,37 @@ export default class Game {
   async initGame() {
     await initAssetsBundles();
 
-    this._scoreBoard = new ScoreBoard(this._pixiApp.stage);
+    this.#scoreBoard = new ScoreBoard(this.#pixiApp.stage);
 
-    this._gameStates = {
-      menu: new Menu(),
-      level: new Level(),
+    this.#gameStates = {
+      menu: new Menu(this.#pixiApp.stage, this.changeState, this.#scoreBoard),
+      level: new Level(this.#pixiApp.stage, this.changeState, this.#scoreBoard),
       gameOver: new GameOverScreen(
-        this._pixiApp.stage,
-        this.resetLevel,
-        this._scoreBoard
+        this.#pixiApp.stage,
+        this.reset,
+        this.#scoreBoard,
+        this.changeState
       ),
     };
 
-    this._pixiApp.ticker.maxFPS = 60;
-    this._pixiApp.ticker.add((ticker: Ticker) => {
+    this.#pixiApp.ticker.maxFPS = 60;
+    this.#pixiApp.ticker.add((ticker: Ticker) => {
       this.update(ticker.deltaTime);
     });
   }
 
-  resetLevel() {
-    this._gameStates.level.resetLevel();
+  reset() {
+    this.#gameStates.level.resetLevel();
+  }
+
+  changeState(newState: "menu" | "level" | "gameOver"): void {
+    this.currentGameState = newState;
   }
 
   update(delta: number) {
-    this._gameStates[this._currentGameState].update(
+    this.#gameStates[this.currentGameState].update(
       delta,
-      this._inputManager.getPressedInputs()
+      this.#inputManager.getPressedInputs()
     );
   }
 }

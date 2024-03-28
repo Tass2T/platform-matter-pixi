@@ -8,11 +8,9 @@ import {
 } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
+import GameState from "../../traits/GameState.js";
 
-export default class GameOverScreen {
-  _scoreBoard: ScoreBoard;
-
-  _parentContainer: Container;
+export default class GameOverScreen extends GameState {
   _curtainContainer: Container = new Container();
   _scoreContainer: Container = new Container();
   _illustrationContainer: Container = new Container();
@@ -42,10 +40,11 @@ export default class GameOverScreen {
   constructor(
     parentContainer: Container,
     resetFunction: Function,
-    scoreBoard: ScoreBoard
+    scoreBoard: ScoreBoard,
+    changeState: Function
   ) {
-    this._scoreBoard = scoreBoard;
-    this._parentContainer = parentContainer;
+    super(parentContainer, changeState, scoreBoard);
+
     this._parentContainer.visible = false;
     this._parentContainer.addChild(
       this._curtainContainer,

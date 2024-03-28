@@ -5,39 +5,41 @@ import PlatformManager from "../../components/platformManager/index.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 import GameOverScreen from "../gameOver/index.js";
-import InputManager from "../../../utils/inputManager.js";
+import GameState from "../../traits/GameState.js";
 
-export default class Level {
-  _gameState: "Menu" | "Game" | "GameOver" = "Menu";
+export default class Level extends GameState {
   _physicEngine: MATTER.Engine;
   _physicRenderer: MATTER.Render;
-  _inputManager: InputManager = new InputManager();
 
-  _levelContainer: Container = new Container();
-  _backgroundContainer: Container = new Container();
-  _propsContainer: Container = new Container();
-  _frontPropsContainer: Container = new Container();
-  _gameContainer: Container = new Container();
-  _scoreContainer: Container = new Container();
-  _gameOverContainer: Container = new Container();
+  _backgroundContainer = new Container();
+  _propsContainer = new Container();
+  _frontPropsContainer = new Container();
+  _gameContainer = new Container();
+  _scoreContainer = new Container();
+  _gameOverContainer = new Container();
 
   _countdown: number = config.COUNTDOWN;
   _displayedSecond: BitmapText;
-  _seconds: number = 0;
+  _seconds = 0;
 
   _player: Player;
   _platformManager: PlatformManager;
-  _scoreBoard: ScoreBoard;
   _gameOverScreen: GameOverScreen;
 
-  constructor() {
+  constructor(
+    parentContainer: Container,
+    changeState: Function,
+    scoreBoard: ScoreBoard
+  ) {
+    super(parentContainer, changeState, scoreBoard);
+
     this._backgroundContainer.zIndex = 1;
     this._propsContainer.zIndex = 2;
     this._frontPropsContainer.zIndex = 3;
     this._gameContainer.zIndex = 4;
     this._scoreContainer.zIndex = 5;
     this._gameOverContainer.zIndex = 6;
-    this._levelContainer.addChild(
+    this._stateContainer.addChild(
       this._backgroundContainer,
       this._propsContainer,
       this._frontPropsContainer,
@@ -48,11 +50,7 @@ export default class Level {
 
     this.initEngine();
 
-    this._scoreBoard = new ScoreBoard(this._scoreContainer);
-
     this.setBackground();
-
-    this.prepareGameOver();
 
     this.initLevel();
   }
@@ -141,7 +139,7 @@ export default class Level {
       config.HEIGHT / 4
     );
     this._displayedSecond.zIndex = 20;
-    this._levelContainer.addChild(this._displayedSecond);
+    this._stateContainer.addChild(this._displayedSecond);
   }
 
   updateProps(delta: number) {
@@ -194,7 +192,7 @@ export default class Level {
   }
 
   getLevelContainer(): Container {
-    return this._levelContainer;
+    return this._stateContainer;
   }
 
   initKeyListener() {
@@ -240,19 +238,10 @@ export default class Level {
     });
   }
 
-  prepareGameOver() {
-    this._gameOverScreen = new GameOverScreen(
-      this._gameOverContainer,
-      this.resetLevel,
-      this._scoreBoard
-    );
-  }
-
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
-      this._gameState = "GameOver";
-      this._gameOverScreen.appear(this._scoreBoard.getPlayerScore());
+      this._changeState("GameOver");
     }
   }
 
@@ -265,7 +254,7 @@ export default class Level {
     this._displayedSecond.text = `${this._countdown}`;
     this._player.reset();
     this._gameOverScreen.disappear();
-    this._gameState = "Game";
+    this._changeState("Game");
   };
 
   updateCountdown() {
@@ -281,7 +270,7 @@ export default class Level {
     }
   }
 
-  update(delta: number, inputArrays: Array<String>) {
+  update(delta: number) {
     if (this._physicEngine && this._player) {
       MATTER.Engine.update(this._physicEngine, delta);
       this._player.update();
