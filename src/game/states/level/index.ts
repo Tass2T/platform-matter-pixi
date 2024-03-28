@@ -187,7 +187,7 @@ export default class Level extends GameState {
     );
 
     this._player = new Player(this._physicEngine.world, this._gameContainer);
-    this._gameState = "Game";
+    this._changeState("Game");
     this.displayCountdown();
   }
 
