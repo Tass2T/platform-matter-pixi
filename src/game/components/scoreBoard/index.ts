@@ -41,6 +41,10 @@ export default class ScoreBoard {
     if (this._scoreText) this._scoreText.text = `${this._displayedPlayerScore}`;
   }
 
+  setVisibility(value: boolean) {
+    this._currentContainer.visible = value;
+  }
+
   update(): void {
     if (this._displayedPlayerScore !== this._actualPlayerScore)
       this.incrementDisplayedPlayerScore();

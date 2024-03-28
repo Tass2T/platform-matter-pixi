@@ -3,7 +3,7 @@ import ScoreBoard from "../components/scoreBoard";
 
 export default class GameState {
   _parentContainer: Container;
-  _stateContainer: Container = new Container();
+  _stateContainer = new Container();
   _changeState: Function;
   _scoreBoard: ScoreBoard;
   constructor(
@@ -15,5 +15,13 @@ export default class GameState {
     this._parentContainer.addChild(this._stateContainer);
     this._changeState = changeState;
     this._scoreBoard = scoreBoard;
+  }
+
+  switchVisibility() {
+    console.log(this._stateContainer.visible);
+
+    this._stateContainer.visible = !this._stateContainer.visible;
+
+    console.log(this._stateContainer.visible);
   }
 }

@@ -187,7 +187,6 @@ export default class Level extends GameState {
     );
 
     this._player = new Player(this._physicEngine.world, this._gameContainer);
-    this._changeState("Game");
     this.displayCountdown();
   }
 
@@ -241,11 +240,11 @@ export default class Level extends GameState {
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
-      this._changeState("GameOver");
+      this._changeState("gameOver");
     }
   }
 
-  resetLevel = (): void => {
+  start = (): void => {
     this._scoreBoard.resetScore();
     this.resetProps();
     this.resetFrontProps();
@@ -253,8 +252,6 @@ export default class Level extends GameState {
     this._countdown = config.COUNTDOWN;
     this._displayedSecond.text = `${this._countdown}`;
     this._player.reset();
-    this._gameOverScreen.disappear();
-    this._changeState("Game");
   };
 
   updateCountdown() {

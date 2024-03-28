@@ -11,7 +11,7 @@ export default class Game {
   #pixiApp: Application;
   #inputManager: InputManager = new InputManager();
   currentGameState: "menu" | "level" | "gameOver" = "level";
-  #gameStates: {
+  gameStates: {
     menu: Menu;
     level: Level;
     gameOver: GameOverScreen;
@@ -41,12 +41,11 @@ export default class Game {
 
     this.#scoreBoard = new ScoreBoard(this.#pixiApp.stage);
 
-    this.#gameStates = {
+    this.gameStates = {
       menu: new Menu(this.#pixiApp.stage, this.changeState, this.#scoreBoard),
       level: new Level(this.#pixiApp.stage, this.changeState, this.#scoreBoard),
       gameOver: new GameOverScreen(
         this.#pixiApp.stage,
-        this.reset,
         this.#scoreBoard,
         this.changeState
       ),
@@ -58,16 +57,13 @@ export default class Game {
     });
   }
 
-  reset() {
-    this.#gameStates.level.resetLevel();
-  }
-
-  changeState(newState: "menu" | "level" | "gameOver"): void {
+  changeState = (newState: "menu" | "level" | "gameOver"): void => {
     this.currentGameState = newState;
-  }
+    this.gameStates[this.currentGameState].start();
+  };
 
   update(delta: number) {
-    this.#gameStates[this.currentGameState].update(
+    this.gameStates[this.currentGameState].update(
       delta,
       this.#inputManager.getPressedInputs()
     );

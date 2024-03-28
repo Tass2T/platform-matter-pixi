@@ -14,4 +14,6 @@ export default class Menu extends GameState {
   update(delta: number, inputArrays: Array<String>) {
     console.log("heeehaa", delta, inputArrays);
   }
+
+  start() {}
 }
