@@ -137,8 +137,9 @@ export default class GameOverScreen extends GameState {
   }
 
   setMessage() {
+    const message = "Maintenez le bouton Espace pour relancer!!";
     this._textMessage = new BitmapText({
-      text: "Maintenez le bouton R pour relancer!!",
+      text: message,
       style: {
         fontFamily: "Arial",
         fontSize: 26,
@@ -148,7 +149,7 @@ export default class GameOverScreen extends GameState {
     });
 
     this._shadowTextMessage = new BitmapText({
-      text: "Maintenez le bouton R pour relancer!!",
+      text: message,
       style: {
         fontFamily: "Arial",
         fontSize: 26,
@@ -202,6 +203,9 @@ export default class GameOverScreen extends GameState {
 
   start() {
     this.switchVisibility();
+    this._scoreText.text = this._scoreBoard.getPlayerScore()
+      ? `${this._scoreBoard.getPlayerScore()}`
+      : "0";
   }
 
   incrementConter(value: number): void {
@@ -281,10 +285,10 @@ export default class GameOverScreen extends GameState {
 
   update(delta: number, inputArrays: Array<String>) {
     if (this._counter > 100) this.leaveScreen();
-    if (inputArrays.includes("KeyR")) {
-      this.incrementConter(3 * delta);
+    if (inputArrays.includes("Space")) {
+      this.incrementConter(4 * delta);
     } else if (this._counter > 0) {
-      this.incrementConter(-3 * delta);
+      this.incrementConter(-4 * delta);
     }
     this.processAnim(delta);
 

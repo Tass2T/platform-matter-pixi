@@ -90,15 +90,11 @@ export default class Level extends GameState {
   }
 
   setProps(): void {
-    ["props2", "props1"].forEach(async (prop, index) => {
+    ["props2", "props1"].forEach(async (prop) => {
       const texture = await Assets.load(prop);
       const sprite = new Sprite(texture);
 
       sprite.anchor.set(0.5, 1);
-      sprite.position.set(
-        index > 0 ? index * config.WIDTH : index,
-        config.HEIGHT
-      );
       this._propsContainer.addChild(sprite);
     });
   }
@@ -106,7 +102,6 @@ export default class Level extends GameState {
   async setFrontProps(): Promise<void> {
     const textures = await Assets.load(["tree1", "tree2", "tree3"]);
 
-    let index = 0;
     const frontPropsWidth = 500;
     const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 2;
     const texturesKeys = Object.keys(textures);
@@ -117,9 +112,8 @@ export default class Level extends GameState {
       );
       sprite.width = frontPropsWidth;
       sprite.anchor.set(0.5, 0.7);
-      sprite.position.set(index, config.HEIGHT);
+      sprite.position.set(0, config.HEIGHT);
       this._frontPropsContainer.addChild(sprite);
-      index += frontPropsWidth - 100;
     }
   }
 
@@ -162,13 +156,13 @@ export default class Level extends GameState {
     });
   }
 
-  resetProps() {
+  setPropsPos() {
     this._propsContainer.children.forEach((prop, index) => {
       prop.position.set(index + config.WIDTH * index, config.HEIGHT);
     });
   }
 
-  resetFrontProps() {
+  setFrontPropsPos() {
     const frontPropsWidth = 500;
     let index = 0;
     this._frontPropsContainer.children.forEach((prop) => {
@@ -202,7 +196,7 @@ export default class Level extends GameState {
   makePlayerJump(e: KeyboardEvent) {
     if (e.repeat) return;
 
-    if (e.code === "Space") this._player.setIsJumping(true);
+    if (e.code === "Space" && !this._countdown) this._player.setIsJumping(true);
   }
 
   stopPlayerJump(e: KeyboardEvent) {
@@ -210,14 +204,19 @@ export default class Level extends GameState {
   }
 
   checkForCollisionWithPlatform() {
+    let isCollinding = false;
     this._platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(
         this._player.getBody(),
         platform.getBody()
       );
-      if (collision?.collided && collision.normal.y === 1)
+      if (collision?.collided && collision.normal.y === 1) {
         this._player.resetJump();
+        isCollinding = true;
+      }
     });
+
+    if (!isCollinding) console.log("heya");
   }
 
   checkForCollisionWithDiamond() {
@@ -246,8 +245,8 @@ export default class Level extends GameState {
 
   start = (): void => {
     this._scoreBoard.resetScore();
-    this.resetProps();
-    this.resetFrontProps();
+    this.setPropsPos();
+    this.setFrontPropsPos();
     this._platformManager.resetPlatforms();
     this._countdown = config.COUNTDOWN;
     this._displayedSecond.text = `${this._countdown}`;
