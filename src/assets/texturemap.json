@@ -46,6 +46,19 @@
           "src": "gameOver/illuEyeMap.json"
         }
       ]
+    },
+    {
+      "name": "menu",
+      "assets": [
+        {
+          "alias": "background",
+          "src": "menu/arriere.png"
+        },
+        {
+          "alias": "persoBody",
+          "src": "menu/persoSheet.json"
+        }
+      ]
     }
   ]
 }
