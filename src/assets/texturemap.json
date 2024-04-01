@@ -57,6 +57,14 @@
         {
           "alias": "persoBody",
           "src": "menu/persoSheet.json"
+        },
+        {
+          "alias": "lArm",
+          "src": "menu/LArm.png"
+        },
+        {
+          "alias": "rArm",
+          "src": "menu/RArm.png"
         }
       ]
     }

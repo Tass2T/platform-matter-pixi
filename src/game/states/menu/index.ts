@@ -10,13 +10,12 @@ export default class Menu extends GameState {
     scoreBoard: ScoreBoard
   ) {
     super(parentContainer, changeState, scoreBoard);
-    this._stateContainer.zIndex = 12;
+    this._stateContainer.zIndex = 1;
     this.initBackground();
   }
 
   async initBackground() {
     const menubundle = await Assets.loadBundle("menu");
-    console.log(menubundle);
 
     const textureSprite = new Sprite(menubundle.background);
     const persoSprite = new AnimatedSprite(
@@ -25,6 +24,7 @@ export default class Menu extends GameState {
     persoSprite.anchor.set(0.5, 0.5);
     persoSprite.height = config.HEIGHT * 0.9;
     persoSprite.width = persoSprite.height;
+    persoSprite.zIndex = 3
 
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
 
@@ -32,7 +32,24 @@ export default class Menu extends GameState {
     textureSprite.height = config.HEIGHT;
     textureSprite.width = config.WIDTH;
 
-    this._stateContainer.addChild(textureSprite, persoSprite);
+    const leftArm = new Sprite(menubundle.lArm)
+    leftArm.anchor.set(0.5,0.5)
+    leftArm.height = persoSprite.height * 0.35
+    leftArm.width = leftArm.height
+    leftArm.position.set(config.WIDTH / 2 - persoSprite.width / 2.9, config.HEIGHT / 2.4)
+    leftArm.angle = 15
+    leftArm.zIndex = 4
+
+    const rightArm = new Sprite(menubundle.rArm)
+    rightArm.anchor.set(0.5,0.5)
+    rightArm.height = persoSprite.height * 0.35
+    rightArm.height = persoSprite.height * 0.35
+    rightArm.width = rightArm.height
+    rightArm.position.set(config.WIDTH / 2 + persoSprite.width / 3.4, config.HEIGHT / 2.4)
+    rightArm.zIndex = 2
+
+
+    this._stateContainer.addChild(textureSprite, persoSprite, leftArm, rightArm);
   }
 
   start() {
