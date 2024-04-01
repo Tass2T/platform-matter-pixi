@@ -18,6 +18,11 @@ export default class Menu extends GameState {
     const menubundle = await Assets.loadBundle("menu");
 
     const textureSprite = new Sprite(menubundle.background);
+    textureSprite.position.set(0, 0);
+    textureSprite.height = config.HEIGHT;
+    textureSprite.width = config.WIDTH;
+
+
     const persoSprite = new AnimatedSprite(
       menubundle.persoBody.animations.closeEye
     );
@@ -25,12 +30,10 @@ export default class Menu extends GameState {
     persoSprite.height = config.HEIGHT * 0.9;
     persoSprite.width = persoSprite.height;
     persoSprite.zIndex = 3
-
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
+    persoSprite.label = "body"
 
-    textureSprite.position.set(0, 0);
-    textureSprite.height = config.HEIGHT;
-    textureSprite.width = config.WIDTH;
+    
 
     const leftArm = new Sprite(menubundle.lArm)
     leftArm.anchor.set(0.5,0.5)
@@ -39,6 +42,7 @@ export default class Menu extends GameState {
     leftArm.position.set(config.WIDTH / 2 - persoSprite.width / 2.9, config.HEIGHT / 2.4)
     leftArm.angle = 15
     leftArm.zIndex = 4
+    leftArm.label = "leftArm"
 
     const rightArm = new Sprite(menubundle.rArm)
     rightArm.anchor.set(0.5,0.5)
@@ -47,6 +51,7 @@ export default class Menu extends GameState {
     rightArm.width = rightArm.height
     rightArm.position.set(config.WIDTH / 2 + persoSprite.width / 3.4, config.HEIGHT / 2.4)
     rightArm.zIndex = 2
+    rightArm.label = "rightArm"
 
 
     this._stateContainer.addChild(textureSprite, persoSprite, leftArm, rightArm);
