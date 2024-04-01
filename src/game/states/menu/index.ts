@@ -34,7 +34,7 @@ export default class Menu extends GameState {
     persoSprite.zIndex = 3
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
     persoSprite.label = "body"
-    persoSprite.animationSpeed = 1.1
+    persoSprite.animationSpeed = 1.2
     persoSprite.loop = false
     persoSprite.onComplete = () => persoSprite.gotoAndStop(0)
     this._body = persoSprite
