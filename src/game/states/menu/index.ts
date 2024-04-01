@@ -4,10 +4,12 @@ import ScoreBoard from "../../components/scoreBoard";
 import GameState from "../../traits/GameState";
 
 export default class Menu extends GameState {
+  _seconds = 0
+  _body: AnimatedSprite
   constructor(
     parentContainer: Container,
     changeState: Function,
-    scoreBoard: ScoreBoard
+    scoreBoard: ScoreBoard,
   ) {
     super(parentContainer, changeState, scoreBoard);
     this._stateContainer.zIndex = 1;
@@ -32,7 +34,10 @@ export default class Menu extends GameState {
     persoSprite.zIndex = 3
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
     persoSprite.label = "body"
-
+    persoSprite.animationSpeed = 1.1
+    persoSprite.loop = false
+    persoSprite.onComplete = () => persoSprite.gotoAndStop(0)
+    this._body = persoSprite
     
 
     const leftArm = new Sprite(menubundle.lArm)
@@ -61,6 +66,14 @@ export default class Menu extends GameState {
     return;
   }
 
+  animateBody() {
+    if(Math.floor(this._seconds) === 3) {
+      this._body.play()
+      this._seconds = 0
+      
+    }
+  }
+
   leave() {
     this.switchVisibility();
     this._changeState("level");
@@ -68,5 +81,9 @@ export default class Menu extends GameState {
 
   update(delta: number, inputArrays: Array<String>) {
     if (inputArrays.length) this.leave();
+
+    this.animateBody()
+
+    this._seconds += (1 / 60) * delta;
   }
 }
