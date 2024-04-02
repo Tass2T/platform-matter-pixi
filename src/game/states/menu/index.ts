@@ -51,7 +51,7 @@ export default class Menu extends GameState {
     leftArm.anchor.set(1, 0.5);
     leftArm.height = persoSprite.height * 0.35;
     leftArm.width = leftArm.height;
-    leftArm.position.set(persoSprite.x - 100, config.HEIGHT / 2.2);
+    leftArm.position.set(persoSprite.x - 70, config.HEIGHT / 2.2);
     leftArm.angle = 15;
     leftArm.zIndex = 4;
     this.#lArm = leftArm;
@@ -61,7 +61,7 @@ export default class Menu extends GameState {
     rightArm.height = persoSprite.height * 0.35;
     rightArm.height = persoSprite.height * 0.35;
     rightArm.width = rightArm.height;
-    rightArm.position.set(config.WIDTH / 2 + 90, config.HEIGHT / 2.6);
+    rightArm.position.set(config.WIDTH / 2 + 80, config.HEIGHT / 2.6);
     rightArm.zIndex = 2;
     this.#rArm = rightArm;
 
