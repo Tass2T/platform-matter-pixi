@@ -32,9 +32,9 @@ export default class Menu extends GameState {
     const eyes = new AnimatedSprite(menubundle.persoEyes.animations.blink);
     eyes.zIndex = 6;
     eyes.anchor.set(0.5);
-    eyes.position.set(config.WIDTH / 2 + 90, config.HEIGHT / 2 - 150);
-    eyes.width = eyes.width * 0.4;
-    eyes.height = eyes.height * 0.4;
+    eyes.position.set(config.WIDTH / 2 + 65, config.HEIGHT / 2 - 110);
+    eyes.width = eyes.width * 0.3;
+    eyes.height = eyes.height * 0.3;
     eyes.loop = false;
     eyes.animationSpeed = 1.4;
     eyes.onComplete = () => eyes.gotoAndStop(0);
@@ -42,8 +42,8 @@ export default class Menu extends GameState {
 
     const persoSprite = new Sprite(menubundle.persoBody);
     persoSprite.anchor.set(0.5, 0.5);
-    persoSprite.height = 700;
-    persoSprite.width = 700;
+    persoSprite.height = 500;
+    persoSprite.width = 500;
     persoSprite.zIndex = 3;
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
 
