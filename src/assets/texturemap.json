@@ -56,7 +56,11 @@
         },
         {
           "alias": "persoBody",
-          "src": "menu/persoSheet.json"
+          "src": "menu/perso.png"
+        },
+        {
+          "alias": "persoEyes",
+          "src": "menu/eyesSheetMap.json"
         },
         {
           "alias": "lArm",

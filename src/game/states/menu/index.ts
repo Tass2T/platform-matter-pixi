@@ -7,7 +7,7 @@ export default class Menu extends GameState {
   #seconds = 0;
   #eyeCounts = 0;
   #charContainer = new Container();
-  #body: AnimatedSprite;
+  #eyes: AnimatedSprite;
   #lArm: Sprite;
   #rArm: Sprite;
   #isReady = false;
@@ -29,19 +29,23 @@ export default class Menu extends GameState {
     textureSprite.height = config.HEIGHT;
     textureSprite.width = config.WIDTH;
 
-    const persoSprite = new AnimatedSprite(
-      menubundle.persoBody.animations.closeEye
-    );
+    const eyes = new AnimatedSprite(menubundle.persoEyes.animations.blink);
+    eyes.zIndex = 6;
+    eyes.anchor.set(0.5);
+    eyes.position.set(config.WIDTH / 2 + 90, config.HEIGHT / 2 - 150);
+    eyes.width = eyes.width * 0.4;
+    eyes.height = eyes.height * 0.4;
+    eyes.loop = false;
+    eyes.animationSpeed = 1.4;
+    eyes.onComplete = () => eyes.gotoAndStop(0);
+    this.#eyes = eyes;
+
+    const persoSprite = new Sprite(menubundle.persoBody);
     persoSprite.anchor.set(0.5, 0.5);
-    persoSprite.height = config.HEIGHT * 0.9;
-    persoSprite.width = persoSprite.height;
+    persoSprite.height = 700;
+    persoSprite.width = 700;
     persoSprite.zIndex = 3;
     persoSprite.position.set(config.WIDTH / 2, config.HEIGHT / 2);
-    persoSprite.label = "body";
-    persoSprite.animationSpeed = 1.2;
-    persoSprite.loop = false;
-    persoSprite.onComplete = () => persoSprite.gotoAndStop(0);
-    this.#body = persoSprite;
 
     const leftArm = new Sprite(menubundle.lArm);
     leftArm.anchor.set(1, 0.5);
@@ -50,7 +54,6 @@ export default class Menu extends GameState {
     leftArm.position.set(persoSprite.x - 100, config.HEIGHT / 2.2);
     leftArm.angle = 15;
     leftArm.zIndex = 4;
-    leftArm.label = "leftArm";
     this.#lArm = leftArm;
 
     const rightArm = new Sprite(menubundle.rArm);
@@ -60,10 +63,15 @@ export default class Menu extends GameState {
     rightArm.width = rightArm.height;
     rightArm.position.set(config.WIDTH / 2 + 90, config.HEIGHT / 2.6);
     rightArm.zIndex = 2;
-    rightArm.label = "rightArm";
     this.#rArm = rightArm;
 
-    this.#charContainer.addChild(textureSprite, persoSprite, leftArm, rightArm);
+    this.#charContainer.addChild(
+      textureSprite,
+      persoSprite,
+      leftArm,
+      rightArm,
+      eyes
+    );
     this._stateContainer.addChild(this.#charContainer);
 
     this.#isReady = true;
@@ -75,7 +83,7 @@ export default class Menu extends GameState {
 
   animateBody(delta: number) {
     if (Math.floor(this.#eyeCounts) === 3) {
-      this.#body.play();
+      this.#eyes.play();
       this.#eyeCounts = 0;
     }
 
