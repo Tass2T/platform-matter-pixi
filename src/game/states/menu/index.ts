@@ -80,12 +80,12 @@ export default class Menu extends GameState {
     }
 
     this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5;
-    this.#rArm.angle = 15 + Math.cos(this.#seconds) * 5;
+    this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3;
   }
 
   leave() {
-    // this.switchVisibility();
-    // this._changeState("level");
+    this.switchVisibility();
+    this._changeState("level");
   }
 
   update(delta: number, inputArrays: Array<String>) {
