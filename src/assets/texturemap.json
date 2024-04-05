@@ -69,6 +69,18 @@
         {
           "alias": "rArm",
           "src": "menu/RArm.png"
+        },
+        {
+          "alias": "redBalloon",
+          "src": "menu/red.png"
+        },
+        {
+          "alias": "blueBalloon",
+          "src": "menu/blue.png"
+        },
+        {
+          "alias": "yellow",
+          "src": "menu/yellow.png"
         }
       ]
     }

@@ -10,6 +10,7 @@ export default class Menu extends GameState {
   #eyes: AnimatedSprite;
   #lArm: Sprite;
   #rArm: Sprite;
+  #balloons: Array<Sprite> = [];
   #isReady = false;
   constructor(
     parentContainer: Container,
@@ -64,6 +65,12 @@ export default class Menu extends GameState {
     rightArm.position.set(config.WIDTH / 2 + 80, config.HEIGHT / 2.6);
     rightArm.zIndex = 2;
     this.#rArm = rightArm;
+
+    ["red", "blue", "yellow"].forEach((item) => {
+      const sprite = new Sprite(menubundle[item]);
+
+      this.#balloons.push(sprite);
+    });
 
     this.#charContainer.addChild(
       textureSprite,
