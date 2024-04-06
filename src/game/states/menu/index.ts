@@ -1,4 +1,4 @@
-import { AnimatedSprite, Assets, Container, Sprite } from "pixi.js";
+import { AnimatedSprite, Assets, Container, Sprite, TextStyle } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard";
 import GameState from "../../traits/GameState";
@@ -10,7 +10,7 @@ export default class Menu extends GameState {
   #eyes: AnimatedSprite;
   #lArm: Sprite;
   #rArm: Sprite;
-  #balloons: Array<Sprite> = [];
+  #text: Text;
   #isReady = false;
   constructor(
     parentContainer: Container,
@@ -20,6 +20,7 @@ export default class Menu extends GameState {
     super(parentContainer, changeState, scoreBoard);
     this._stateContainer.zIndex = 1;
     this.initBackground();
+    this.initText();
   }
 
   async initBackground() {
@@ -76,6 +77,10 @@ export default class Menu extends GameState {
     this._stateContainer.addChild(this.#charContainer);
 
     this.#isReady = true;
+  }
+
+  async initText() {
+    this.#text = new Text("Spanish are honest");
   }
 
   start() {
