@@ -66,12 +66,6 @@ export default class Menu extends GameState {
     rightArm.zIndex = 2;
     this.#rArm = rightArm;
 
-    ["red", "blue", "yellow"].forEach((item) => {
-      const sprite = new Sprite(menubundle[item]);
-
-      this.#balloons.push(sprite);
-    });
-
     this.#charContainer.addChild(
       textureSprite,
       persoSprite,
