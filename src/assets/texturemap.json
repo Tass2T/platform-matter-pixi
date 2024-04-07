@@ -46,6 +46,44 @@
           "src": "gameOver/illuEyeMap.json"
         }
       ]
+    },
+    {
+      "name": "menu",
+      "assets": [
+        {
+          "alias": "background",
+          "src": "menu/arriere.png"
+        },
+        {
+          "alias": "persoBody",
+          "src": "menu/perso.png"
+        },
+        {
+          "alias": "persoEyes",
+          "src": "menu/eyesSheetMap.json"
+        },
+        {
+          "alias": "lArm",
+          "src": "menu/LArm.png"
+        },
+        {
+          "alias": "rArm",
+          "src": "menu/RArm.png"
+        }
+      ]
+    },
+    {
+      "name": "fonts",
+      "assets": [
+        {
+          "alias": "title",
+          "src": "font/knee.ttf"
+        },
+        {
+          "alias": "msgText",
+          "src": "font/denk.ttf"
+        }
+      ]
     }
   ]
 }

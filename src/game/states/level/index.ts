@@ -204,19 +204,14 @@ export default class Level extends GameState {
   }
 
   checkForCollisionWithPlatform() {
-    let isCollinding = false;
     this._platformManager.getPlatformList().forEach((platform) => {
       const collision = MATTER.Collision.collides(
         this._player.getBody(),
         platform.getBody()
       );
-      if (collision?.collided && collision.normal.y === 1) {
+      if (collision?.collided && collision.normal.y === 1)
         this._player.resetJump();
-        isCollinding = true;
-      }
     });
-
-    if (!isCollinding) console.log("heya");
   }
 
   checkForCollisionWithDiamond() {
