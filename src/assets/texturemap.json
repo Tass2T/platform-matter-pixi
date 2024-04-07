@@ -69,6 +69,10 @@
         {
           "alias": "rArm",
           "src": "menu/RArm.png"
+        },
+        {
+          "alias": "font",
+          "src": "font/knee.ttf"
         }
       ]
     }

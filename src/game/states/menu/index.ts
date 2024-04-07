@@ -1,4 +1,11 @@
-import { AnimatedSprite, Assets, Container, Sprite, TextStyle } from "pixi.js";
+import {
+  AnimatedSprite,
+  Assets,
+  Container,
+  FillGradient,
+  Sprite,
+  Text,
+} from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard";
 import GameState from "../../traits/GameState";
@@ -80,7 +87,28 @@ export default class Menu extends GameState {
   }
 
   async initText() {
-    this.#text = new Text("Spanish are honest");
+    const font = await Assets.load("font");
+    console.log(font);
+
+    this.#text = new Text({
+      text: "KIWI RUN",
+      style: {
+        fontFamily: font.family,
+        fontSize: 136,
+        fill: "#65ca00",
+        padding: 30,
+        dropShadow: {
+          distance: 10,
+          color: "#ffffff",
+          angle: Math.PI * 12,
+        },
+      },
+    });
+
+    this.#text.position.set(30, 0);
+    this.#text.zIndex = 30;
+
+    this._stateContainer.addChild(this.#text);
   }
 
   start() {
@@ -104,7 +132,7 @@ export default class Menu extends GameState {
 
   update(delta: number, inputArrays: Array<String>) {
     if (this.#isReady) {
-      if (inputArrays.length) this.leave();
+      // if (inputArrays.length) this.leave();
 
       this.animateBody(delta);
 
