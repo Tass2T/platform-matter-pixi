@@ -69,10 +69,19 @@
         {
           "alias": "rArm",
           "src": "menu/RArm.png"
+        }
+      ]
+    },
+    {
+      "name": "fonts",
+      "assets": [
+        {
+          "alias": "title",
+          "src": "font/knee.ttf"
         },
         {
-          "alias": "font",
-          "src": "font/knee.ttf"
+          "alias": "msgText",
+          "src": "font/denk.ttf"
         }
       ]
     }

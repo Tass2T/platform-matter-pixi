@@ -18,6 +18,7 @@ export default class Menu extends GameState {
   #lArm: Sprite;
   #rArm: Sprite;
   #text: Text;
+  #subTitle: Text;
   #isReady = false;
   constructor(
     parentContainer: Container,
@@ -87,13 +88,13 @@ export default class Menu extends GameState {
   }
 
   async initText() {
-    const font = await Assets.load("font");
-    console.log(font);
+    const fonts = await Assets.loadBundle("fonts");
+    console.log(fonts);
 
     this.#text = new Text({
       text: "KIWI RUN",
       style: {
-        fontFamily: font.family,
+        fontFamily: fonts.title.family,
         fontSize: 136,
         fill: "#65ca00",
         padding: 30,
@@ -107,8 +108,27 @@ export default class Menu extends GameState {
 
     this.#text.position.set(30, 0);
     this.#text.zIndex = 30;
+    this.#text.rotation = -0.05;
 
-    this._stateContainer.addChild(this.#text);
+    this.#subTitle = new Text({
+      text: "Appuyerz sur n'importe quel touche pour débuter !!",
+      style: {
+        fontFamily: fonts.msgText.family,
+        fontSize: 30,
+        fill: "#ffffff",
+        dropShadow: {
+          distance: 3,
+          angle: Math.PI * 12,
+          color: "#53a400",
+        },
+      },
+    });
+
+    this.#subTitle.anchor.set(0.5, 1);
+    this.#subTitle.zIndex = 30;
+    this.#subTitle.position.set(config.WIDTH / 2, config.HEIGHT * 0.9);
+
+    this._stateContainer.addChild(this.#text, this.#subTitle);
   }
 
   start() {
@@ -121,6 +141,9 @@ export default class Menu extends GameState {
       this.#eyeCounts = 0;
     }
 
+    if (Math.floor(this.#seconds) % 2 === 0) this.#subTitle.visible = false;
+    else this.#subTitle.visible = true;
+
     this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5;
     this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3;
   }
@@ -132,7 +155,7 @@ export default class Menu extends GameState {
 
   update(delta: number, inputArrays: Array<String>) {
     if (this.#isReady) {
-      // if (inputArrays.length) this.leave();
+      if (inputArrays.length) this.leave();
 
       this.animateBody(delta);
 
