@@ -210,6 +210,8 @@ export default class GameOverScreen extends GameState {
 
   incrementConter(value: number): void {
     this._counter += value;
+
+    if (this._counter < 0) this._counter = 0;
   }
 
   moveCurtainContainer(delta: number) {
