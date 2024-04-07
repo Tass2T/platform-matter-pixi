@@ -244,6 +244,7 @@ export default class Level extends GameState {
     this.setFrontPropsPos();
     this._platformManager.resetPlatforms();
     this._countdown = config.COUNTDOWN;
+    this._scoreBoard.setVisibility(true);
     this._displayedSecond.text = `${this._countdown}`;
     this._player.reset();
   };
