@@ -1,12 +1,12 @@
 import * as MATTER from "matter-js";
 import { Spritesheet, Container, Assets, AnimatedSprite } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Player extends VisibleObjects {
   _isJumping: boolean = false;
   _playerSpritesheet: Spritesheet;
-  _velocity: number = config.baseJumpSpeed;
+  _velocity: number = config.player.baseJumpSpeed;
 
   constructor(physicEngineWorld: MATTER.World, parentContainer: Container) {
     super();

@@ -1,6 +1,6 @@
 import * as MATTER from "matter-js";
 import { Container } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import Platform from "../platform/index.js";
 
 export default class PlatformManager {
@@ -35,7 +35,7 @@ export default class PlatformManager {
           ? config.platForm.start
           : this._platFormList[this._platFormList.length - 1].getRightCoord() +
             this.setAjustedGap();
-      const ground = new Platform("standard", x, levelContainer, i === 1);
+      const ground = new Platform(x, levelContainer, i === 1);
 
       this._platFormList.push(ground);
       MATTER.Composite.add(this._engine.world, ground.getBody());

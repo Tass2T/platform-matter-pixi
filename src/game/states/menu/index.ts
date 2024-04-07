@@ -1,5 +1,5 @@
 import { AnimatedSprite, Assets, Container, Sprite, Text } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import ScoreBoard from "../../components/scoreBoard";
 import GameState from "../../traits/GameState";
 

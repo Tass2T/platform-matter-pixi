@@ -38,6 +38,7 @@ export default class VisibleObjects {
   }
 
   update(delta: number) {
+    delta
     if (this._sprite && this._body) this.syncSpriteWithBody();
   }
 }
