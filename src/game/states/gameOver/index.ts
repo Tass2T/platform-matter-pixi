@@ -263,7 +263,7 @@ export default class GameOverScreen extends GameState {
 
     this._yellowCircle
       .circle(
-        config.WIDTH * 0.46,
+        config.WIDTH * 0.5,
         config.HEIGHT * 0.86,
         50 + Math.floor(this._counter * 8)
       )
@@ -271,7 +271,7 @@ export default class GameOverScreen extends GameState {
 
     this._yellowCircleMask
       .circle(
-        config.WIDTH * 0.46,
+        config.WIDTH * 0.5,
         config.HEIGHT * 0.86,
         50 + Math.floor(this._counter * 8)
       )
