@@ -36,9 +36,7 @@ export default class Diamond extends VisibleObjects {
       platFormPos.x -
         config.platForm.standard.width / 2 +
         (config.diamond.side + config.diamond.gap) * pos,
-      this._orderIndex % 2 === 0
-        ? platFormPos.y + 10
-        : platFormPos.y - config.diamond.height,
+      platFormPos.y - config.diamond.height,
       config.diamond.side,
       config.diamond.side,
       { isStatic: true, isSensor: true }
@@ -94,6 +92,12 @@ export default class Diamond extends VisibleObjects {
     this._sprite.visible = false;
   }
 
+  reset() {
+    this.syncPosition();
+    this.syncSpriteWithBody();
+    this.setHasBeenTaken(false);
+  }
+
   setHasBeenTaken(value: boolean) {
     if (this._sprite) {
       this._hasBeenTaken = value;
@@ -109,7 +113,7 @@ export default class Diamond extends VisibleObjects {
         this._sprite.visible = true;
         this._sprite.loop = true;
         this._sprite.textures = this._spritesheet.animations["idle"];
-        this._sprite.animationSpeed = 0.08;
+        this._sprite.animationSpeed = 0.09;
         this._sprite.gotoAndPlay(0);
         this._pointsContainer.position.y = 0;
         this._pointsContainer.visible = false;
@@ -122,11 +126,9 @@ export default class Diamond extends VisibleObjects {
       x:
         this._parentPos.x -
         config.platForm.standard.width / 2 +
-        (config.diamond.side + config.diamond.gap) * this._orderIndex,
+        (40 + config.diamond.gap) * this._orderIndex,
       y:
-        this._orderIndex % 2 === 0
-          ? this._parentPos.y - config.diamond.height - 15
-          : this._parentPos.y - config.diamond.height,
+        this._parentPos.y - 50,
     });
   }
 

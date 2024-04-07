@@ -20,10 +20,10 @@ export default {
     },
   },
   diamond: {
-    side: 30,
-    height: 50,
-    nb: 4,
-    gap: 30,
+    side: 35,
+    height: 35,
+    nb: 3,
+    gap: 40,
     points: 500,
   },
 };

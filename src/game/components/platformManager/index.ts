@@ -54,8 +54,7 @@ export default class PlatformManager {
 
       this._platFormList[i].setPosition(x, y);
       this._platFormList[i]._diamondList.forEach((diamond) => {
-        diamond.syncPosition();
-        diamond.syncSpriteWithBody();
+        diamond.reset();
         if (diamond._boundWithFirstPlatform) diamond.hide();
       });
     }

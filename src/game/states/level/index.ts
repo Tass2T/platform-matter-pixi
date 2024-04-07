@@ -21,6 +21,7 @@ export default class Level extends GameState {
   _countdown: number = config.COUNTDOWN;
   _displayedSecond: BitmapText;
   _seconds = 0;
+  #blockJump = true;
 
   _player: Player;
   _platformManager: PlatformManager;
@@ -196,7 +197,7 @@ export default class Level extends GameState {
   makePlayerJump(e: KeyboardEvent) {
     if (e.repeat) return;
 
-    if (e.code === "Space" && !this._countdown) this._player.setIsJumping(true);
+    if (e.code === "Space" && !this.#blockJump) this._player.setIsJumping(true);
   }
 
   stopPlayerJump(e: KeyboardEvent) {
@@ -234,16 +235,18 @@ export default class Level extends GameState {
   checkIfPlayerFell(): void {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0);
+      this.#blockJump = true;
       this._changeState("gameOver");
     }
   }
 
   start = (): void => {
+    this._countdown = config.COUNTDOWN;
     this._scoreBoard.resetScore();
     this.setPropsPos();
     this.setFrontPropsPos();
     this._platformManager.resetPlatforms();
-    this._countdown = config.COUNTDOWN;
+    this._scoreBoard.setVisibility(true);
     this._displayedSecond.text = `${this._countdown}`;
     this._player.reset();
   };
@@ -256,6 +259,7 @@ export default class Level extends GameState {
       if (this._countdown) this._displayedSecond.text = `${this._countdown}`;
       else {
         this._displayedSecond.text = "";
+        this.#blockJump = false;
         this._platformManager.setGameSpeed(config.SPEED);
       }
     }

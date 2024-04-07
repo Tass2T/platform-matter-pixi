@@ -1,11 +1,4 @@
-import {
-  AnimatedSprite,
-  Assets,
-  Container,
-  FillGradient,
-  Sprite,
-  Text,
-} from "pixi.js";
+import { AnimatedSprite, Assets, Container, Sprite, Text } from "pixi.js";
 import config from "../../../../gameConfig.js";
 import ScoreBoard from "../../components/scoreBoard";
 import GameState from "../../traits/GameState";
@@ -27,8 +20,9 @@ export default class Menu extends GameState {
   ) {
     super(parentContainer, changeState, scoreBoard);
     this._stateContainer.zIndex = 1;
-    this.initBackground();
-    this.initText();
+    this.initBackground().then(() => {
+      this.initText().then(() => (this.#isReady = true));
+    });
   }
 
   async initBackground() {
@@ -83,13 +77,10 @@ export default class Menu extends GameState {
       eyes
     );
     this._stateContainer.addChild(this.#charContainer);
-
-    this.#isReady = true;
   }
 
   async initText() {
     const fonts = await Assets.loadBundle("fonts");
-    console.log(fonts);
 
     this.#text = new Text({
       text: "KIWI RUN",
@@ -141,9 +132,8 @@ export default class Menu extends GameState {
       this.#eyeCounts = 0;
     }
 
-    if (Math.floor(this.#seconds) % 2 === 0) this.#subTitle.visible = false;
-    else this.#subTitle.visible = true;
-
+    this.#subTitle.width =
+      this.#subTitle.width + Math.cos(this.#seconds) * delta;
     this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5;
     this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3;
   }

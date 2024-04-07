@@ -19,6 +19,7 @@ export default class ScoreBoard {
       },
     });
     this._scoreText.position.set(config.WIDTH - 250, 20);
+    this.setVisibility(false);
     this._currentContainer.addChild(this._scoreText);
   }
 
