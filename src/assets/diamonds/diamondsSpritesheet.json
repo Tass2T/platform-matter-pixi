@@ -4,91 +4,112 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 150,
-        "h": 150
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "idle-two": {
       "frame": {
-        "x": 150,
+        "x": 400,
         "y": 0,
-        "w": 150,
-        "h": 150
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "idle-three": {
       "frame": {
-        "x": 300,
+        "x": 800,
         "y": 0,
-        "w": 150,
-        "h": 150
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "idle-four": {
       "frame": {
-        "x": 450,
+        "x": 1200,
         "y": 0,
-        "w": 150,
-        "h": 150
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
+
     "taken-one": {
       "frame": {
         "x": 0,
-        "y": 150,
-        "w": 150,
-        "h": 150
+        "y": 400,
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "taken-two": {
       "frame": {
-        "x": 150,
-        "y": 150,
-        "w": 150,
-        "h": 150
+        "x": 400,
+        "y": 400,
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "taken-three": {
       "frame": {
-        "x": 300,
-        "y": 150,
-        "w": 150,
-        "h": 150
+        "x": 800,
+        "y": 400,
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     },
     "taken-four": {
       "frame": {
-        "x": 450,
-        "y": 150,
-        "w": 150,
-        "h": 150
+        "x": 1200,
+        "y": 400,
+        "w": 400,
+        "h": 400
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 150, "h": 150 },
-      "sourceSize": { "w": 150, "h": 150 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
+    },
+    "taken-five": {
+      "frame": {
+        "x": 1600,
+        "y": 400,
+        "w": 400,
+        "h": 400
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
+    },
+    "taken-six": {
+      "frame": {
+        "x": 2000,
+        "y": 400,
+        "w": 400,
+        "h": 400
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 400, "h": 400 },
+      "sourceSize": { "w": 400, "h": 400 }
     }
   },
   "animations": {
     "idle": ["idle-one", "idle-two", "idle-three", "idle-four"],
-    "taken": ["taken-one", "taken-two", "taken-three", "taken-four"]
+    "taken": ["taken-one", "taken-two", "taken-three", "taken-four","taken-five","taken-six" ]
   },
   "meta": {
     "image": "diamondsSpritesheet.png",
     "format": "RGBA8888",
-    "size": { "w": 600, "h": 300 },
+    "size": { "w": 2400, "h": 800 },
     "scale": "2"
   }
 }
