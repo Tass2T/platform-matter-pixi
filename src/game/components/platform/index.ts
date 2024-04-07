@@ -1,6 +1,6 @@
 import * as MATTER from "matter-js";
 import { Container, Assets, AnimatedSprite } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import Diamond from "../diamond/index.js";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
@@ -8,7 +8,6 @@ export default class Platform extends VisibleObjects {
   _diamondList: Array<Diamond> = [];
   _isFirst: boolean;
   constructor(
-    type: string,
     xStart: number,
     levelContainer: Container,
     first = false
@@ -18,15 +17,15 @@ export default class Platform extends VisibleObjects {
     this._body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
-      config.platForm[type].width,
-      config.platForm[type].height,
+      config.platForm.standard.width,
+      config.platForm.standard.height,
       {
         isStatic: true,
       }
     );
     this._body.label = "standard";
-    this._bodyHeight = config.platForm[type].height;
-    this._bodyWidth = config.platForm[type].width;
+    this._bodyHeight = config.platForm.standard.height;
+    this._bodyWidth = config.platForm.standard.width;
 
     this.initAssets(levelContainer);
   }
@@ -59,6 +58,7 @@ export default class Platform extends VisibleObjects {
   }
 
   getRightCoord() {
+    // @ts-ignore
     return this._body.position.x + config.platForm[this._body.label].width;
   }
 

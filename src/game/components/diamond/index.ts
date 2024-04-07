@@ -6,7 +6,7 @@ import {
   Assets,
   AnimatedSprite,
 } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import VisibleObjects from "../../traits/VisibleObjects.js";
 
 export default class Diamond extends VisibleObjects {

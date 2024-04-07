@@ -1,6 +1,6 @@
 import Level from "./states/level/index.js";
 import { Application, Ticker } from "pixi.js";
-import config from "../../gameConfig.js";
+import config from "../../gameConfig.ts";
 import { initAssetsBundles } from "../utils/loaderUtils.js";
 import Menu from "./states/menu/index.js";
 import GameOverScreen from "./states/gameOver/index.js";

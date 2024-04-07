@@ -6,7 +6,7 @@ import {
   Sprite,
   AnimatedSprite,
 } from "pixi.js";
-import config from "../../../../gameConfig.js";
+import config from "../../../../gameConfig.ts";
 import ScoreBoard from "../../components/scoreBoard/index.js";
 import GameState from "../../traits/GameState.js";
 
