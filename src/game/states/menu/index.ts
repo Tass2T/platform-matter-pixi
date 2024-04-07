@@ -139,7 +139,8 @@ export default class Menu extends GameState {
       this.#eyeCounts = 0;
     }
 
-    this.#subTitle.width = this.#subTitle.width + Math.cos(this.#seconds) * 1.5;
+    this.#subTitle.width =
+      this.#subTitle.width + Math.cos(this.#seconds) * delta;
     this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5;
     this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3;
   }
