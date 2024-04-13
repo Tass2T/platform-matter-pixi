@@ -1,33 +1,4 @@
-interface configType {
-  HEIGHT: number
-  WIDTH: number
-  SPEED: number
-  GRAVITY: number
-  MAXSPEED: number
-  COUNTDOWN: number
-  PHYSIC_DEBUG_MODE: boolean
-  player: {
-    xAxisStart: number
-    baseJumpSpeed: number
-    velocityLoss: number
-  }
-  platForm: {
-    balloonNb: number
-    gap: number
-    start: number
-    width: number
-    height: number
-  }
-  diamond: {
-    side: number
-    height: number
-    nb: number
-    gap: number
-    points: number
-  }
-}
-
-const config: configType = {
+const config = {
   HEIGHT: window.innerHeight,
   WIDTH: window.innerWidth > 1920 ? 1920 : window.innerWidth,
   SPEED: 6,
