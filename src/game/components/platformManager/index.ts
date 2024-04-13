@@ -30,10 +30,7 @@ export default class PlatformManager {
 
   createPlatforms(levelContainer: Container) {
     for (let i = 1; i <= 6; i++) {
-      const x =
-        i === 1
-          ? config.platForm.start
-          : this._platFormList[this._platFormList.length - 1].getRightCoord() + this.setAjustedGap()
+      const x = i === 1 ? config.platForm.start : this._platFormList[this._platFormList.length - 1].getRightCoord() + this.setAjustedGap()
       const ground = new Platform(x, levelContainer, i === 1)
 
       this._platFormList.push(ground)
