@@ -1,9 +1,9 @@
 import * as MATTER from 'matter-js'
-import { AnimatedSprite } from 'pixi.js'
+import { AnimatedSprite, Sprite, Container } from 'pixi.js'
 
 export default class VisibleObjects {
   _body: MATTER.Body
-  _sprite: AnimatedSprite
+  _sprite: Sprite | AnimatedSprite
   _isVisible: boolean = true
   _bodyWidth: number
   _bodyHeight: number
@@ -14,7 +14,7 @@ export default class VisibleObjects {
     return this._body
   }
 
-  getSprite(): AnimatedSprite {
+  getSprite(): Container {
     return this._sprite
   }
 

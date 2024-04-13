@@ -22,7 +22,7 @@ export default class Diamond extends VisibleObjects {
     if (this._boundWithFirstPlatform) this._hasBeenTaken = true
 
     this._body = MATTER.Bodies.rectangle(
-      platFormPos.x - config.platForm.standard.width / 2 + (config.diamond.side + config.diamond.gap) * pos,
+      platFormPos.x - config.platForm.width / 2 + (config.diamond.side + config.diamond.gap) * pos,
       platFormPos.y - config.diamond.height,
       config.diamond.side,
       config.diamond.side,
@@ -86,7 +86,7 @@ export default class Diamond extends VisibleObjects {
   }
 
   setHasBeenTaken(value: boolean) {
-    if (this._sprite) {
+    if (this._sprite && this._sprite instanceof AnimatedSprite) {
       this._hasBeenTaken = value
       if (this._hasBeenTaken) {
         this._sprite.textures = this._spritesheet.animations['taken']
@@ -110,7 +110,7 @@ export default class Diamond extends VisibleObjects {
 
   syncPosition(): void {
     MATTER.Body.setPosition(this._body, {
-      x: this._parentPos.x - config.platForm.standard.width / 2 + (40 + config.diamond.gap) * this._orderIndex,
+      x: this._parentPos.x - config.platForm.width / 2 + (40 + config.diamond.gap) * this._orderIndex,
       y: this._parentPos.y - 50,
     })
   }

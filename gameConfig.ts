@@ -12,12 +12,11 @@ interface configType {
     velocityLoss: number
   }
   platForm: {
+    balloonNb: number
     gap: number
     start: number
-    standard: {
-      width: number
-      height: number
-    }
+    width: number
+    height: number
   }
   diamond: {
     side: number
@@ -42,12 +41,11 @@ const config: configType = {
     velocityLoss: 11,
   },
   platForm: {
+    balloonNb: 6,
     gap: 100,
     start: 200,
-    standard: {
-      width: 300,
-      height: 40,
-    },
+    width: 300,
+    height: 40,
   },
   diamond: {
     side: 35,
