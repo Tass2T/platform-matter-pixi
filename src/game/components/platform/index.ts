@@ -24,11 +24,11 @@ export default class Platform extends VisibleObjects {
     )
     this.#platformContainer.zIndex = 3
 
-    this.initAssets()
+    this.initAssets(levelContainer)
     levelContainer.addChild(this.#platformContainer)
   }
 
-  async initAssets() {
+  async initAssets(levelContainer: Container) {
     const texture = await Assets.load('platform')
     const ballonWidth = Math.ceil(config.platForm.width / config.platForm.balloonNb)
     const inflatedWidth = Math.floor(ballonWidth + ballonWidth / 3)
@@ -44,7 +44,7 @@ export default class Platform extends VisibleObjects {
     }
     this.#platformContainer.addChild(...this.#balloons)
 
-    this.prepareDiamond()
+    this.prepareDiamond(levelContainer)
   }
 
   getAdjustedHeight(): number {
@@ -86,9 +86,9 @@ export default class Platform extends VisibleObjects {
     return this._diamondList
   }
 
-  prepareDiamond() {
+  prepareDiamond(levelContainer: Container) {
     for (let i = 1; i <= config.diamond.nb; i++) {
-      this._diamondList.push(new Diamond(this.#platformContainer, this._body.position, i, this._isFirst))
+      this._diamondList.push(new Diamond(levelContainer, this._body.position, i, this._isFirst))
     }
   }
 
