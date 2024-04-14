@@ -1,5 +1,5 @@
 import * as MATTER from 'matter-js'
-import { Container, Assets, Sprite } from 'pixi.js'
+import { Container, Assets, Sprite, Texture, Spritesheet } from 'pixi.js'
 import config from '../../../../gameConfig.ts'
 import Diamond from '../diamond/index.js'
 import VisibleObjects from '../../traits/VisibleObjects.js'
@@ -10,6 +10,7 @@ export default class Platform extends VisibleObjects {
   #balloons: Sprite[] = []
   #platformContainer = new Container({ isRenderGroup: true })
   #seconds = 0
+  #ballonsSpriteSheet: Spritesheet
   constructor(xStart: number, levelContainer: Container, first = false) {
     super()
     this._isFirst = first ? true : false
@@ -29,14 +30,14 @@ export default class Platform extends VisibleObjects {
   }
 
   async initAssets(levelContainer: Container) {
-    const texture = await Assets.load('platform')
-    console.log(texture)
+    this.#ballonsSpriteSheet = await Assets.load('platform')
+    const keys = Object.keys(this.#ballonsSpriteSheet.textures)
 
     const ballonWidth = Math.ceil(config.platForm.width / config.platForm.balloonNb)
     const inflatedWidth = Math.floor(ballonWidth + ballonWidth / 3)
 
     for (let i = 0; i < config.platForm.balloonNb; i++) {
-      const sprite = new Sprite(texture.textures[texture._frameKeys[Math.floor(Math.random() * 4)]])
+      const sprite = new Sprite(this.#ballonsSpriteSheet.textures[keys[Math.floor(Math.random() * 4)]])
       sprite.width = inflatedWidth
       sprite.height = inflatedWidth
       sprite.anchor.set(0, 0.5)
@@ -82,6 +83,11 @@ export default class Platform extends VisibleObjects {
       y: config.HEIGHT * this.ajustedHeight(),
     })
     this._diamondList.forEach(diamond => diamond.setHasBeenTaken(false))
+
+    const keys = Object.keys(this.#ballonsSpriteSheet.textures)
+    this.#balloons.forEach(
+      balloon => (balloon.texture = this.#ballonsSpriteSheet.textures[keys[Math.floor(Math.random() * 4)]])
+    )
   }
 
   getDiamondList(): Array<Diamond> {
