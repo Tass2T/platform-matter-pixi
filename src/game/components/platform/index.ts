@@ -30,11 +30,13 @@ export default class Platform extends VisibleObjects {
 
   async initAssets(levelContainer: Container) {
     const texture = await Assets.load('platform')
+    console.log(texture)
+
     const ballonWidth = Math.ceil(config.platForm.width / config.platForm.balloonNb)
     const inflatedWidth = Math.floor(ballonWidth + ballonWidth / 3)
 
     for (let i = 0; i < config.platForm.balloonNb; i++) {
-      const sprite = new Sprite(texture)
+      const sprite = new Sprite(texture.textures[texture._frameKeys[Math.floor(Math.random() * 4)]])
       sprite.width = inflatedWidth
       sprite.height = inflatedWidth
       sprite.anchor.set(0, 0.5)
@@ -107,8 +109,8 @@ export default class Platform extends VisibleObjects {
   moveBalloons() {
     this.#balloons.forEach((balloon, index) => {
       balloon.position.set(
-        balloon.position.x + Math.sin(this.#seconds) * (index % 2 === 0 ? 0.01 : -0.03),
-        balloon.position.y + Math.cos(this.#seconds) * (index % 2 === 0 ? 0.04 : -0.02)
+        balloon.position.x + Math.sin(this.#seconds) * (index % 2 === 0 ? 0.02 : -0.04),
+        balloon.position.y + Math.cos(this.#seconds) * (index % 2 === 0 ? 0.05 : -0.03)
       )
     })
   }

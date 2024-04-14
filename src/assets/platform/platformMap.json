@@ -1,23 +1,50 @@
 {
   "frames": {
-    "state1": {
+    "green": {
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 391,
-        "h": 134
+        "w": 100,
+        "h": 100
       },
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 391, "h": 134 },
-      "sourceSize": { "w": 391, "h": 134 }
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 100 },
+      "sourceSize": { "w": 100, "h": 100 }
+    },
+    "yellow": {
+      "frame": {
+        "x": 100,
+        "y": 0,
+        "w": 100,
+        "h": 100
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 100 },
+      "sourceSize": { "w": 100, "h": 100 }
+    },
+    "red": {
+      "frame": {
+        "x": 200,
+        "y": 0,
+        "w": 100,
+        "h": 100
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 100 },
+      "so,urceSize": { "w": 100, "h": 100 }
+    },
+    "purple": {
+      "frame": {
+        "x": 300,
+        "y": 0,
+        "w": 100,
+        "h": 100
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 100 },
+      "sourceSize": { "w": 100, "h": 100 }
     }
   },
-  "animations": {
-    "move": ["state1"]
-  },
   "meta": {
-    "image": "platform.png",
+    "image": "balloonSpritesheet.png",
     "format": "RGBA8888",
-    "size": { "w": 391, "h": 134 },
+    "size": { "w": 400, "h": 100 },
     "scale": "1"
   }
 }
