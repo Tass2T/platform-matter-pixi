@@ -40,7 +40,7 @@ export default class Platform extends VisibleObjects {
       const sprite = new Sprite(this.#ballonsSpriteSheet.textures[keys[Math.floor(Math.random() * 4)]])
       sprite.width = inflatedWidth
       sprite.height = inflatedWidth
-      sprite.anchor.set(0, 0.5)
+      sprite.anchor.set(0, 0.4)
       sprite.position.set(15 + ballonWidth * i, 0 + config.platForm.height / 2)
       sprite.zIndex = Math.floor(Math.random() * 3)
       this.#balloons.push(sprite)
