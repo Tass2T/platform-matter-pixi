@@ -17,16 +17,16 @@ const config = {
   },
   platForm: {
     balloonNb: 6,
-    gap: playWidth / 12,
-    start: playWidth * 0.2,
+    gap: playWidth / 18,
+    start: playWidth * 0.15,
     width: playWidth * 0.23,
     height: innerHeight * 0.1,
   },
   diamond: {
     side: playWidth / 35,
-    height: playWidth / 35,
+    height: 1000,
     nb: 3,
-    gap: playWidth / 30,
+    gap: playWidth / 23,
     points: 500,
   },
 }

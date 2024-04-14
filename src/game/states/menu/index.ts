@@ -59,9 +59,8 @@ export default class Menu extends GameState {
     const rightArm = new Sprite(menubundle.rArm)
     rightArm.anchor.set(0, 0.5)
     rightArm.height = persoSprite.height * 0.35
-    rightArm.height = persoSprite.height * 0.35
     rightArm.width = rightArm.height
-    rightArm.position.set(config.WIDTH / 2 + 80, config.HEIGHT / 2.6)
+    rightArm.position.set(config.WIDTH / 1.83, config.HEIGHT / 2.5)
     rightArm.zIndex = 2
     this.#rArm = rightArm
 
