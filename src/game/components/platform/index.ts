@@ -1,5 +1,5 @@
 import * as MATTER from 'matter-js'
-import { Container, Assets, Sprite, Graphics } from 'pixi.js'
+import { Container, Assets, Sprite } from 'pixi.js'
 import config from '../../../../gameConfig.ts'
 import Diamond from '../diamond/index.js'
 import VisibleObjects from '../../traits/VisibleObjects.js'
@@ -9,6 +9,7 @@ export default class Platform extends VisibleObjects {
   _isFirst: boolean
   #balloons: Sprite[] = []
   #platformContainer = new Container({ isRenderGroup: true })
+  #seconds = 0
   constructor(xStart: number, levelContainer: Container, first = false) {
     super()
     this._isFirst = first ? true : false
@@ -103,10 +104,22 @@ export default class Platform extends VisibleObjects {
     )
   }
 
+  moveBalloons() {
+    this.#balloons.forEach((balloon, index) => {
+      balloon.position.set(
+        balloon.position.x + Math.sin(this.#seconds) * (index % 2 === 0 ? 0.01 : -0.03),
+        balloon.position.y + Math.cos(this.#seconds) * (index % 2 === 0 ? 0.04 : -0.02)
+      )
+    })
+  }
+
   update(delta: number): void {
     if (this.#balloons.length && this._body) {
       this.syncSpriteWithBody()
+      this.moveBalloons()
+
       this._diamondList.forEach(diamond => diamond.update(delta))
+      this.#seconds += (1 / 60) * delta
     }
   }
 }
