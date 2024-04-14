@@ -75,7 +75,7 @@ export default class Menu extends GameState {
       text: 'KIWI RUN',
       style: {
         fontFamily: fonts.title.family,
-        fontSize: 136,
+        fontSize: config.HEIGHT / 5,
         fill: '#65ca00',
         padding: 30,
         dropShadow: {
@@ -94,7 +94,7 @@ export default class Menu extends GameState {
       text: "Appuyerz sur n'importe quel touche pour débuter !!",
       style: {
         fontFamily: fonts.msgText.family,
-        fontSize: 30,
+        fontSize: config.HEIGHT / 24,
         fill: '#ffffff',
         dropShadow: {
           distance: 3,
