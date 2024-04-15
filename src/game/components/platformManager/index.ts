@@ -30,7 +30,10 @@ export default class PlatformManager {
 
   createPlatforms(levelContainer: Container) {
     for (let i = 1; i <= 6; i++) {
-      const x = i === 1 ? config.platForm.start : this._platFormList[this._platFormList.length - 1].getRightCoord() + this.setAjustedGap()
+      const x =
+        i === 1
+          ? config.platForm.start
+          : this._platFormList[this._platFormList.length - 1].getRightCoord() + this.setAjustedGap()
       const ground = new Platform(x, levelContainer, i === 1)
 
       this._platFormList.push(ground)
@@ -53,7 +56,7 @@ export default class PlatformManager {
   }
 
   setAjustedGap(): number {
-    return config.platForm.gap * (Math.random() * 3) + (this._gameSpeed ? this._gameSpeed : config.SPEED)
+    return config.platForm.gap * (Math.random() * (this._gameSpeed ? this._gameSpeed / 2 : config.SPEED / 2))
   }
 
   getFarfestXCoord(): number {

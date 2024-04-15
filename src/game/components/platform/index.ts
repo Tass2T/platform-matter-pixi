@@ -1,5 +1,5 @@
 import * as MATTER from 'matter-js'
-import { Container, Assets, Sprite, Texture, Spritesheet } from 'pixi.js'
+import { Container, Assets, Sprite, Spritesheet } from 'pixi.js'
 import config from '../../../../gameConfig.ts'
 import Diamond from '../diamond/index.js'
 import VisibleObjects from '../../traits/VisibleObjects.js'
@@ -51,15 +51,7 @@ export default class Platform extends VisibleObjects {
   }
 
   getAdjustedHeight(): number {
-    return config.HEIGHT * this.ajustedHeight()
-  }
-
-  ajustedHeight(): number {
-    let randomNumber = Math.random()
-
-    if (randomNumber <= 0.2) randomNumber += 0.3
-    if (randomNumber >= 0.7) randomNumber -= 0.3
-    return randomNumber
+    return config.HEIGHT / 2 + (Math.random() - 0.5) * config.platForm.spaceFromCenter
   }
 
   getRightCoord() {
@@ -80,7 +72,7 @@ export default class Platform extends VisibleObjects {
   moveToRight(x: number) {
     MATTER.Body.setPosition(this._body, {
       x,
-      y: config.HEIGHT * this.ajustedHeight(),
+      y: this.getAdjustedHeight(),
     })
     this._diamondList.forEach(diamond => diamond.setHasBeenTaken(false))
 
@@ -114,9 +106,10 @@ export default class Platform extends VisibleObjects {
 
   moveBalloons() {
     this.#balloons.forEach((balloon, index) => {
+      const moveValue = index % 2 === 0 ? 0.06 : 0.04
       balloon.position.set(
-        balloon.position.x + Math.sin(this.#seconds) * (index % 2 === 0 ? 0.02 : -0.04),
-        balloon.position.y + Math.cos(this.#seconds) * (index % 2 === 0 ? 0.05 : -0.03)
+        balloon.position.x + Math.sin(this.#seconds) * moveValue * (index % 2 === 0 ? 1 : -1),
+        balloon.position.y + Math.cos(this.#seconds) * moveValue * (index % 2 === 0 ? 1 : -1)
       )
     })
   }
