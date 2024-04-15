@@ -13,7 +13,7 @@ export default class Level extends GameState {
 
   _backgroundContainer = new Container()
   _propsContainer = new Container()
-  _frontPropsContainer = new Container()
+  _frontPropsContainer = new Container({ isRenderGroup: true })
   _gameContainer = new Container()
   _scoreContainer = new Container()
   _gameOverContainer = new Container()
