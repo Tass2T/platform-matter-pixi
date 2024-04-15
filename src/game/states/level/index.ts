@@ -90,7 +90,7 @@ export default class Level extends GameState {
     ;['props2', 'props1'].forEach(async prop => {
       const texture = await Assets.load(prop)
       const sprite = new Sprite(texture)
-
+      sprite.scale = 1.4
       sprite.anchor.set(0.5, 1)
       this._propsContainer.addChild(sprite)
     })

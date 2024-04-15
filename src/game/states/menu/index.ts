@@ -59,9 +59,8 @@ export default class Menu extends GameState {
     const rightArm = new Sprite(menubundle.rArm)
     rightArm.anchor.set(0, 0.5)
     rightArm.height = persoSprite.height * 0.35
-    rightArm.height = persoSprite.height * 0.35
     rightArm.width = rightArm.height
-    rightArm.position.set(config.WIDTH / 2 + 80, config.HEIGHT / 2.6)
+    rightArm.position.set(config.WIDTH / 1.83, config.HEIGHT / 2.5)
     rightArm.zIndex = 2
     this.#rArm = rightArm
 
@@ -76,7 +75,7 @@ export default class Menu extends GameState {
       text: 'KIWI RUN',
       style: {
         fontFamily: fonts.title.family,
-        fontSize: 136,
+        fontSize: config.HEIGHT / 5,
         fill: '#65ca00',
         padding: 30,
         dropShadow: {
@@ -95,7 +94,7 @@ export default class Menu extends GameState {
       text: "Appuyerz sur n'importe quel touche pour débuter !!",
       style: {
         fontFamily: fonts.msgText.family,
-        fontSize: 30,
+        fontSize: config.HEIGHT / 24,
         fill: '#ffffff',
         dropShadow: {
           distance: 3,
