@@ -90,7 +90,7 @@ export default class Level extends GameState {
     ;['props2', 'props1'].forEach(async prop => {
       const texture = await Assets.load(prop)
       const sprite = new Sprite(texture)
-      sprite.scale = 1.4
+      sprite.scale = 1.2
       sprite.anchor.set(0.5, 1)
       this._propsContainer.addChild(sprite)
     })
@@ -100,7 +100,7 @@ export default class Level extends GameState {
     const textures = await Assets.load(['tree1', 'tree2', 'tree3'])
 
     const frontPropsWidth = 500
-    const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 2
+    const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 4
     const texturesKeys = Object.keys(textures)
 
     for (let i = 0; i < propsNeeded; i++) {
@@ -130,7 +130,7 @@ export default class Level extends GameState {
 
   updateProps(delta: number) {
     this._propsContainer.children.forEach(prop => {
-      prop.position.x -= 0.05 * this._platformManager.getGamespeed() * delta
+      prop.position.x -= 0.01 * this._platformManager.getGamespeed() * delta
     })
   }
 

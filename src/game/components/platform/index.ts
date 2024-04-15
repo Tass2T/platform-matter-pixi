@@ -35,11 +35,12 @@ export default class Platform extends VisibleObjects {
 
     const ballonWidth = Math.ceil(config.platForm.width / config.platForm.balloonNb)
     const inflatedWidth = Math.floor(ballonWidth + ballonWidth / 3)
+    const inflatedHeight = Math.floor(config.platForm.height + config.platForm.height / 3)
 
     for (let i = 0; i < config.platForm.balloonNb; i++) {
       const sprite = new Sprite(this.#ballonsSpriteSheet.textures[keys[Math.floor(Math.random() * 4)]])
       sprite.width = inflatedWidth
-      sprite.height = inflatedWidth
+      sprite.height = inflatedHeight
       sprite.anchor.set(0, 0.4)
       sprite.position.set(15 + ballonWidth * i, 0 + config.platForm.height / 2)
       sprite.zIndex = Math.floor(Math.random() * 3)
