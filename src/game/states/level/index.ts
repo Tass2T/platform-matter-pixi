@@ -99,16 +99,18 @@ export default class Level extends GameState {
   async setFrontProps(): Promise<void> {
     const textures = await Assets.load(['trees'])
 
-    const frontPropsWidth = 1200
-    const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 4
+    const propsNeeded = 3
     const texturesKeys = Object.keys(textures.trees.data.frames)
-    
     
 
     for (let i = 0; i < propsNeeded; i++) {
       const sprite = new Sprite(textures.trees.textures[texturesKeys[i]])
-      sprite.anchor.set(0, 1)
-      sprite.position.set(0, config.HEIGHT)
+      sprite.anchor.set(0, 0.9)
+      sprite.height = config.HEIGHT
+      sprite.width = config.WIDTH
+      sprite.zIndex = 3 - i
+      sprite.position.set(i * config.frontPropsWidth, config.HEIGHT)
+      
       this._frontPropsContainer.addChild(sprite)
     }
   }
@@ -139,27 +141,24 @@ export default class Level extends GameState {
     this._frontPropsContainer.children.forEach(prop => {
       prop.position.x -= this._platformManager.getGamespeed() * delta
 
-      if (prop.position.x + prop.getBounds().width / 2 < 0) {
-        // A REVOIR C'EST HORRIBLE
-        prop.position.x =
-          (this._frontPropsContainer.children.length - 1) * prop.getBounds().width -
-          this._frontPropsContainer.children.length * 100
+      if (prop.position.x + config.frontPropsWidth  <= 0) {
+        prop.position.x +=
+          2 * config.frontPropsWidth
       }
     })
   }
 
   setPropsPos() {
     this._propsContainer.children.forEach((prop, index) => {
-      prop.position.set(index + config.WIDTH * index, config.HEIGHT)
+      prop.position.set(config.WIDTH * index, config.HEIGHT)
     })
   }
 
   setFrontPropsPos() {
-    const frontPropsWidth = 1200
     let index = 0
     this._frontPropsContainer.children.forEach(prop => {
       prop.position.x = index
-      index += frontPropsWidth * (frontPropsWidth / config.WIDTH) - 100
+      index += config.frontPropsWidth - 50
     })
   }
 
