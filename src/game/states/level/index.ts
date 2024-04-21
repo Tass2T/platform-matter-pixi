@@ -77,7 +77,7 @@ export default class Level extends GameState {
     const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
     seaSprite.anchor.set(0, 1)
     seaSprite.width = config.WIDTH
-    seaSprite.position.set(0, config.HEIGHT * 1.2)
+    seaSprite.position.set(0, config.HEIGHT * 1)
     seaSprite.animationSpeed = 0.1
     seaSprite.play()
     this._backgroundContainer.addChild(skySprite, seaSprite)
@@ -143,7 +143,7 @@ export default class Level extends GameState {
 
       if (prop.position.x + config.frontPropsWidth  <= 0) {
         prop.position.x +=
-          2 * config.frontPropsWidth
+          2.9 * config.frontPropsWidth
       }
     })
   }
