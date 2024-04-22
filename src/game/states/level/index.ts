@@ -105,7 +105,7 @@ export default class Level extends GameState {
 
     for (let i = 0; i < propsNeeded; i++) {
       const sprite = new Sprite(textures.trees.textures[texturesKeys[i]])
-      sprite.anchor.set(0, 0.9)
+      sprite.anchor.set(0, 0.95)
       sprite.height = config.HEIGHT
       sprite.width = config.WIDTH
       sprite.zIndex = 3 - i
@@ -139,7 +139,7 @@ export default class Level extends GameState {
 
   updateFrontProps(delta: number) {
     this._frontPropsContainer.children.forEach(prop => {
-      prop.position.x -= this._platformManager.getGamespeed() * delta
+      prop.position.x -= this._platformManager.getGamespeed() 
 
       if (prop.position.x + config.frontPropsWidth  <= 0) {
         prop.position.x +=
