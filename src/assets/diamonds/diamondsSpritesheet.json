@@ -104,7 +104,7 @@
   },
   "animations": {
     "idle": ["idle-one", "idle-two", "idle-three", "idle-four"],
-    "taken": ["taken-one", "taken-two", "taken-three", "taken-four","taken-five","taken-six" ]
+    "taken": ["taken-one", "taken-two", "taken-three", "taken-four", "taken-five", "taken-six"]
   },
   "meta": {
     "image": "diamondsSpritesheet.png",

@@ -1,3 +1,3 @@
-import Game from "./game/index";
+import Game from './game/index'
 
-new Game();
+new Game()

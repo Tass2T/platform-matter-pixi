@@ -1,15 +1,15 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite'
 
 export default defineConfig(() => {
   return {
-    root: "./",
-    publicDir: "./src/assets/",
-    base: "./",
+    root: './',
+    publicDir: './src/assets/',
+    base: './',
     server: { host: true },
     build: {
-      outDir: "./dist",
+      outDir: './dist',
       emptyOutDir: true,
       sourcemap: true,
     },
-  };
-});
+  }
+})

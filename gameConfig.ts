@@ -1,61 +1,36 @@
-interface configType {
-  HEIGHT: number,
-  WIDTH: number,
-  SPEED: number,
-  GRAVITY: number,
-  MAXSPEED: number,
-  COUNTDOWN: number,
-  PHYSIC_DEBUG_MODE: boolean,
-  player: {
-    xAxisStart: number,
-    baseJumpSpeed: number,
-    velocityLoss: number,
-  },
-  platForm: {
-    gap: number,
-    start: number,
-    standard: {
-      width: number,
-      height: number,
-    },
-  },
-  diamond: {
-    side: number,
-    height: number,
-    nb: number,
-    gap: number,
-    points: number,
-  },
-}
+const playWidth = window.innerWidth > 1920 ? 1920 : window.innerWidth
 
-const config: configType = {
-  HEIGHT: 700,
-  WIDTH: 1200,
+const config = {
+  HEIGHT: window.innerHeight,
+  WIDTH: playWidth,
   SPEED: 6,
-  GRAVITY: 1.2,
-  MAXSPEED: 15,
+  GRAVITY: 1.5,
+  MAXSPEED: 25,
   COUNTDOWN: 3,
   PHYSIC_DEBUG_MODE: false,
   player: {
     xAxisStart: 150,
-    baseJumpSpeed: 220,
+    baseJumpSpeed: 260,
     velocityLoss: 11,
+    height: 70,
+    width: 40,
   },
   platForm: {
-    gap: 100,
-    start: 200,
-    standard: {
-      width: 300,
-      height: 40,
-    },
+    balloonNb: 7,
+    gap: 90,
+    start: 150,
+    width: 300,
+    height: 50,
+    spaceFromCenter: 400,
   },
   diamond: {
     side: 35,
-    height: 35,
+    height: 30,
     nb: 3,
-    gap: 40,
+    gap: 45,
     points: 500,
   },
-};
+  frontPropsWidth: 1080 * (window.innerWidth / 1080)
+}
 
 export default config

@@ -1,18 +1,20 @@
 export default class InputManager {
-  pressedInput: Array<String> = [];
+  pressedInput: Array<String> = []
   constructor() {
-    window.addEventListener("keydown", (e) => {
-      if (e.repeat) return;
+    window.addEventListener('keydown', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (e.repeat) return
 
-      if (!this.pressedInput.includes(e.code)) this.pressedInput.push(e.code);
-    });
+      if (!this.pressedInput.includes(e.code)) this.pressedInput.push(e.code)
+    })
 
-    window.addEventListener("keyup", (e) => {
-      this.pressedInput = this.pressedInput.filter((code) => code !== e.code);
-    });
+    window.addEventListener('keyup', e => {
+      this.pressedInput = this.pressedInput.filter(code => code !== e.code)
+    })
   }
 
   getPressedInputs() {
-    return this.pressedInput;
+    return this.pressedInput
   }
 }

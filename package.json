@@ -1,7 +1,7 @@
 {
   "name": "platform-matter-pixi",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.9.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,11 +10,11 @@
   },
   "devDependencies": {
     "@types/matter-js": "^0.19.6",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "typescript": "^5.4.5",
+    "vite": "^5.2.9"
   },
   "dependencies": {
     "matter-js": "^0.19.0",
-    "pixi.js": "^8.0.0"
+    "pixi.js": "^8.1.0"
   }
 }
