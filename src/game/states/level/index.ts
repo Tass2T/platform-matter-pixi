@@ -77,7 +77,7 @@ export default class Level extends GameState {
     const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
     seaSprite.anchor.set(0, 1)
     seaSprite.width = config.WIDTH
-    seaSprite.position.set(0, config.HEIGHT * 1.2)
+    seaSprite.position.set(0, config.HEIGHT * 1)
     seaSprite.animationSpeed = 0.1
     seaSprite.play()
     this._backgroundContainer.addChild(skySprite, seaSprite)
@@ -90,24 +90,27 @@ export default class Level extends GameState {
     ;['props2', 'props1'].forEach(async prop => {
       const texture = await Assets.load(prop)
       const sprite = new Sprite(texture)
-      sprite.scale = 1.2
+      sprite.scale = 1.3
       sprite.anchor.set(0.5, 1)
       this._propsContainer.addChild(sprite)
     })
   }
 
   async setFrontProps(): Promise<void> {
-    const textures = await Assets.load(['tree1', 'tree2', 'tree3'])
+    const textures = await Assets.load(['trees'])
 
-    const frontPropsWidth = 500
-    const propsNeeded = Math.ceil(config.WIDTH / frontPropsWidth) + 4
-    const texturesKeys = Object.keys(textures)
+    const propsNeeded = 3
+    const texturesKeys = Object.keys(textures.trees.data.frames)
+    
 
     for (let i = 0; i < propsNeeded; i++) {
-      const sprite = new Sprite(textures[texturesKeys[Math.floor(Math.random() * texturesKeys.length)]])
-      sprite.width = frontPropsWidth
-      sprite.anchor.set(0.5, 0.7)
-      sprite.position.set(0, config.HEIGHT)
+      const sprite = new Sprite(textures.trees.textures[texturesKeys[i]])
+      sprite.anchor.set(0, 0.95)
+      sprite.height = config.HEIGHT
+      sprite.width = config.WIDTH
+      sprite.zIndex = 3 - i
+      sprite.position.set(i * config.frontPropsWidth, config.HEIGHT)
+      
       this._frontPropsContainer.addChild(sprite)
     }
   }
@@ -136,29 +139,26 @@ export default class Level extends GameState {
 
   updateFrontProps(delta: number) {
     this._frontPropsContainer.children.forEach(prop => {
-      prop.position.x -= this._platformManager.getGamespeed() * delta
+      prop.position.x -= this._platformManager.getGamespeed() 
 
-      if (prop.position.x + prop.getBounds().width / 2 < 0) {
-        // A REVOIR C'EST HORRIBLE
-        prop.position.x =
-          (this._frontPropsContainer.children.length - 1) * prop.getBounds().width -
-          this._frontPropsContainer.children.length * 100
+      if (prop.position.x + config.frontPropsWidth  <= 0) {
+        prop.position.x +=
+          2.9 * config.frontPropsWidth
       }
     })
   }
 
   setPropsPos() {
     this._propsContainer.children.forEach((prop, index) => {
-      prop.position.set(index + config.WIDTH * index, config.HEIGHT)
+      prop.position.set(config.WIDTH * index, config.HEIGHT)
     })
   }
 
   setFrontPropsPos() {
-    const frontPropsWidth = 500
     let index = 0
     this._frontPropsContainer.children.forEach(prop => {
       prop.position.x = index
-      index += frontPropsWidth - 100
+      index += config.frontPropsWidth - 50
     })
   }
 

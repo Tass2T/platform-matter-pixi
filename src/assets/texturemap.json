@@ -26,16 +26,8 @@
           "src": "background/props/1.png"
         },
         {
-          "alias": "tree1",
-          "src": "background/frontProps/tree1.png"
-        },
-        {
-          "alias": "tree2",
-          "src": "background/frontProps/tree2.png"
-        },
-        {
-          "alias": "tree3",
-          "src": "background/frontProps/tree3.png"
+          "alias": "trees",
+          "src": "background/frontProps/frontPropsSheet.json"
         },
         {
           "alias": "gameOverIllu",
