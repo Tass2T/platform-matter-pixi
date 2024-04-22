@@ -38,7 +38,7 @@ export default class Player extends VisibleObjects {
       
     }
     // A faire ==>  Retirer les ignores et faire qqchose a proposito du type CustomSprite
-    window.requestAnimationFrame(() => {
+    
       this._isJumping = value
       if (this._isJumping) {
         //@ts-ignore
@@ -51,7 +51,7 @@ export default class Player extends VisibleObjects {
         //@ts-ignore
         this._sprite.gotoAndPlay(0)
       }
-    })
+    
   }
 
   checkJumpAnimation() {

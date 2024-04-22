@@ -105,7 +105,7 @@ export default class Level extends GameState {
 
     for (let i = 0; i < propsNeeded; i++) {
       const sprite = new Sprite(textures.trees.textures[texturesKeys[i]])
-      sprite.anchor.set(0, 0.95)
+      sprite.anchor.set(0, 0.99)
       sprite.height = config.HEIGHT
       sprite.width = config.WIDTH
       sprite.zIndex = 3 - i
@@ -137,9 +137,9 @@ export default class Level extends GameState {
     })
   }
 
-  updateFrontProps() {
+  updateFrontProps(delta: number) {
     this._frontPropsContainer.children.forEach(prop => {
-      prop.position.x -= this._platformManager.getGamespeed() 
+      prop.position.x -= this._platformManager.getGamespeed() * delta
 
       if (prop.position.x + config.frontPropsWidth  <= 0) {
         prop.position.x +=
@@ -253,7 +253,7 @@ export default class Level extends GameState {
       this.checkForCollisionWithPlatform()
       this._platformManager.update(delta)
       this.updateProps(delta)
-      this.updateFrontProps()
+      this.updateFrontProps(delta)
       this._scoreBoard.update()
       this.checkIfPlayerFell()
 

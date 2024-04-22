@@ -16,7 +16,7 @@ export default class Platform extends VisibleObjects {
     this._isFirst = first ? true : false
     this._body = MATTER.Bodies.rectangle(
       xStart,
-      first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
+      first ? config.HEIGHT : this.getAdjustedHeight(),
       config.platForm.width,
       config.platForm.height,
       {
@@ -52,7 +52,7 @@ export default class Platform extends VisibleObjects {
   }
 
   getAdjustedHeight(): number {
-    return config.HEIGHT / 2 + (Math.random() - 0.5) * config.platForm.spaceFromCenter
+    return config.HEIGHT - Math.random() * config.platForm.spaceFromCenter - 50
   }
 
   getRightCoord() {

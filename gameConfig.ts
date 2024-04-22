@@ -21,7 +21,7 @@ const config = {
     start: 150,
     width: 300,
     height: 50,
-    spaceFromCenter: 400,
+    spaceFromCenter: 450,
   },
   diamond: {
     side: 35,
