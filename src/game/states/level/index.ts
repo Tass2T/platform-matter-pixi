@@ -137,7 +137,7 @@ export default class Level extends GameState {
     })
   }
 
-  updateFrontProps(delta: number) {
+  updateFrontProps() {
     this._frontPropsContainer.children.forEach(prop => {
       prop.position.x -= this._platformManager.getGamespeed() 
 
@@ -253,7 +253,7 @@ export default class Level extends GameState {
       this.checkForCollisionWithPlatform()
       this._platformManager.update(delta)
       this.updateProps(delta)
-      this.updateFrontProps(delta)
+      this.updateFrontProps()
       this._scoreBoard.update()
       this.checkIfPlayerFell()
 

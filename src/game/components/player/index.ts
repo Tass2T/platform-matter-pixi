@@ -34,26 +34,37 @@ export default class Player extends VisibleObjects {
   }
 
   setIsJumping(value: boolean): void {
+    if (this._sprite instanceof AnimatedSprite) {
+      
+    }
+    // A faire ==>  Retirer les ignores et faire qqchose a proposito du type CustomSprite
     window.requestAnimationFrame(() => {
       this._isJumping = value
       if (this._isJumping) {
+        //@ts-ignore
         this._sprite.textures = this._playerSpritesheet.animations['jump']
+        //@ts-ignore
         this._sprite.gotoAndStop(0)
       } else {
+        //@ts-ignore
         this._sprite.textures = this._playerSpritesheet.animations['run']
+        //@ts-ignore
         this._sprite.gotoAndPlay(0)
       }
     })
   }
 
   checkJumpAnimation() {
+    //@ts-ignore
     if (this._body.velocity.y > 0 && !this._sprite.playing) {
       this.startAnimation('fall')
     }
   }
 
   startAnimation(name: string) {
+    //@ts-ignore
     this._sprite.textures = this._playerSpritesheet.animations[name]
+    //@ts-ignore
     this._sprite.gotoAndPlay(0)
   }
 

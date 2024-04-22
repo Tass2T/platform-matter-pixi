@@ -1,9 +1,11 @@
 import * as MATTER from 'matter-js'
 import { AnimatedSprite, Sprite, Container } from 'pixi.js'
 
+type CustomSprite = Sprite | AnimatedSprite
+
 export default class VisibleObjects {
   _body: MATTER.Body
-  _sprite: Sprite | AnimatedSprite
+  _sprite: CustomSprite
   _isVisible: boolean = true
   _bodyWidth: number
   _bodyHeight: number
