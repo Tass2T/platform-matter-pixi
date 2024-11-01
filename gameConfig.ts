@@ -28,7 +28,7 @@ const config = {
     gap: 45,
     points: 500,
   },
-  frontPropsWidth: 1080 * (window.innerWidth / 1080),
+  frontPropsWidth: 1080 * (1280 / 1080),
 }
 
 export default config
