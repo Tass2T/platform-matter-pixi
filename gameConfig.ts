@@ -1,9 +1,7 @@
-const playWidth = window.innerWidth > 1920 ? 1920 : window.innerWidth
-
 const config = {
-  HEIGHT: window.innerHeight,
-  WIDTH: playWidth,
-  SPEED: 6,
+  HEIGHT: 720,
+  WIDTH: 1280,
+  SPEED: 5,
   GRAVITY: 1.5,
   MAXSPEED: 25,
   COUNTDOWN: 3,
@@ -30,7 +28,7 @@ const config = {
     gap: 45,
     points: 500,
   },
-  frontPropsWidth: 1080 * (window.innerWidth / 1080)
+  frontPropsWidth: 1080 * (window.innerWidth / 1080),
 }
 
 export default config
