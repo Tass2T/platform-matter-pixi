@@ -1,13 +1,12 @@
 import * as MATTER from 'matter-js'
 import { Container, Assets, Sprite, AnimatedSprite, BitmapText } from 'pixi.js'
-import Player from '../../components/player/index.js'
-import PlatformManager from '../../components/platformManager/index.js'
-import config from '../../../../gameConfig.ts'
-import ScoreBoard from '../../components/scoreBoard/index.js'
-import GameOverScreen from '../gameOver/index.js'
-import GameState from '../../traits/GameState.js'
+import Player from '../components/player'
+import PlatformManager from '../components/platformManager'
+import config from '../../../gameConfig.ts'
+import GameOverScreen from './GameOver.ts'
+import { AppScreen } from '../../models'
 
-export default class Level extends GameState {
+export default class GameScreen extends Container implements AppScreen {
   _physicEngine: MATTER.Engine
   _physicRenderer: MATTER.Render
 
@@ -27,16 +26,18 @@ export default class Level extends GameState {
   _platformManager: PlatformManager
   _gameOverScreen: GameOverScreen
 
-  constructor(parentContainer: Container, changeState: Function, scoreBoard: ScoreBoard) {
-    super(parentContainer, changeState, scoreBoard)
+  constructor() {
+    super()
+  }
 
+  prepare() {
     this._backgroundContainer.zIndex = 1
     this._propsContainer.zIndex = 2
     this._frontPropsContainer.zIndex = 3
     this._gameContainer.zIndex = 4
     this._scoreContainer.zIndex = 5
     this._gameOverContainer.zIndex = 6
-    this._stateContainer.addChild(
+    this.addChild(
       this._backgroundContainer,
       this._propsContainer,
       this._frontPropsContainer,
@@ -50,10 +51,6 @@ export default class Level extends GameState {
     this.setBackground()
 
     this.initLevel()
-  }
-
-  getScoreBoard() {
-    return this._scoreBoard
   }
 
   initEngine() {
@@ -101,7 +98,6 @@ export default class Level extends GameState {
 
     const propsNeeded = 3
     const texturesKeys = Object.keys(textures.trees.data.frames)
-    
 
     for (let i = 0; i < propsNeeded; i++) {
       const sprite = new Sprite(textures.trees.textures[texturesKeys[i]])
@@ -110,7 +106,7 @@ export default class Level extends GameState {
       sprite.width = config.WIDTH
       sprite.zIndex = 3 - i
       sprite.position.set(i * config.frontPropsWidth, config.HEIGHT)
-      
+
       this._frontPropsContainer.addChild(sprite)
     }
   }
@@ -128,7 +124,7 @@ export default class Level extends GameState {
 
     this._displayedSecond.position.set(config.WIDTH / 2 - this._displayedSecond.width / 2, config.HEIGHT / 4)
     this._displayedSecond.zIndex = 20
-    this._stateContainer.addChild(this._displayedSecond)
+    this.addChild(this._displayedSecond)
   }
 
   updateProps(delta: number) {
@@ -141,9 +137,8 @@ export default class Level extends GameState {
     this._frontPropsContainer.children.forEach(prop => {
       prop.position.x -= this._platformManager.getGamespeed() * delta
 
-      if (prop.position.x + config.frontPropsWidth  <= 0) {
-        prop.position.x +=
-          2.9 * config.frontPropsWidth
+      if (prop.position.x + config.frontPropsWidth <= 0) {
+        prop.position.x += 2.9 * config.frontPropsWidth
       }
     })
   }
@@ -170,10 +165,6 @@ export default class Level extends GameState {
 
     this._player = new Player(this._physicEngine.world, this._gameContainer)
     this.displayCountdown()
-  }
-
-  getLevelContainer(): Container {
-    return this._stateContainer
   }
 
   initKeyListener() {

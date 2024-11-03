@@ -1,9 +1,9 @@
-import Level from './states/level/index.js'
+import Level from './screens/Game.ts'
 import { Application, Ticker } from 'pixi.js'
 import config from '../../gameConfig.ts'
 import { initAssetsBundles } from '../utils/loaderUtils.js'
-import Menu from './states/menu/index.js'
-import GameOverScreen from './states/gameOver/index.js'
+import Menu from './screens/Menu.ts'
+import GameOverScreen from './screens/GameOver.ts'
 import InputManager from '../utils/inputManager.js'
 import ScoreBoard from './components/scoreBoard/index.js'
 

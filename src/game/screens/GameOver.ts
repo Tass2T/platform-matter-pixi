@@ -1,9 +1,8 @@
 import { Container, Graphics, BitmapText, Assets, Sprite, AnimatedSprite } from 'pixi.js'
-import config from '../../../../gameConfig.ts'
-import ScoreBoard from '../../components/scoreBoard/index.js'
-import GameState from '../../traits/GameState.js'
+import config from '../../../gameConfig.ts'
+import { AppScreen } from '../../models'
 
-export default class GameOverScreen extends GameState {
+export default class GameOverScreen extends Container implements AppScreen {
   _curtainContainer: Container = new Container()
   _scoreContainer: Container = new Container()
   _illustrationContainer: Container = new Container()
@@ -29,8 +28,11 @@ export default class GameOverScreen extends GameState {
     eyeAnim?: AnimatedSprite
   }
 
-  constructor(parentContainer: Container, scoreBoard: ScoreBoard, changeState: Function) {
-    super(parentContainer, changeState, scoreBoard)
+  constructor() {
+    super()
+  }
+
+  prepare() {
     this.switchVisibility()
     this._stateContainer.zIndex = 10
     this._stateContainer.addChild(

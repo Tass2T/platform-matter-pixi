@@ -1,9 +1,8 @@
 import { AnimatedSprite, Assets, Container, Sprite, Text } from 'pixi.js'
-import config from '../../../../gameConfig.ts'
-import ScoreBoard from '../../components/scoreBoard'
-import GameState from '../../traits/GameState'
+import config from '../../../gameConfig.ts'
+import { AppScreen } from '../../models'
 
-export default class Menu extends GameState {
+export default class MenuScreen extends Container implements AppScreen {
   #seconds = 0
   #eyeCounts = 0
   #charContainer = new Container()
@@ -13,12 +12,15 @@ export default class Menu extends GameState {
   #text: Text
   #subTitle: Text
   #isReady = false
-  constructor(parentContainer: Container, changeState: Function, scoreBoard: ScoreBoard) {
-    super(parentContainer, changeState, scoreBoard)
-    this._stateContainer.zIndex = 1
-    this.initBackground().then(() => {
-      this.initText().then(() => (this.#isReady = true))
-    })
+
+  constructor() {
+    super()
+  }
+
+  async prepare() {
+    await this.initBackground()
+    await this.initText()
+    return true
   }
 
   async initBackground() {
@@ -65,7 +67,7 @@ export default class Menu extends GameState {
     this.#rArm = rightArm
 
     this.#charContainer.addChild(textureSprite, persoSprite, leftArm, rightArm, eyes)
-    this._stateContainer.addChild(this.#charContainer)
+    this.addChild(this.#charContainer)
   }
 
   async initText() {
@@ -108,7 +110,7 @@ export default class Menu extends GameState {
     this.#subTitle.zIndex = 30
     this.#subTitle.position.set(config.WIDTH / 2, config.HEIGHT * 0.9)
 
-    this._stateContainer.addChild(this.#text, this.#subTitle)
+    this.addChild(this.#text, this.#subTitle)
   }
 
   start() {
@@ -140,10 +142,5 @@ export default class Menu extends GameState {
       this.#seconds += (1 / 60) * delta
       this.#eyeCounts += (1 / 60) * delta
     }
-  }
-
-  destroy() {
-    this.#seconds = 0
-    this.#eyeCounts = 0
   }
 }
