@@ -74,7 +74,7 @@ export default class GameScreen extends Container implements AppScreen {
     const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
     seaSprite.anchor.set(0, 1)
     seaSprite.width = config.WIDTH
-    seaSprite.position.set(0, config.HEIGHT * 1)
+    seaSprite.position.set(0, config.HEIGHT)
     seaSprite.animationSpeed = 0.1
     seaSprite.play()
     this._backgroundContainer.addChild(skySprite, seaSprite)
