@@ -19,10 +19,14 @@ document.body.appendChild(app.canvas)
 
 await initAssetsBundles()
 
-// if (getStateFromParams() === 'gameOver') {
-//   navigation.goToScreen(GameOverScreen)
-// } else if (getStateFromParams() === 'game') {
-//   navigation.goToScreen(GameScreen)
-// } else {
-navigation.goToScreen(MenuScreen)
-// }
+if (import.meta.env.MODE === 'development') {
+  if (getStateFromParams() === 'gameOver') {
+    navigation.goToScreen(new GameOverScreen())
+  } else if (getStateFromParams() === 'game') {
+    navigation.goToScreen(new GameScreen())
+  } else {
+    navigation.goToScreen(new MenuScreen())
+  }
+} else {
+  navigation.goToScreen(new MenuScreen())
+}

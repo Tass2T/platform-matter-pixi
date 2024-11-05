@@ -1,6 +1,6 @@
 import { Container, Ticker } from 'pixi.js'
 
 interface AppScreen extends Container {
-  prepare?: () => void
-  update?: (time: Ticker) => void
+  prepare: () => Promise<void>
+  update?: (ticker: Ticker) => void
 }

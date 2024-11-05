@@ -1,5 +1,5 @@
 import * as MATTER from 'matter-js'
-import { Container, Assets, Sprite, AnimatedSprite, BitmapText } from 'pixi.js'
+import { Container, Assets, Sprite, AnimatedSprite, BitmapText, Ticker } from 'pixi.js'
 import Player from '../components/player'
 import PlatformManager from '../components/platformManager'
 import config from '../../../gameConfig.ts'
@@ -30,27 +30,31 @@ export default class GameScreen extends Container implements AppScreen {
     super()
   }
 
-  prepare() {
-    this._backgroundContainer.zIndex = 1
-    this._propsContainer.zIndex = 2
-    this._frontPropsContainer.zIndex = 3
-    this._gameContainer.zIndex = 4
-    this._scoreContainer.zIndex = 5
-    this._gameOverContainer.zIndex = 6
-    this.addChild(
-      this._backgroundContainer,
-      this._propsContainer,
-      this._frontPropsContainer,
-      this._gameContainer,
-      this._gameOverContainer,
-      this._scoreContainer
-    )
+  prepare(): Promise<void> {
+    return new Promise(resolve => {
+      this._backgroundContainer.zIndex = 1
+      this._propsContainer.zIndex = 2
+      this._frontPropsContainer.zIndex = 3
+      this._gameContainer.zIndex = 4
+      this._scoreContainer.zIndex = 5
+      this._gameOverContainer.zIndex = 6
+      this.addChild(
+        this._backgroundContainer,
+        this._propsContainer,
+        this._frontPropsContainer,
+        this._gameContainer,
+        this._gameOverContainer,
+        this._scoreContainer
+      )
 
-    this.initEngine()
+      this.initEngine()
 
-    this.setBackground()
+      this.setBackground()
 
-    this.initLevel()
+      this.initLevel()
+
+      resolve()
+    })
   }
 
   initEngine() {
@@ -236,23 +240,24 @@ export default class GameScreen extends Container implements AppScreen {
     }
   }
 
-  update(delta: number) {
-    if (this._physicEngine && this._player) {
-      MATTER.Engine.update(this._physicEngine, delta)
-      this._player.update()
-      this.checkForCollisionWithDiamond()
-      this.checkForCollisionWithPlatform()
-      this._platformManager.update(delta)
-      this.updateProps(delta)
-      this.updateFrontProps(delta)
-      this._scoreBoard.update()
-      this.checkIfPlayerFell()
-
-      if (this._countdown) {
-        this._seconds += (1 / 60) * delta
-        this.updateCountdown()
-      }
-    }
+  update(ticker: Ticker) {
+    console.log(ticker)
+    // if (this._physicEngine && this._player) {
+    //   MATTER.Engine.update(this._physicEngine, delta)
+    //   this._player.update()
+    //   this.checkForCollisionWithDiamond()
+    //   this.checkForCollisionWithPlatform()
+    //   this._platformManager.update(delta)
+    //   this.updateProps(delta)
+    //   this.updateFrontProps(delta)
+    //   this._scoreBoard.update()
+    //   this.checkIfPlayerFell()
+    //
+    //   if (this._countdown) {
+    //     this._seconds += (1 / 60) * delta
+    //     this.updateCountdown()
+    //   }
+    // }
   }
 
   destroy() {

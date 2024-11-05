@@ -1,6 +1,9 @@
-import { AnimatedSprite, Assets, Container, Sprite, Text } from 'pixi.js'
+import { AnimatedSprite, Assets, Container, Sprite, Text, Ticker } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { AppScreen } from '../../models'
+import { inputManager } from '../../utils/inputManager.ts'
+import { navigation } from '../Navigation.ts'
+import GameScreen from './Game.ts'
 
 export default class MenuScreen extends Container implements AppScreen {
   #seconds = 0
@@ -11,16 +14,18 @@ export default class MenuScreen extends Container implements AppScreen {
   #rArm: Sprite
   #text: Text
   #subTitle: Text
-  #isReady = false
 
   constructor() {
     super()
   }
 
-  async prepare() {
-    await this.initBackground()
-    await this.initText()
-    return true
+  prepare(): Promise<void> {
+    return new Promise(async resolve => {
+      await this.initBackground()
+      await this.initText()
+
+      resolve()
+    })
   }
 
   async initBackground() {
@@ -113,10 +118,6 @@ export default class MenuScreen extends Container implements AppScreen {
     this.addChild(this.#text, this.#subTitle)
   }
 
-  start() {
-    return
-  }
-
   animateBody(delta: number) {
     if (Math.floor(this.#eyeCounts) === 3) {
       this.#eyes.play()
@@ -128,19 +129,14 @@ export default class MenuScreen extends Container implements AppScreen {
     this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3
   }
 
-  leave() {
-    this.switchVisibility()
-    this._changeState('level')
-  }
+  leave() {}
 
-  update(delta: number, inputArrays: Array<String>) {
-    if (this.#isReady) {
-      if (inputArrays.length) this.leave()
+  update = (ticker: Ticker) => {
+    // if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
 
-      this.animateBody(delta)
+    this.animateBody(ticker.deltaMS)
 
-      this.#seconds += (1 / 60) * delta
-      this.#eyeCounts += (1 / 60) * delta
-    }
+    this.#seconds += (1 / 60) * ticker.deltaMS
+    this.#eyeCounts += (1 / 60) * ticker.deltaMS
   }
 }
