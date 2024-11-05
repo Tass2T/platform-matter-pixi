@@ -132,7 +132,7 @@ export default class MenuScreen extends Container implements AppScreen {
   leave() {}
 
   update = (ticker: Ticker) => {
-    // if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
+    if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
 
     this.animateBody(ticker.deltaMS)
 
