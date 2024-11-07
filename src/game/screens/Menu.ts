@@ -1,13 +1,12 @@
-import { AnimatedSprite, Assets, Container, Sprite, Text, Ticker } from 'pixi.js'
+import { AnimatedSprite, Assets, Container, Sprite, Text } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { AppScreen } from '../../models'
 import { inputManager } from '../../utils/inputManager.ts'
 import { navigation } from '../Navigation.ts'
 import GameScreen from './Game.ts'
+import gsap from 'gsap'
 
 export default class MenuScreen extends Container implements AppScreen {
-  #seconds = 0
-  #eyeCounts = 0
   #charContainer = new Container()
   #eyes: AnimatedSprite
   #lArm: Sprite
@@ -21,14 +20,14 @@ export default class MenuScreen extends Container implements AppScreen {
 
   prepare(): Promise<void> {
     return new Promise(async resolve => {
-      await this.initBackground()
+      await this.initArt()
       await this.initText()
-
+      this.animate()
       resolve()
     })
   }
 
-  async initBackground() {
+  async initArt() {
     const menubundle = await Assets.loadBundle('menu')
 
     const textureSprite = new Sprite(menubundle.background)
@@ -57,7 +56,7 @@ export default class MenuScreen extends Container implements AppScreen {
     const leftArm = new Sprite(menubundle.lArm)
     leftArm.anchor.set(1, 0.5)
     leftArm.height = persoSprite.height * 0.35
-    leftArm.width = leftArm.height
+    leftArm.width = persoSprite.height * 0.35
     leftArm.position.set(persoSprite.x - 80, config.HEIGHT / 2.2)
     leftArm.angle = 15
     leftArm.zIndex = 4
@@ -66,7 +65,7 @@ export default class MenuScreen extends Container implements AppScreen {
     const rightArm = new Sprite(menubundle.rArm)
     rightArm.anchor.set(0, 0.5)
     rightArm.height = persoSprite.height * 0.35
-    rightArm.width = rightArm.height
+    rightArm.width = persoSprite.height * 0.35
     rightArm.position.set(config.WIDTH / 1.83, config.HEIGHT / 2.5)
     rightArm.zIndex = 2
     this.#rArm = rightArm
@@ -118,23 +117,14 @@ export default class MenuScreen extends Container implements AppScreen {
     this.addChild(this.#text, this.#subTitle)
   }
 
-  animateBody(delta: number) {
-    if (Math.floor(this.#eyeCounts) === 50) {
-      this.#eyes.play()
-      this.#eyeCounts = 0
-    }
-
-    this.#subTitle.width = this.#subTitle.width + Math.cos(this.#seconds) * delta
-    this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5
-    this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3
+  animate() {
+    setInterval(() => this.#eyes.gotoAndPlay(0), 4000)
+    gsap.to(this.#subTitle, { pixi: { scale: 1.1 }, duration: 2, repeat: -1, yoyo: true })
+    gsap.to(this.#lArm, { pixi: { rotation: 10 }, duration: 1, repeat: -1, yoyo: true })
+    gsap.to(this.#rArm, { pixi: { rotation: -4 }, duration: 1.3, repeat: -1, yoyo: true })
   }
 
-  update = (ticker: Ticker) => {
+  update = () => {
     if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
-
-    this.animateBody(ticker.deltaMS)
-
-    this.#seconds += (1 / 60) * ticker.deltaMS
-    this.#eyeCounts += (1 / 60) * ticker.deltaMS
   }
 }
