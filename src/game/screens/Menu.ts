@@ -58,7 +58,7 @@ export default class MenuScreen extends Container implements AppScreen {
     leftArm.anchor.set(1, 0.5)
     leftArm.height = persoSprite.height * 0.35
     leftArm.width = leftArm.height
-    leftArm.position.set(persoSprite.x - 70, config.HEIGHT / 2.2)
+    leftArm.position.set(persoSprite.x - 80, config.HEIGHT / 2.2)
     leftArm.angle = 15
     leftArm.zIndex = 4
     this.#lArm = leftArm
@@ -119,7 +119,7 @@ export default class MenuScreen extends Container implements AppScreen {
   }
 
   animateBody(delta: number) {
-    if (Math.floor(this.#eyeCounts) === 3) {
+    if (Math.floor(this.#eyeCounts) === 50) {
       this.#eyes.play()
       this.#eyeCounts = 0
     }
@@ -128,8 +128,6 @@ export default class MenuScreen extends Container implements AppScreen {
     this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5
     this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3
   }
-
-  leave() {}
 
   update = (ticker: Ticker) => {
     if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
