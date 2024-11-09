@@ -5,7 +5,9 @@ const config = {
   GRAVITY: 1.5,
   MAXSPEED: 25,
   COUNTDOWN: 3,
-  PHYSIC_DEBUG_MODE: false,
+  props: {
+    backPropSpeed: 0.02,
+  },
   player: {
     xAxisStart: 150,
     baseJumpSpeed: 260,

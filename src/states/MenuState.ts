@@ -3,7 +3,7 @@ import config from '../../gameConfig.ts'
 import { AppScreen } from '../models'
 import { inputManager } from '../utils/inputManager.ts'
 import { navigation } from '../Navigation.ts'
-import GameScreen from './GameState.ts'
+import GameScreen from './OldGame.ts'
 import gsap from 'gsap'
 
 export default class MenuState extends Container implements AppScreen {
