@@ -4,8 +4,8 @@ import { PixiPlugin } from 'gsap/PixiPlugin'
 import { initAssetsBundles } from './utils/loaderUtils.ts'
 import { navigation } from './Navigation.ts'
 import { getStateFromParams } from './utils/url.ts'
-import MenuScreen from './states/Menu.ts'
-import GameScreen from './states/Game.ts'
+import MenuState from './states/MenuState.ts'
+import GameState from './states/GameState.ts'
 import gsap from 'gsap'
 
 gsap.registerPlugin(PixiPlugin)
@@ -31,10 +31,10 @@ await initAssetsBundles()
 
 if (import.meta.env.MODE === 'development') {
   if (getStateFromParams() === 'game') {
-    navigation.goToScreen(new GameScreen())
+    navigation.goToScreen(new GameState())
   } else {
-    navigation.goToScreen(new MenuScreen())
+    navigation.goToScreen(new MenuState())
   }
 } else {
-  navigation.goToScreen(new MenuScreen())
+  navigation.goToScreen(new MenuState())
 }

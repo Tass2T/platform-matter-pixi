@@ -3,10 +3,10 @@ import config from '../../gameConfig.ts'
 import { AppScreen } from '../models'
 import { inputManager } from '../utils/inputManager.ts'
 import { navigation } from '../Navigation.ts'
-import GameScreen from './Game.ts'
+import GameScreen from './GameState.ts'
 import gsap from 'gsap'
 
-export default class MenuScreen extends Container implements AppScreen {
+export default class MenuState extends Container implements AppScreen {
   #charContainer = new Container()
   #eyes: AnimatedSprite
   #lArm: Sprite

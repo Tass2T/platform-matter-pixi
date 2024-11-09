@@ -6,7 +6,7 @@ import PlatformManager from '../game/components/platformManager'
 import config from '../../gameConfig.ts'
 import { AppScreen } from '../models'
 
-export default class GameScreen extends Container implements AppScreen {
+export default class GameState extends Container implements AppScreen {
   _physicEngine: MATTER.Engine
 
   _backgroundContainer = new Container()
@@ -60,7 +60,7 @@ export default class GameScreen extends Container implements AppScreen {
     this._physicEngine.gravity.scale = config.GRAVITY
 
     if (config.PHYSIC_DEBUG_MODE) {
-      var render = MATTER.Render.create({
+      const render = MATTER.Render.create({
         element: document.body,
         engine: this._physicEngine,
       })
