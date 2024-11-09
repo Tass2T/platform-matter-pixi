@@ -2,7 +2,7 @@ import * as MATTER from 'matter-js'
 import { Container, Assets, Sprite, Spritesheet } from 'pixi.js'
 import config from '../../../../gameConfig.ts'
 import Diamond from '../diamond/index.js'
-import VisibleObjects from '../../traits/VisibleObjects.js'
+import VisibleObjects from '../../../traits/VisibleObjects.js'
 
 export default class Platform extends VisibleObjects {
   _diamondList: Array<Diamond> = []
@@ -13,7 +13,7 @@ export default class Platform extends VisibleObjects {
   #ballonsSpriteSheet: Spritesheet
   constructor(xStart: number, levelContainer: Container, first = false) {
     super()
-    this._isFirst = first ? true : false
+    this._isFirst = first
     this._body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT : this.getAdjustedHeight(),
@@ -42,7 +42,7 @@ export default class Platform extends VisibleObjects {
       sprite.width = inflatedWidth
       sprite.height = inflatedHeight
       sprite.anchor.set(0, 0.4)
-      sprite.position.set(15 + ballonWidth * i, 0 + config.platForm.height / 2)
+      sprite.position.set(15 + ballonWidth * i, config.platForm.height / 2)
       sprite.zIndex = Math.floor(Math.random() * 3)
       this.#balloons.push(sprite)
     }

@@ -2,10 +2,10 @@ import * as PIXI from 'pixi.js'
 import config from '../gameConfig.ts'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import { initAssetsBundles } from './utils/loaderUtils.ts'
-import { navigation } from './game/Navigation.ts'
+import { navigation } from './Navigation.ts'
 import { getStateFromParams } from './utils/url.ts'
-import MenuScreen from './game/screens/Menu.ts'
-import GameScreen from './game/screens/Game.ts'
+import MenuScreen from './states/Menu.ts'
+import GameScreen from './states/Game.ts'
 import gsap from 'gsap'
 
 gsap.registerPlugin(PixiPlugin)

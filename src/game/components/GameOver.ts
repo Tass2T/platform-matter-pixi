@@ -1,6 +1,7 @@
 import { Container, Graphics, BitmapText, Assets, Sprite, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { AppScreen } from '../../models'
+import { inputManager } from '../../utils/inputManager.ts'
 
 export default class GameOverScreen extends Container implements AppScreen {
   _curtainContainer: Container = new Container()
@@ -32,19 +33,17 @@ export default class GameOverScreen extends Container implements AppScreen {
     super()
   }
 
-  prepare() {
-    this.switchVisibility()
-    this._stateContainer.zIndex = 10
-    this._stateContainer.addChild(
-      this._curtainContainer,
-      this._scoreContainer,
-      this._illustrationContainer,
-      this._msgContainer
-    )
+  prepare(): Promise<void> {
+    return new Promise(resolve => {
+      this.zIndex = 10
+      this.addChild(this._curtainContainer, this._scoreContainer, this._illustrationContainer, this._msgContainer)
 
-    this.initCurtains()
-    this.initIllustration()
-    this.setMessage()
+      this.initCurtains()
+      this.initIllustration()
+      this.setMessage()
+
+      resolve()
+    })
   }
 
   initCurtains() {
@@ -140,7 +139,7 @@ export default class GameOverScreen extends Container implements AppScreen {
   }
 
   appear(playerScore: number) {
-    this._parentContainer.visible = true
+    this.visible = true
 
     this._scoreText.text = playerScore ? `${playerScore}` : '0'
   }
@@ -159,11 +158,6 @@ export default class GameOverScreen extends Container implements AppScreen {
     this._yellowRectScreen.rotation = 0
 
     this._illustration.eyeAnim?.gotoAndStop(0)
-  }
-
-  start() {
-    this.switchVisibility()
-    this._scoreText.text = this._scoreBoard.getPlayerScore() ? `${this._scoreBoard.getPlayerScore()}` : '0'
   }
 
   incrementConter(value: number): void {
@@ -197,7 +191,9 @@ export default class GameOverScreen extends Container implements AppScreen {
     }
   }
 
-  processAnim(delta: number) {
+  processAnim() {
+    // to be refactorized anyway
+    const delta = 0
     switch (this._animationProcess) {
       case 0:
         this.moveCurtainContainer(delta)
@@ -229,18 +225,16 @@ export default class GameOverScreen extends Container implements AppScreen {
   leaveScreen() {
     this._counter = 0
     this.resetVariablesAndElements()
-    this.switchVisibility()
-    this._changeState('level')
   }
 
-  update(delta: number, inputArrays: Array<String>) {
+  update() {
     if (this._counter > 100) this.leaveScreen()
-    if (inputArrays.includes('Space')) {
-      this.incrementConter(4 * delta)
+    if (inputManager.getPressedInputs().includes('Space')) {
+      this.incrementConter(4)
     } else if (this._counter > 0) {
-      this.incrementConter(-4 * delta)
+      this.incrementConter(-4)
     }
-    this.processAnim(delta)
+    this.processAnim()
 
     this.syncYellowCircle()
   }

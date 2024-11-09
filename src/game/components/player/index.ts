@@ -1,7 +1,7 @@
 import * as MATTER from 'matter-js'
 import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../../gameConfig.ts'
-import VisibleObjects from '../../traits/VisibleObjects.js'
+import VisibleObjects from '../../../traits/VisibleObjects.js'
 
 export default class Player extends VisibleObjects {
   _isJumping: boolean = false
@@ -35,23 +35,21 @@ export default class Player extends VisibleObjects {
 
   setIsJumping(value: boolean): void {
     if (this._sprite instanceof AnimatedSprite) {
-      
     }
     // A faire ==>  Retirer les ignores et faire qqchose a proposito du type CustomSprite
-    
-      this._isJumping = value
-      if (this._isJumping) {
-        //@ts-ignore
-        this._sprite.textures = this._playerSpritesheet.animations['jump']
-        //@ts-ignore
-        this._sprite.gotoAndStop(0)
-      } else {
-        //@ts-ignore
-        this._sprite.textures = this._playerSpritesheet.animations['run']
-        //@ts-ignore
-        this._sprite.gotoAndPlay(0)
-      }
-    
+
+    this._isJumping = value
+    if (this._isJumping) {
+      //@ts-ignore
+      this._sprite.textures = this._playerSpritesheet.animations['jump']
+      //@ts-ignore
+      this._sprite.gotoAndStop(0)
+    } else {
+      //@ts-ignore
+      this._sprite.textures = this._playerSpritesheet.animations['run']
+      //@ts-ignore
+      this._sprite.gotoAndPlay(0)
+    }
   }
 
   checkJumpAnimation() {

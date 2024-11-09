@@ -1,14 +1,13 @@
 import * as MATTER from 'matter-js'
-import { Container, Assets, Sprite, AnimatedSprite, BitmapText, Ticker } from 'pixi.js'
-import Player from '../components/player'
-import PlatformManager from '../components/platformManager'
-import config from '../../../gameConfig.ts'
-import GameOverScreen from './GameOver.ts'
-import { AppScreen } from '../../models'
+import gsap from 'gsap'
+import { Container, Assets, Sprite, AnimatedSprite, BitmapText } from 'pixi.js'
+import Player from '../game/components/player'
+import PlatformManager from '../game/components/platformManager'
+import config from '../../gameConfig.ts'
+import { AppScreen } from '../models'
 
 export default class GameScreen extends Container implements AppScreen {
   _physicEngine: MATTER.Engine
-  _physicRenderer: MATTER.Render
 
   _backgroundContainer = new Container()
   _propsContainer = new Container()
@@ -24,7 +23,6 @@ export default class GameScreen extends Container implements AppScreen {
 
   _player: Player
   _platformManager: PlatformManager
-  _gameOverScreen: GameOverScreen
 
   constructor() {
     super()
@@ -199,7 +197,6 @@ export default class GameScreen extends Container implements AppScreen {
         const collision = MATTER.Collision.collides(this._player.getBody(), diamond.getBody())
         if (collision?.collided && !diamond.getHasBeenTaken()) {
           diamond.setHasBeenTaken(true)
-          this._scoreBoard.addToScore(config.diamond.points)
 
           this._platformManager.increaseGamespeed()
         }
@@ -211,17 +208,14 @@ export default class GameScreen extends Container implements AppScreen {
     if (this._player.hasFallen()) {
       this._platformManager.setGameSpeed(0)
       this.#blockJump = true
-      this._changeState('gameOver')
     }
   }
 
   start = (): void => {
     this._countdown = config.COUNTDOWN
-    this._scoreBoard.resetScore()
     this.setPropsPos()
     this.setFrontPropsPos()
     this._platformManager.resetPlatforms()
-    this._scoreBoard.setVisibility(true)
     this._displayedSecond.text = `${this._countdown}`
     this._player.reset()
   }
@@ -240,24 +234,24 @@ export default class GameScreen extends Container implements AppScreen {
     }
   }
 
-  update(ticker: Ticker) {
-    console.log(ticker)
-    // if (this._physicEngine && this._player) {
-    //   MATTER.Engine.update(this._physicEngine, delta)
-    //   this._player.update()
-    //   this.checkForCollisionWithDiamond()
-    //   this.checkForCollisionWithPlatform()
-    //   this._platformManager.update(delta)
-    //   this.updateProps(delta)
-    //   this.updateFrontProps(delta)
-    //   this._scoreBoard.update()
-    //   this.checkIfPlayerFell()
-    //
-    //   if (this._countdown) {
-    //     this._seconds += (1 / 60) * delta
-    //     this.updateCountdown()
-    //   }
-    // }
+  update = () => {
+    if (this._physicEngine && this._player) {
+      const delta = gsap.ticker.deltaRatio()
+
+      MATTER.Engine.update(this._physicEngine, delta)
+      this._player.update()
+      this.checkForCollisionWithDiamond()
+      this.checkForCollisionWithPlatform()
+      this._platformManager.update(delta)
+      this.updateProps(delta)
+      this.updateFrontProps(delta)
+      this.checkIfPlayerFell()
+
+      if (this._countdown) {
+        this._seconds += (1 / 60) * delta
+        this.updateCountdown()
+      }
+    }
   }
 
   destroy() {
