@@ -2,10 +2,11 @@ import { Assets, Container, Sprite } from 'pixi.js'
 import { AppScreen } from '../models'
 import config from '../../gameConfig.ts'
 import * as MATTER from 'matter-js'
+import gsap from 'gsap'
 
 export default class Game extends Container implements AppScreen {
   #physicEngine: Matter.Engine
-  #backProps = new Container({ isRenderGroup: true })
+  #backProps = new Container()
   #frontPropsContainer = new Container({ isRenderGroup: true })
 
   constructor() {
@@ -14,7 +15,7 @@ export default class Game extends Container implements AppScreen {
     this.initEngine()
     this.setBackProps()
 
-    this.addChild(this.#backProps, this.#frontPropsContainer)
+    this.addChild(this.#backProps)
   }
 
   initEngine() {
@@ -22,15 +23,13 @@ export default class Game extends Container implements AppScreen {
     this.#physicEngine.gravity.scale = config.GRAVITY
   }
 
-  setBackProps(): void {
-    ;['props2', 'props1'].forEach(async (prop, index) => {
-      const texture = await Assets.load(prop)
-      const sprite = new Sprite(texture)
-      sprite.height = config.HEIGHT
-      sprite.width = config.WIDTH
-      sprite.x = -(config.WIDTH / 3) + index * config.WIDTH
-      this.#backProps.addChild(sprite)
-    })
+  async setBackProps(): Promise<void> {
+    const texture = await Assets.load('backProps')
+    const sprite = new Sprite(texture)
+    sprite.height = config.HEIGHT * 1.1
+    sprite.x = 0
+    sprite.y = -config.HEIGHT * 0.1
+    this.#backProps.addChild(sprite)
   }
 
   async setFrontProps(): Promise<void> {
@@ -51,5 +50,7 @@ export default class Game extends Container implements AppScreen {
     }
   }
 
-  update = () => {}
+  update = () => {
+    this.#backProps.x -= 2 * gsap.ticker.deltaRatio()
+  }
 }
