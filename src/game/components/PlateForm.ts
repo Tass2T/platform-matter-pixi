@@ -5,16 +5,15 @@ import Diamond from './Diamond.ts'
 import VisibleObjects from '../../traits/VisibleObjects.ts'
 
 export default class Platform extends VisibleObjects {
-  _diamondList: Array<Diamond> = []
-  _isFirst: boolean
+  #diamondList: Array<Diamond> = []
+  #isFirst: boolean
   #platformContainer = new Container({ isRenderGroup: true })
-  #seconds = 0
   constructor(xStart: number, levelContainer: Container, first = false) {
     super()
-    this._isFirst = first
+    this.#isFirst = first
     this._body = MATTER.Bodies.rectangle(
       xStart,
-      first ? config.HEIGHT : this.getAdjustedHeight(),
+      first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
       config.platForm.width,
       config.platForm.height,
       {
@@ -24,6 +23,7 @@ export default class Platform extends VisibleObjects {
     this.#platformContainer.zIndex = 3
 
     this.initAssets()
+    this.prepareDiamond(levelContainer)
     levelContainer.addChild(this.#platformContainer)
   }
 
@@ -62,12 +62,12 @@ export default class Platform extends VisibleObjects {
   }
 
   getDiamondList(): Array<Diamond> {
-    return this._diamondList
+    return this.#diamondList
   }
 
   prepareDiamond(levelContainer: Container) {
     for (let i = 1; i <= config.diamond.nb; i++) {
-      this._diamondList.push(new Diamond(levelContainer, this._body.position, i, this._isFirst))
+      this.#diamondList.push(new Diamond(levelContainer, this._body.position, i, this.#isFirst))
     }
   }
 
@@ -85,6 +85,5 @@ export default class Platform extends VisibleObjects {
 
   update(delta: number): void {
     this.syncSpriteWithBody()
-    this.#seconds += (1 / 60) * delta
   }
 }

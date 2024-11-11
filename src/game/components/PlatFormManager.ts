@@ -4,11 +4,11 @@ import config from '../../../gameConfig.ts'
 import Platform from './PlateForm.ts'
 
 export default class PlatformManager {
-  _engine: MATTER.Engine
+  #engine: MATTER.Engine
   _platFormList: Array<Platform> = []
   _gameSpeed: number = 0
   constructor(engineWorld: MATTER.Engine, parentContainer: Container) {
-    this._engine = engineWorld
+    this.#engine = engineWorld
     this.createPlatforms(parentContainer)
   }
 
@@ -37,7 +37,7 @@ export default class PlatformManager {
       const ground = new Platform(x, levelContainer, i === 1)
 
       this._platFormList.push(ground)
-      MATTER.Composite.add(this._engine.world, ground.getBody())
+      MATTER.Composite.add(this.#engine.world, ground.getBody())
     }
   }
 
