@@ -3,17 +3,23 @@ import { AppScreen } from '../models'
 import config from '../../gameConfig.ts'
 import * as MATTER from 'matter-js'
 import gsap from 'gsap'
+import PlatformManager from './components/PlatFormManager.ts'
+import Player from './components/Player.ts'
 
 export default class Game extends Container implements AppScreen {
   #physicEngine: Matter.Engine
   #backProps = new Container()
   #frontPropsContainer = new Container({ isRenderGroup: true })
+  #player: Player
+  #platformManager: PlatformManager
 
   constructor() {
     super()
 
     this.initEngine()
     this.setBackProps()
+
+    this.initLevel()
 
     this.addChild(this.#backProps)
   }
@@ -50,7 +56,16 @@ export default class Game extends Container implements AppScreen {
     }
   }
 
+  async initLevel() {
+    await Assets.loadBundle('level')
+
+    this.#platformManager = new PlatformManager(this.#physicEngine, this)
+
+    this.#player = new Player(this.#physicEngine.world, this)
+  }
+
   update = () => {
-    this.#backProps.x -= 2 * gsap.ticker.deltaRatio()
+    const delta = gsap.ticker.deltaRatio()
+    this.#backProps.x -= 0.06 * delta
   }
 }

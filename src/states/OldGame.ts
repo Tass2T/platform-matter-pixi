@@ -1,8 +1,8 @@
 import * as MATTER from 'matter-js'
 import gsap from 'gsap'
 import { Container, Assets, Sprite, AnimatedSprite, BitmapText } from 'pixi.js'
-import Player from '../game/components/player'
-import PlatformManager from '../game/components/platformManager'
+import Player from '../game/components/Player.ts'
+import PlatformManager from '../game/components/PlatFormManager.ts'
 import config from '../../gameConfig.ts'
 import { AppScreen } from '../models'
 

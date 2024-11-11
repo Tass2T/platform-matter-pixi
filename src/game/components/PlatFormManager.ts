@@ -1,7 +1,7 @@
 import * as MATTER from 'matter-js'
 import { Container } from 'pixi.js'
-import config from '../../../../gameConfig.ts'
-import Platform from '../platform/index.js'
+import config from '../../../gameConfig.ts'
+import Platform from './PlateForm.ts'
 
 export default class PlatformManager {
   _engine: MATTER.Engine
@@ -48,10 +48,6 @@ export default class PlatformManager {
       const y = i === 0 ? config.HEIGHT / 2 : this._platFormList[i].getAdjustedHeight()
 
       this._platFormList[i].setPosition(x, y)
-      this._platFormList[i]._diamondList.forEach(diamond => {
-        diamond.reset()
-        if (diamond._boundWithFirstPlatform) diamond.hide()
-      })
     }
   }
 

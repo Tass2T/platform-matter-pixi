@@ -1,7 +1,7 @@
 import * as MATTER from 'matter-js'
 import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite } from 'pixi.js'
-import config from '../../../../gameConfig.ts'
-import VisibleObjects from '../../../traits/VisibleObjects.js'
+import config from '../../../gameConfig.ts'
+import VisibleObjects from '../../traits/VisibleObjects.ts'
 
 export default class Diamond extends VisibleObjects {
   _diamondContainer: Container = new Container()

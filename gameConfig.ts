@@ -19,8 +19,8 @@ const config = {
     balloonNb: 7,
     gap: 90,
     start: 150,
-    width: 300,
-    height: 50,
+    width: 327,
+    height: 127,
     spaceFromCenter: 450,
   },
   diamond: {

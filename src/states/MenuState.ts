@@ -3,7 +3,7 @@ import config from '../../gameConfig.ts'
 import { AppScreen } from '../models'
 import { inputManager } from '../utils/inputManager.ts'
 import { navigation } from '../Navigation.ts'
-import GameScreen from './OldGame.ts'
+import GameState from './GameState.ts'
 import gsap from 'gsap'
 
 export default class MenuState extends Container implements AppScreen {
@@ -125,6 +125,6 @@ export default class MenuState extends Container implements AppScreen {
   }
 
   update = () => {
-    if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameScreen())
+    if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameState())
   }
 }

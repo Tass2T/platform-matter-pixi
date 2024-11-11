@@ -14,7 +14,7 @@
         },
         {
           "alias": "platform",
-          "src": "platform/platformMap.json"
+          "src": "platform/platForm.png"
         },
         { "alias": "diamonds", "src": "diamonds/diamondsSpritesheet.json" },
         {
