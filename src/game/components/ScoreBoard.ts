@@ -5,7 +5,7 @@ export default class ScoreBoard extends Container {
   #displayedPlayerScore = 0
   #actualPlayerScore = 0
   #scoreText: BitmapText | null = null
-  #visible = true
+
   constructor() {
     super()
     this.#scoreText = new BitmapText({
@@ -38,10 +38,6 @@ export default class ScoreBoard extends Container {
     this.#actualPlayerScore = 0
     this.#displayedPlayerScore = 0
     if (this.#scoreText) this.#scoreText.text = `${this.#displayedPlayerScore}`
-  }
-
-  setVisibility(value: boolean) {
-    this.#visible = value
   }
 
   update(): void {
