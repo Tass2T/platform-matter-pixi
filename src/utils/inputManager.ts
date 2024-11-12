@@ -15,6 +15,10 @@ class InputManager {
   getPressedInputs() {
     return this.pressedInput
   }
+
+  isSpacePressed() {
+    return this.pressedInput.includes('Space')
+  }
 }
 
 export const inputManager = new InputManager()

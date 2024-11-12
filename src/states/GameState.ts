@@ -1,10 +1,11 @@
-import { AnimatedSprite, Assets, Container, Sprite } from 'pixi.js'
+import { Container } from 'pixi.js'
 import { AppScreen } from '../models'
 import Game from '../game/Game.ts'
-import config from '../../gameConfig.ts'
+import GameUI from '../game/UI/GameUI.ts'
 
 export default class GameState extends Container implements AppScreen {
   #game: Game
+  #ui: GameUI
 
   constructor() {
     super()
@@ -12,25 +13,13 @@ export default class GameState extends Container implements AppScreen {
 
   prepare = (): Promise<void> => {
     return new Promise(async (resolve): Promise<void> => {
-      await this.setBackground()
       this.#game = new Game()
-      this.addChild(this.#game)
+      this.#ui = new GameUI()
+      await this.#game.prepare()
+      await this.#ui.prepare()
+      this.addChild(this.#game, this.#ui)
       resolve()
     })
-  }
-
-  async setBackground() {
-    const texture = await Assets.load('backdrop')
-    const skySprite = new Sprite(texture)
-
-    const seaTextures = await Assets.load('seaProp')
-    const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
-    seaSprite.anchor.set(0, 1)
-    seaSprite.width = config.WIDTH
-    seaSprite.position.set(0, config.HEIGHT)
-    seaSprite.animationSpeed = 0.15
-    this.addChild(skySprite, seaSprite)
-    seaSprite.play()
   }
 
   update = () => {
