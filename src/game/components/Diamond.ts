@@ -1,57 +1,60 @@
 import * as MATTER from 'matter-js'
-import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite } from 'pixi.js'
+import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite, Sprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import VisibleObjects from '../../traits/VisibleObjects.ts'
+import gsap from 'gsap'
 
 export default class Diamond extends VisibleObjects {
-  _diamondContainer: Container = new Container()
-  _parentPos: MATTER.Vector
-  _orderIndex: number
-  _hasBeenTaken: boolean
-  _spritesheet: Spritesheet
-  _scoreText: BitmapText
-  _pointsContainer: Container = new Container()
-  _boundWithFirstPlatform: boolean
+  #diamondContainer: Container = new Container()
+  #parentPos: MATTER.Vector
+  #orderIndex: number
+  #hasBeenTaken: boolean
+  #spritesheet: Spritesheet
+  #scoreText: BitmapText
+  #pointsContainer: Container = new Container()
+  #boundWithFirstPlatform: boolean
+  #body: MATTER.Body
+  #bodyHeight = config.diamond.side
+  #bodyWidth = config.diamond.side
+  #sprite: Sprite
   constructor(levelContainer: Container, platFormPos: MATTER.Vector, pos: number, firstPlatform: boolean) {
     super()
-    levelContainer.addChild(this._diamondContainer)
-    this._parentPos = platFormPos
-    this._orderIndex = pos
-    this._boundWithFirstPlatform = firstPlatform
+    levelContainer.addChild(this.#diamondContainer)
+    this.#parentPos = platFormPos
+    this.#orderIndex = pos
+    this.#boundWithFirstPlatform = firstPlatform
 
-    if (this._boundWithFirstPlatform) this._hasBeenTaken = true
+    if (this.#boundWithFirstPlatform) this.#hasBeenTaken = true
 
-    this._body = MATTER.Bodies.rectangle(
+    this.#body = MATTER.Bodies.rectangle(
       platFormPos.x - config.platForm.width / 2 + (config.diamond.side + config.diamond.gap) * pos,
       platFormPos.y - config.diamond.height,
       config.diamond.side,
       config.diamond.side,
       { isStatic: true, isSensor: true }
     )
-    this._bodyHeight = config.diamond.side
-    this._bodyWidth = config.diamond.side
 
     this.initAssets()
   }
 
   async initAssets() {
-    this._spritesheet = await Assets.load('diamonds')
+    this.#spritesheet = await Assets.load('diamonds')
 
-    this._sprite = new AnimatedSprite(this._spritesheet.animations['idle'])
-    this._sprite.width = this._bodyWidth
-    this._sprite.height = this._bodyHeight
-    this._sprite.anchor.set(0.5, 0.5)
+    this.#sprite = new AnimatedSprite(this.#spritesheet.animations['idle'])
+    this.#sprite.width = this.#bodyWidth
+    this.#sprite.height = this.#bodyHeight
+    this.#sprite.anchor.set(0.5, 0.5)
 
     this.animateSprite(0.08)
-    if (this._boundWithFirstPlatform) this._sprite.visible = false
+    if (this.#boundWithFirstPlatform) this.#sprite.visible = false
 
-    this._diamondContainer.addChild(this._sprite)
+    this.#diamondContainer.addChild(this.#sprite)
 
     this.initScoreContainer()
   }
 
   initScoreContainer() {
-    this._scoreText = new BitmapText({
+    this.#scoreText = new BitmapText({
       text: `${config.diamond.points}`,
       style: {
         fontFamily: 'Arial',
@@ -60,23 +63,23 @@ export default class Diamond extends VisibleObjects {
         stroke: { width: 1 },
       },
     })
-    this._pointsContainer.position.set(-40, 0)
-    this._pointsContainer.visible = false
-    this._pointsContainer.addChild(this._scoreText)
-    this._diamondContainer.addChild(this._pointsContainer)
+    this.#pointsContainer.position.set(-40, 0)
+    this.#pointsContainer.visible = false
+    this.#pointsContainer.addChild(this.#scoreText)
+    this.#diamondContainer.addChild(this.#pointsContainer)
   }
 
   getPosition(): MATTER.Vector {
-    return this._body.position
+    return this.#body.position
   }
 
   getHasBeenTaken() {
-    return this._hasBeenTaken
+    return this.#hasBeenTaken
   }
 
   hide() {
-    this._hasBeenTaken = true
-    this._sprite.visible = false
+    this.#hasBeenTaken = true
+    this.#sprite.visible = false
   }
 
   reset() {
@@ -86,49 +89,49 @@ export default class Diamond extends VisibleObjects {
   }
 
   setHasBeenTaken(value: boolean) {
-    if (this._sprite && this._sprite instanceof AnimatedSprite) {
-      this._hasBeenTaken = value
-      if (this._hasBeenTaken) {
-        this._sprite.textures = this._spritesheet.animations['taken']
-        this._sprite.animationSpeed = 0.3
-        this._sprite.loop = false
-        this._sprite.onComplete = () => (this._sprite.visible = false)
+    if (this.#sprite && this.#sprite instanceof AnimatedSprite) {
+      this.#hasBeenTaken = value
+      if (this.#hasBeenTaken) {
+        this.#sprite.textures = this.#spritesheet.animations['taken']
+        this.#sprite.animationSpeed = 0.3
+        this.#sprite.loop = false
+        this.#sprite.onComplete = () => (this.#sprite.visible = false)
 
-        this._sprite.gotoAndPlay(0)
-        this._pointsContainer.visible = true
+        this.#sprite.gotoAndPlay(0)
+        this.#pointsContainer.visible = true
       } else {
-        this._sprite.visible = true
-        this._sprite.loop = true
-        this._sprite.textures = this._spritesheet.animations['idle']
-        this._sprite.animationSpeed = 0.09
-        this._sprite.gotoAndPlay(0)
-        this._pointsContainer.position.y = 0
-        this._pointsContainer.visible = false
+        this.#sprite.visible = true
+        this.#sprite.loop = true
+        this.#sprite.textures = this.#spritesheet.animations['idle']
+        this.#sprite.animationSpeed = 0.09
+        this.#sprite.gotoAndPlay(0)
+        this.#pointsContainer.position.y = 0
+        this.#pointsContainer.visible = false
       }
     }
   }
 
   syncPosition(): void {
-    MATTER.Body.setPosition(this._body, {
-      x: this._parentPos.x - config.platForm.width / 2 + (40 + config.diamond.gap) * this._orderIndex,
-      y: this._parentPos.y - 50,
+    MATTER.Body.setPosition(this.#body, {
+      x: this.#parentPos.x - config.platForm.width / 2 + (40 + config.diamond.gap) * this.#orderIndex,
+      y: this.#parentPos.y - 50,
     })
   }
 
   syncSpriteWithBody() {
-    this._diamondContainer.position.x = this._body.position.x
-    this._diamondContainer.position.y = this._body.position.y
+    this.#diamondContainer.position.x = this.#body.position.x
+    this.#diamondContainer.position.y = this.#body.position.y
   }
 
   syncScorePosition(delta: number) {
-    if (this._hasBeenTaken) {
-      this._pointsContainer.position.y -= 3 * delta
+    if (this.#hasBeenTaken) {
+      this.#pointsContainer.position.y -= 3 * delta
     }
   }
 
-  update(delta: number): void {
+  update(): void {
     this.syncPosition()
     this.syncSpriteWithBody()
-    this.syncScorePosition(delta)
+    this.syncScorePosition(gsap.ticker.deltaRatio())
   }
 }

@@ -83,7 +83,9 @@ export default class Platform extends VisibleObjects {
     )
   }
 
-  update(delta: number): void {
+  update(): void {
     this.syncSpriteWithBody()
+
+    this.#diamondList.forEach(diamond => diamond.update())
   }
 }
