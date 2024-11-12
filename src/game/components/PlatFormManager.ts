@@ -5,27 +5,27 @@ import Platform from './PlateForm.ts'
 
 export default class PlatformManager {
   #engine: MATTER.Engine
-  _platFormList: Array<Platform> = []
-  _gameSpeed: number = 0
+  #platFormList: Array<Platform> = []
+  #gameSpeed: number = 0
   constructor(engineWorld: MATTER.Engine, parentContainer: Container) {
     this.#engine = engineWorld
     this.createPlatforms(parentContainer)
   }
 
   getGamespeed() {
-    return this._gameSpeed
+    return this.#gameSpeed
   }
 
   getPlatformList() {
-    return this._platFormList
+    return this.#platFormList
   }
 
   increaseGamespeed() {
-    if (this._gameSpeed < config.MAXSPEED) this._gameSpeed += 0.05
+    if (this.#gameSpeed < config.MAXSPEED) this.#gameSpeed += 0.05
   }
 
   setGameSpeed(newValue: number): void {
-    this._gameSpeed = newValue
+    this.#gameSpeed = newValue
   }
 
   createPlatforms(levelContainer: Container) {
@@ -33,58 +33,58 @@ export default class PlatformManager {
       const x =
         i === 1
           ? config.platForm.start
-          : this._platFormList[this._platFormList.length - 1].getRightCoord() + this.setAjustedGap()
+          : this.#platFormList[this.#platFormList.length - 1].getRightCoord() + this.setAjustedGap()
       const ground = new Platform(x, levelContainer, i === 1)
 
-      this._platFormList.push(ground)
+      this.#platFormList.push(ground)
       MATTER.Composite.add(this.#engine.world, ground.getBody())
     }
   }
 
   resetPlatforms(): void {
-    for (let i = 0; i < this._platFormList.length; i++) {
-      const x = i === 0 ? config.platForm.start : this._platFormList[i - 1].getRightCoord() + this.setAjustedGap()
+    for (let i = 0; i < this.#platFormList.length; i++) {
+      const x = i === 0 ? config.platForm.start : this.#platFormList[i - 1].getRightCoord() + this.setAjustedGap()
 
-      const y = i === 0 ? config.HEIGHT / 2 : this._platFormList[i].getAdjustedHeight()
+      const y = i === 0 ? config.HEIGHT / 2 : this.#platFormList[i].getAdjustedHeight()
 
-      this._platFormList[i].setPosition(x, y)
+      this.#platFormList[i].setPosition(x, y)
     }
   }
 
   setAjustedGap(): number {
-    return config.platForm.gap * (Math.random() * (this._gameSpeed ? this._gameSpeed / 2 : config.SPEED / 2))
+    return config.platForm.gap * (Math.random() * (this.#gameSpeed ? this.#gameSpeed / 2 : config.SPEED / 2))
   }
 
   getFarfestXCoord(): number {
     let result = 0
 
-    for (let i = 0; i < this._platFormList.length; i++) {
-      if (this._platFormList[i].getRightCoord() > result) result = this._platFormList[i].getRightCoord()
+    for (let i = 0; i < this.#platFormList.length; i++) {
+      if (this.#platFormList[i].getRightCoord() > result) result = this.#platFormList[i].getRightCoord()
     }
 
     return result
   }
 
   movePlatforms(delta: number): void {
-    this._platFormList.forEach(platForm => {
+    this.#platFormList.forEach(platForm => {
       if (platForm.hasDisappeared()) {
         const x = this.getFarfestXCoord()
 
         platForm.moveToRight(x + this.setAjustedGap())
       } else {
-        platForm.moveLeft(this._gameSpeed * delta)
+        platForm.moveLeft(this.#gameSpeed * delta)
       }
     })
   }
 
-  syncPlatforms(delta: number) {
-    this._platFormList.forEach(platform => {
-      platform.update(delta)
+  syncPlatforms() {
+    this.#platFormList.forEach(platform => {
+      platform.update()
     })
   }
 
   update(delta: number) {
     this.movePlatforms(delta)
-    this.syncPlatforms(delta)
+    this.syncPlatforms()
   }
 }

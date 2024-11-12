@@ -15,7 +15,7 @@ export default class Platform extends VisibleObjects {
       xStart,
       first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
       config.platForm.width,
-      config.platForm.height,
+      config.platForm.height / 3.2,
       {
         isStatic: true,
       }

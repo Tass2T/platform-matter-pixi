@@ -18,7 +18,6 @@ export default class Game extends Container implements AppScreen {
 
   constructor() {
     super()
-
     this.initEngine()
   }
 
@@ -72,6 +71,7 @@ export default class Game extends Container implements AppScreen {
 
   checkInputs() {
     if (inputManager.isSpacePressed() && !this.#blockJump) this.#player.setIsJumping(true)
+    else this.#player.setIsJumping(false)
   }
 
   checkIfPlayerFell(): void {
@@ -81,12 +81,20 @@ export default class Game extends Container implements AppScreen {
     }
   }
 
+  checkForCollisionWithPlatform() {
+    this.#platformManager.getPlatformList().forEach(platform => {
+      const collision = MATTER.Collision.collides(this.#player.getBody(), platform.getBody())
+      if (collision?.collided && collision.normal.y === 1) this.#player.resetJump()
+    })
+  }
+
   update = () => {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
-      this.checkInputs()
       this.#backProps.x -= 0.06 * delta
+      this.checkInputs()
+      this.checkForCollisionWithPlatform()
       this.#platformManager.update(delta)
       this.#player.update()
       this.checkIfPlayerFell()

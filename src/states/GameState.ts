@@ -14,7 +14,9 @@ export default class GameState extends Container implements AppScreen {
   prepare = (): Promise<void> => {
     return new Promise(async (resolve): Promise<void> => {
       this.#game = new Game()
+      this.#game.zIndex = 1
       this.#ui = new GameUI()
+      this.#ui.zIndex = 2
       await this.#game.prepare()
       await this.#ui.prepare()
       this.addChild(this.#game, this.#ui)
