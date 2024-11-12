@@ -4,9 +4,9 @@ import config from '../../../gameConfig.ts'
 import VisibleObjects from '../../traits/VisibleObjects.ts'
 
 export default class Player extends VisibleObjects {
-  _isJumping: boolean = false
-  _playerSpritesheet: Spritesheet
-  _velocity: number = config.player.baseJumpSpeed
+  #isJumping: boolean = false
+  #playerSpritesheet: Spritesheet
+  #velocity: number = config.player.baseJumpSpeed
 
   constructor(physicEngineWorld: MATTER.World, parentContainer: Container) {
     super()
@@ -20,11 +20,11 @@ export default class Player extends VisibleObjects {
   }
 
   async initSprite(parentContainer: Container) {
-    this._playerSpritesheet = await Assets.load('player')
+    this.#playerSpritesheet = await Assets.load('player')
 
     this._isLoading = false
 
-    this._sprite = new AnimatedSprite(this._playerSpritesheet.animations['run'])
+    this._sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
     this._sprite.height = this._bodyHeight
     this._sprite.anchor.set(0.5, 0.5)
 
@@ -38,15 +38,15 @@ export default class Player extends VisibleObjects {
     }
     // A faire ==>  Retirer les ignores et faire qqchose a proposito du type CustomSprite
 
-    this._isJumping = value
-    if (this._isJumping) {
+    this.#isJumping = value
+    if (this.#isJumping) {
       //@ts-ignore
-      this._sprite.textures = this._playerSpritesheet.animations['jump']
+      this._sprite.textures = this.#playerSpritesheet.animations['jump']
       //@ts-ignore
       this._sprite.gotoAndStop(0)
     } else {
       //@ts-ignore
-      this._sprite.textures = this._playerSpritesheet.animations['run']
+      this._sprite.textures = this.#playerSpritesheet.animations['run']
       //@ts-ignore
       this._sprite.gotoAndPlay(0)
     }
@@ -61,30 +61,30 @@ export default class Player extends VisibleObjects {
 
   startAnimation(name: string) {
     //@ts-ignore
-    this._sprite.textures = this._playerSpritesheet.animations[name]
+    this._sprite.textures = this.#playerSpritesheet.animations[name]
     //@ts-ignore
     this._sprite.gotoAndPlay(0)
   }
 
   addVelocity(): void {
-    if (this._velocity > 0) {
+    if (this.#velocity > 0) {
       MATTER.Body.setVelocity(this._body, {
         x: 0,
         y: -config.player.baseJumpSpeed,
       })
-      this._velocity -= config.player.velocityLoss
-      if (this._velocity < 0) this._velocity = 0
+      this.#velocity -= config.player.velocityLoss
+      if (this.#velocity < 0) this.#velocity = 0
     }
   }
 
   stopVelocity(): void {
-    this._velocity = 0
+    this.#velocity = 0
     this.setIsJumping(false)
   }
 
   resetJump(): void {
-    if (this._isJumping) {
-      this._velocity = config.player.baseJumpSpeed
+    if (this.#isJumping) {
+      this.#velocity = config.player.baseJumpSpeed
     }
   }
 
@@ -102,7 +102,7 @@ export default class Player extends VisibleObjects {
   update() {
     if (this._sprite && this._body) {
       this.syncSpriteWithBody()
-      if (this._isJumping) {
+      if (this.#isJumping) {
         this.addVelocity()
         this.checkJumpAnimation()
       }

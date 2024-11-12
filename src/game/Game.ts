@@ -13,7 +13,8 @@ export default class Game extends Container implements AppScreen {
   #player: Player
   #platformManager: PlatformManager
   #isReady = false
-  #blockJump: false
+  #isPaused = false
+  #blockJump = false
 
   constructor() {
     super()
@@ -73,13 +74,22 @@ export default class Game extends Container implements AppScreen {
     if (inputManager.isSpacePressed() && !this.#blockJump) this.#player.setIsJumping(true)
   }
 
+  checkIfPlayerFell(): void {
+    if (this.#player.hasFallen()) {
+      this.#platformManager.setGameSpeed(0)
+      this.#blockJump = true
+    }
+  }
+
   update = () => {
-    if (this.#isReady) {
+    if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
+      MATTER.Engine.update(this.#physicEngine, delta)
       this.checkInputs()
       this.#backProps.x -= 0.06 * delta
       this.#platformManager.update(delta)
       this.#player.update()
+      this.checkIfPlayerFell()
     }
   }
 }
