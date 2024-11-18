@@ -4,6 +4,7 @@ import ScoreBoard from '../components/ScoreBoard.ts'
 
 export default class GameUI extends Container implements AppScreen {
   #scoreBoard: ScoreBoard
+
   constructor() {
     super()
   }

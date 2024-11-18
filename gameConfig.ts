@@ -6,7 +6,7 @@ const config = {
   MAXSPEED: 25,
   COUNTDOWN: 3,
   props: {
-    backPropSpeed: 0.02,
+    backPropSpeed: 0.06,
   },
   player: {
     xAxisStart: 150,

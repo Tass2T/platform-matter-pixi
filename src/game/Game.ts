@@ -11,6 +11,7 @@ export default class Game extends Container implements AppScreen {
   #backProps = new Container()
   #player: Player
   #platformManager: PlatformManager
+  #backgroundSpeed = config.props.backPropSpeed
   #isReady = false
   #isPaused = false
 
@@ -34,7 +35,20 @@ export default class Game extends Container implements AppScreen {
     this.#physicEngine.gravity.scale = config.GRAVITY
   }
 
-  async setBackground() {
+  getPhysicEngine() {
+    return this.#physicEngine
+  }
+
+  getPlayer() {
+    return this.#player
+  }
+
+  pause() {
+    this.#platformManager.setGameSpeed(0)
+    this.#backgroundSpeed = 0
+  }
+
+  private async setBackground() {
     const texture = await Assets.load('backdrop')
     const skySprite = new Sprite(texture)
     skySprite.zIndex = -3
@@ -50,7 +64,7 @@ export default class Game extends Container implements AppScreen {
     seaSprite.play()
   }
 
-  async setBackProps(): Promise<void> {
+  private async setBackProps(): Promise<void> {
     const texture = await Assets.load('backProps')
     const sprite = new Sprite(texture)
     sprite.height = config.HEIGHT * 1.1
@@ -60,7 +74,7 @@ export default class Game extends Container implements AppScreen {
     this.#backProps.addChild(sprite)
   }
 
-  async initLevel() {
+  private async initLevel() {
     await Assets.loadBundle('level')
 
     this.#platformManager = new PlatformManager(this)
@@ -70,15 +84,11 @@ export default class Game extends Container implements AppScreen {
     this.#isReady = true
   }
 
-  getPhysicEngine() {
-    return this.#physicEngine
-  }
-
   update = () => {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
-      this.#backProps.x -= 0.06 * delta
+      this.#backProps.x -= this.#backgroundSpeed * delta
       this.#platformManager.update(delta)
       this.#player.update()
     }

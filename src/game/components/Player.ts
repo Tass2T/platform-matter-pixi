@@ -3,6 +3,7 @@ import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
 import gsap from 'gsap'
+import { Sleeping } from 'matter-js'
 
 export default class Player {
   #isJumping: boolean = false
@@ -11,6 +12,7 @@ export default class Player {
   #bodyHeight = config.player.height
   #body: MATTER.Body
   #sprite: AnimatedSprite
+  #hasFallen: boolean = false
 
   constructor(physicEngineWorld: MATTER.World, parentContainer: Container) {
     this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
@@ -19,6 +21,10 @@ export default class Player {
 
     this.initSprite(parentContainer)
     MATTER.Composite.add(physicEngineWorld, this.#body)
+  }
+
+  getHasFallen = () => {
+    return this.#hasFallen
   }
 
   async initSprite(parentContainer: Container) {
@@ -95,12 +101,21 @@ export default class Player {
     }
   }
 
+  checkIfPlayerHasFallen() {
+    if (this.#body.position.y >= config.HEIGHT) {
+      this.#hasFallen = true
+      this.#sprite.stop()
+      Sleeping.set(this.#body, true)
+    }
+  }
+
   update() {
     if (this.#sprite && this.#body) {
       this.syncSpriteWithBody()
       this.checkJumpAnimation()
       this.checkIfIsStillJumping()
       this.checkForInputs()
+      this.checkIfPlayerHasFallen()
     }
   }
 }

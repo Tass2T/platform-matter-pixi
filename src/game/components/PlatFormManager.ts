@@ -7,7 +7,7 @@ import Game from '../Game.ts'
 export default class PlatformManager {
   #engine: MATTER.Engine
   #platFormList: Array<Platform> = []
-  #gameSpeed: number = 0
+  #gameSpeed: number = 3
   constructor(parentContainer: Game) {
     this.#engine = parentContainer.getPhysicEngine()
     this.createPlatforms(parentContainer)

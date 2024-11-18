@@ -7,6 +7,8 @@ export default class GameState extends Container implements AppScreen {
   #game: Game
   #ui: GameUI
 
+  #isPausing = false
+
   constructor() {
     super()
   }
@@ -24,7 +26,14 @@ export default class GameState extends Container implements AppScreen {
     })
   }
 
+  checkIfGameOver() {
+    if (this.#game.getPlayer().getHasFallen()) {
+      this.#game.pause()
+    }
+  }
+
   update = () => {
     this.#game.update()
+    if (!this.#isPausing) this.checkIfGameOver()
   }
 }
