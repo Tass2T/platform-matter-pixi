@@ -11,7 +11,7 @@ const config = {
   player: {
     xAxisStart: 150,
     baseJumpSpeed: 300,
-    velocityLoss: 11,
+    velocityLoss: 8,
     height: 70,
     width: 40,
   },

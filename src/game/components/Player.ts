@@ -2,6 +2,7 @@ import * as MATTER from 'matter-js'
 import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
+import gsap from 'gsap'
 
 export default class Player {
   #isJumping: boolean = false
@@ -35,63 +36,39 @@ export default class Player {
   setIsJumping(value: boolean): void {
     this.#isJumping = value
     if (this.#isJumping) {
-      //@ts-ignore
       this.#sprite.textures = this.#playerSpritesheet.animations['jump']
-      //@ts-ignore
       this.#sprite.gotoAndStop(0)
     } else {
-      //@ts-ignore
       this.#sprite.textures = this.#playerSpritesheet.animations['run']
-      //@ts-ignore
       this.#sprite.gotoAndPlay(0)
     }
   }
 
   checkJumpAnimation() {
-    //@ts-ignore
     if (this.#body.velocity.y > 0 && !this.#sprite.playing) {
       this.startAnimation('fall')
     }
   }
 
   startAnimation(name: string) {
-    //@ts-ignore
     this.#sprite.textures = this.#playerSpritesheet.animations[name]
-    //@ts-ignore
     this.#sprite.gotoAndPlay(0)
   }
 
   addVelocity(): void {
-    if (this.#body.velocity.y === 0) this.#velocity = config.player.baseJumpSpeed
-
-    this.#velocity -= config.player.velocityLoss
-
-    MATTER.Body.setVelocity(this.#body, {
-      x: 0,
-      y: -this.#velocity,
-    })
-  }
-
-  stopVelocity(): void {
-    this.#velocity = 0
-    this.setIsJumping(false)
-  }
-
-  resetJump(): void {
-    if (this.#isJumping) {
-      this.#velocity = config.player.baseJumpSpeed
+    if (this.#body.velocity.y <= 0 && this.#body.velocity.y > -2) {
+      this.setIsJumping(true)
     }
-  }
 
-  hasFallen(): boolean {
-    return this.#body.position.y >= config.HEIGHT || this.#body.position.x <= 0
-  }
+    if (this.#isJumping && this.#velocity) {
+      const delta = gsap.ticker.deltaRatio()
+      this.#velocity -= config.player.velocityLoss * delta
 
-  reset() {
-    const x = config.player.xAxisStart
-    const y = config.HEIGHT / 3
-    MATTER.Body.setPosition(this.#body, { x, y })
-    this.#sprite.position.set(x, y)
+      MATTER.Body.setVelocity(this.#body, {
+        x: 0,
+        y: -this.#velocity,
+      })
+    }
   }
 
   animateSprite(customSpeed: number = 0): void {
@@ -108,12 +85,21 @@ export default class Player {
 
   checkForInputs() {
     if (inputManager.isSpacePressed()) this.addVelocity()
+    else if (!inputManager.isSpacePressed() && this.#isJumping) this.#velocity = 0
+  }
+
+  checkIfIsStillJumping() {
+    if (this.#isJumping && this.#body.velocity.y === 0) {
+      this.setIsJumping(false)
+      this.#velocity = config.player.baseJumpSpeed
+    }
   }
 
   update() {
     if (this.#sprite && this.#body) {
       this.syncSpriteWithBody()
       this.checkJumpAnimation()
+      this.checkIfIsStillJumping()
       this.checkForInputs()
     }
   }
