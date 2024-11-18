@@ -37,6 +37,7 @@ export default class Game extends Container implements AppScreen {
   async setBackground() {
     const texture = await Assets.load('backdrop')
     const skySprite = new Sprite(texture)
+    skySprite.zIndex = -3
 
     const seaTextures = await Assets.load('seaProp')
     const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
@@ -44,6 +45,7 @@ export default class Game extends Container implements AppScreen {
     seaSprite.width = config.WIDTH
     seaSprite.position.set(0, config.HEIGHT)
     seaSprite.animationSpeed = 0.15
+    seaSprite.zIndex = -2
     this.addChild(skySprite, seaSprite)
     seaSprite.play()
   }
@@ -54,6 +56,7 @@ export default class Game extends Container implements AppScreen {
     sprite.height = config.HEIGHT * 1.1
     sprite.x = 0
     sprite.y = -config.HEIGHT * 0.1
+    this.#backProps.zIndex = -1
     this.#backProps.addChild(sprite)
   }
 
