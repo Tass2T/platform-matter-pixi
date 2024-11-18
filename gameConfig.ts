@@ -2,7 +2,7 @@ const config = {
   HEIGHT: 720,
   WIDTH: 1280,
   SPEED: 5,
-  GRAVITY: 1.5,
+  GRAVITY: 1,
   MAXSPEED: 25,
   COUNTDOWN: 3,
   props: {
@@ -10,7 +10,7 @@ const config = {
   },
   player: {
     xAxisStart: 150,
-    baseJumpSpeed: 260,
+    baseJumpSpeed: 300,
     velocityLoss: 11,
     height: 70,
     width: 40,
