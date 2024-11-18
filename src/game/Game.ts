@@ -4,7 +4,6 @@ import * as MATTER from 'matter-js'
 import gsap from 'gsap'
 import PlatformManager from './components/PlatFormManager.ts'
 import Player from './components/Player.ts'
-import { inputManager } from '../utils/inputManager.ts'
 import config from '../../gameConfig.ts'
 
 export default class Game extends Container implements AppScreen {
@@ -14,7 +13,6 @@ export default class Game extends Container implements AppScreen {
   #platformManager: PlatformManager
   #isReady = false
   #isPaused = false
-  #blockJump = false
 
   constructor() {
     super()
@@ -62,30 +60,15 @@ export default class Game extends Container implements AppScreen {
   async initLevel() {
     await Assets.loadBundle('level')
 
-    this.#platformManager = new PlatformManager(this.#physicEngine, this)
+    this.#platformManager = new PlatformManager(this)
 
     this.#player = new Player(this.#physicEngine.world, this)
 
     this.#isReady = true
   }
 
-  checkInputs() {
-    if (inputManager.isSpacePressed() && !this.#blockJump) this.#player.setIsJumping(true)
-    else this.#player.setIsJumping(false)
-  }
-
-  checkIfPlayerFell(): void {
-    if (this.#player.hasFallen()) {
-      this.#platformManager.setGameSpeed(0)
-      this.#blockJump = true
-    }
-  }
-
-  checkForCollisionWithPlatform() {
-    this.#platformManager.getPlatformList().forEach(platform => {
-      const collision = MATTER.Collision.collides(this.#player.getBody(), platform.getBody())
-      if (collision?.collided && collision.normal.y === 1) this.#player.resetJump()
-    })
+  getPhysicEngine() {
+    return this.#physicEngine
   }
 
   update = () => {
@@ -93,11 +76,8 @@ export default class Game extends Container implements AppScreen {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
       this.#backProps.x -= 0.06 * delta
-      this.checkInputs()
-      this.checkForCollisionWithPlatform()
       this.#platformManager.update(delta)
       this.#player.update()
-      this.checkIfPlayerFell()
     }
   }
 }

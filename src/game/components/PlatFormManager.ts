@@ -2,13 +2,14 @@ import * as MATTER from 'matter-js'
 import { Container } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import Platform from './PlateForm.ts'
+import Game from '../Game.ts'
 
 export default class PlatformManager {
   #engine: MATTER.Engine
   #platFormList: Array<Platform> = []
   #gameSpeed: number = 0
-  constructor(engineWorld: MATTER.Engine, parentContainer: Container) {
-    this.#engine = engineWorld
+  constructor(parentContainer: Game) {
+    this.#engine = parentContainer.getPhysicEngine()
     this.createPlatforms(parentContainer)
   }
 
