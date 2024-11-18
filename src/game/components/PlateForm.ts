@@ -62,6 +62,8 @@ export default class Platform {
       x,
       y: this.getAdjustedHeight(),
     })
+
+    this.#diamondList.forEach(diamond => diamond.setHasBeenTaken(false))
   }
 
   getDiamondList(): Array<Diamond> {

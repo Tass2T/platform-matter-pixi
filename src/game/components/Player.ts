@@ -27,6 +27,10 @@ export default class Player {
     return this.#hasFallen
   }
 
+  getBody() {
+    return this.#body
+  }
+
   async initSprite(parentContainer: Container) {
     this.#playerSpritesheet = await Assets.load('player')
 

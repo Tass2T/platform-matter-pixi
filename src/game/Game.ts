@@ -14,6 +14,7 @@ export default class Game extends Container implements AppScreen {
   #backgroundSpeed = config.props.backPropSpeed
   #isReady = false
   #isPaused = false
+  #score = 0
 
   constructor() {
     super()
@@ -41,6 +42,10 @@ export default class Game extends Container implements AppScreen {
 
   getPlayer() {
     return this.#player
+  }
+
+  getScore() {
+    return this.#score
   }
 
   pause() {
@@ -84,12 +89,26 @@ export default class Game extends Container implements AppScreen {
     this.#isReady = true
   }
 
+  checkForCollisionWithDiamonds(): void {
+    this.#platformManager.getPlatformList().forEach(platForm => {
+      platForm.getDiamondList().forEach(diamond => {
+        const collision = MATTER.Collision.collides(this.#player.getBody(), diamond.getBody())
+        if (collision?.collided && !diamond.getHasBeenTaken()) {
+          diamond.setHasBeenTaken(true)
+          this.#score += config.diamond.points
+          this.#platformManager.increaseGamespeed()
+        }
+      })
+    })
+  }
+
   update = () => {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
       this.#backProps.x -= this.#backgroundSpeed * delta
       this.#platformManager.update(delta)
+      this.checkForCollisionWithDiamonds()
       this.#player.update()
     }
   }

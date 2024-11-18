@@ -21,12 +21,8 @@ export default class ScoreBoard extends Container {
     this.addChild(this.#scoreText)
   }
 
-  getPlayerScore(): number {
-    return this.#actualPlayerScore
-  }
-
-  addToScore(value: number): void {
-    this.#actualPlayerScore += value
+  setScore(value: number): void {
+    this.#actualPlayerScore = value
   }
 
   incrementDisplayedPlayerScore(): void {
@@ -41,6 +37,6 @@ export default class ScoreBoard extends Container {
   }
 
   update(): void {
-    if (this.#displayedPlayerScore !== this.#actualPlayerScore) this.incrementDisplayedPlayerScore()
+    if (this.#displayedPlayerScore < this.#actualPlayerScore) this.incrementDisplayedPlayerScore()
   }
 }

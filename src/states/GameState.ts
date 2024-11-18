@@ -34,6 +34,8 @@ export default class GameState extends Container implements AppScreen {
 
   update = () => {
     this.#game.update()
+    this.#ui.setScore(this.#game.getScore())
+    this.#ui.update()
     if (!this.#isPausing) this.checkIfGameOver()
   }
 }

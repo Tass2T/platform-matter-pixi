@@ -3,6 +3,7 @@ import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite, Sprite } fr
 import config from '../../../gameConfig.ts'
 import VisibleObjects from '../../traits/VisibleObjects.ts'
 import gsap from 'gsap'
+import * as Matter from 'matter-js'
 
 export default class Diamond extends VisibleObjects {
   #diamondContainer: Container = new Container()
@@ -51,6 +52,10 @@ export default class Diamond extends VisibleObjects {
     this.#diamondContainer.addChild(this.#sprite)
 
     this.initScoreContainer()
+  }
+
+  getBody(): Matter.Body {
+    return this.#body
   }
 
   initScoreContainer() {

@@ -14,6 +14,10 @@ export default class GameUI extends Container implements AppScreen {
     this.addChild(this.#scoreBoard)
   }
 
+  setScore(score: number): void {
+    this.#scoreBoard.setScore(score)
+  }
+
   update = () => {
     this.#scoreBoard.update()
   }
