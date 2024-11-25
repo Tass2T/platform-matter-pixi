@@ -18,6 +18,7 @@ export default class Game extends Container implements AppScreen {
 
   constructor() {
     super()
+    this.interactiveChildren = false
     this.initEngine()
   }
 

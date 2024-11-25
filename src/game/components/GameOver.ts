@@ -2,8 +2,10 @@ import { Container, Graphics, BitmapText, Assets, Sprite, AnimatedSprite } from 
 import config from '../../../gameConfig.ts'
 import { AppScreen } from '../../models'
 import { inputManager } from '../../utils/inputManager.ts'
+import gsap from 'gsap'
 
-export default class GameOverScreen extends Container implements AppScreen {
+export default class GameOver extends Container implements AppScreen {
+  #isActive: boolean = false
   #curtainContainer: Container = new Container()
   #scoreContainer: Container = new Container()
   #illustrationContainer: Container = new Container()
@@ -23,6 +25,8 @@ export default class GameOverScreen extends Container implements AppScreen {
   #textMessage: BitmapText
   #shadowTextMessage: BitmapText
 
+  #timeline = gsap.timeline()
+
   #illustration: {
     illu: Sprite
     eyeAnim?: AnimatedSprite
@@ -30,19 +34,13 @@ export default class GameOverScreen extends Container implements AppScreen {
 
   constructor() {
     super()
-  }
 
-  prepare(): Promise<void> {
-    return new Promise(resolve => {
-      this.zIndex = 10
-      this.addChild(this.#curtainContainer, this.#scoreContainer, this.#illustrationContainer, this.#msgContainer)
-
-      this.initCurtains()
-      this.initIllustration()
-      this.setMessage()
-
-      resolve()
-    })
+    this.visible = false
+    this.addChild(this.#curtainContainer, this.#scoreContainer, this.#illustrationContainer, this.#msgContainer)
+    this.initCurtains()
+    this.initIllustration()
+    this.setMessage()
+    this.setTimeline()
   }
 
   initCurtains() {
@@ -63,7 +61,6 @@ export default class GameOverScreen extends Container implements AppScreen {
 
     this.#scoreText.zIndex = 2
     this.#scoreText.position.set(config.WIDTH + 80, config.HEIGHT / 2.5)
-    this.#scoreText.visible = false
     this.#scoreText.skew.y = -0.01
 
     this.#greenRectScreen
@@ -94,7 +91,16 @@ export default class GameOverScreen extends Container implements AppScreen {
     this.#illustration.eyeAnim.loop = false
     this.#illustration.eyeAnim.animationSpeed = 0.4
     this.#illustrationContainer.addChild(this.#illustration.illu, this.#illustration.eyeAnim)
-    this.#illustrationContainer.visible = false
+  }
+
+  start = (playerScore: number) => {
+    this.visible = true
+    this.#scoreText.text = playerScore ? `${playerScore}` : '0'
+    this.#timeline.play()
+  }
+
+  getIsActive = () => {
+    return this.#isActive
   }
 
   setMessage() {
@@ -123,8 +129,6 @@ export default class GameOverScreen extends Container implements AppScreen {
     this.#shadowTextMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85)
     this.#textMessage.zIndex = 12
     this.#shadowTextMessage.zIndex = 13
-    this.#textMessage.visible = false
-    this.#shadowTextMessage.visible = false
 
     this.#shadowTextMessage.mask = this.#yellowCircleMask
 
@@ -137,19 +141,8 @@ export default class GameOverScreen extends Container implements AppScreen {
     )
   }
 
-  appear(playerScore: number) {
-    this.visible = true
-
-    this.#scoreText.text = playerScore ? `${playerScore}` : '0'
-  }
-
   resetVariablesAndElements() {
     this.#animationProcess = 0
-    this.#illustrationContainer.visible = false
-
-    this.#textMessage.visible = false
-    this.#shadowTextMessage.visible = false
-    this.#scoreText.visible = false
 
     this.#scoreText.position.x = config.WIDTH + 80
     this.#curtainContainer.position.x = config.WIDTH
@@ -165,20 +158,6 @@ export default class GameOverScreen extends Container implements AppScreen {
     if (this.#counter < 0) this.#counter = 0
   }
 
-  moveCurtainContainer(delta: number) {
-    if (this.#curtainContainer.position.x > 0) this.#curtainContainer.position.x -= 120 * delta
-    else this.#animationProcess++
-  }
-
-  moveCurtains(delta: number) {
-    if (this.#yellowRectScreen.rotation > -0.06) {
-      this.#yellowRectScreen.rotation -= 0.005 * delta
-    } else {
-      this.#animationProcess++
-      this.#scoreText.visible = true
-    }
-  }
-
   moveScore(delta: number) {
     if (this.#scoreText.position.x > config.WIDTH) this.#scoreText.position.x -= 20 * delta
     else {
@@ -190,22 +169,16 @@ export default class GameOverScreen extends Container implements AppScreen {
     }
   }
 
-  processAnim() {
-    // to be refactorized anyway
-    const delta = 0
-    switch (this.#animationProcess) {
-      case 0:
-        this.moveCurtainContainer(delta)
-        break
-      case 1:
-        this.moveCurtains(delta)
-        break
-      case 2:
-        this.moveScore(delta)
-        break
-      default:
-        break
-    }
+  setTimeline() {
+    this.#timeline.pause()
+    this.#timeline.to(this.#curtainContainer, { x: -120, duration: 0.6 })
+    this.#timeline.to(this.#yellowRectScreen, { angle: -Math.PI * 2, duration: 0.4 })
+    this.#timeline.fromTo(this.#textMessage, { pixi: { alpha: 0, x: 100 } }, { pixi: { alpha: 1, x: 40 } })
+    this.#timeline.fromTo(
+      this.#scoreText,
+      { pixi: { alpha: 0, x: config.WIDTH + 140 } },
+      { pixi: { alpha: 1, x: config.WIDTH + 80 }, duration: 0.3 }
+    )
   }
 
   syncYellowCircle() {
@@ -233,8 +206,6 @@ export default class GameOverScreen extends Container implements AppScreen {
     } else if (this.#counter > 0) {
       this.incrementConter(-4)
     }
-    this.processAnim()
-
     this.syncYellowCircle()
   }
 }

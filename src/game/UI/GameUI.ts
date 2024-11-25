@@ -1,24 +1,27 @@
 import { Container } from 'pixi.js'
 import { AppScreen } from '../../models'
 import ScoreBoard from '../components/ScoreBoard.ts'
+import GameOver from '../components/GameOver.ts'
 
 export default class GameUI extends Container implements AppScreen {
-  #scoreBoard: ScoreBoard
+  #scoreBoard = new ScoreBoard()
+  #gameOver = new GameOver()
 
   constructor() {
     super()
-  }
 
-  async prepare(): Promise<void> {
-    this.#scoreBoard = new ScoreBoard()
-    this.addChild(this.#scoreBoard)
+    this.#scoreBoard.zIndex = 1
+    this.#gameOver.zIndex = 2
+    this.addChild(this.#scoreBoard, this.#gameOver)
   }
 
   setScore(score: number): void {
     this.#scoreBoard.setScore(score)
   }
 
-  update = () => {
-    this.#scoreBoard.update()
+  startGameOver(): void {
+    if (!this.#gameOver.getIsActive()) this.#gameOver.start(this.#scoreBoard.getScore())
   }
+
+  update = () => {}
 }

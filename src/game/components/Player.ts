@@ -106,7 +106,7 @@ export default class Player {
   }
 
   checkIfPlayerHasFallen() {
-    if (this.#body.position.y >= config.HEIGHT) {
+    if (this.#body.position.y >= config.HEIGHT || this.#body.position.x < 0) {
       this.#hasFallen = true
       this.#sprite.stop()
       Sleeping.set(this.#body, true)
@@ -114,7 +114,7 @@ export default class Player {
   }
 
   update() {
-    if (this.#sprite && this.#body) {
+    if (this.#sprite && this.#body && !this.#hasFallen) {
       this.syncSpriteWithBody()
       this.checkJumpAnimation()
       this.checkIfIsStillJumping()

@@ -18,9 +18,8 @@ export default class GameState extends Container implements AppScreen {
       this.#game = new Game()
       this.#game.zIndex = 1
       this.#ui = new GameUI()
-      this.#ui.zIndex = 2
+      this.#ui.zIndex = 4
       await this.#game.prepare()
-      await this.#ui.prepare()
       this.addChild(this.#game, this.#ui)
       resolve()
     })
@@ -29,6 +28,8 @@ export default class GameState extends Container implements AppScreen {
   checkIfGameOver() {
     if (this.#game.getPlayer().getHasFallen()) {
       this.#game.pause()
+      this.#isPausing = true
+      this.#ui.startGameOver()
     }
   }
 

@@ -7,7 +7,7 @@ import Game from '../Game.ts'
 export default class PlatformManager {
   #engine: MATTER.Engine
   #platFormList: Array<Platform> = []
-  #gameSpeed: number = 3
+  #gameSpeed: number = config.SPEED
   constructor(parentContainer: Game) {
     this.#engine = parentContainer.getPhysicEngine()
     this.createPlatforms(parentContainer)
@@ -53,7 +53,7 @@ export default class PlatformManager {
   }
 
   setAjustedGap(): number {
-    return config.platForm.gap * (Math.random() * (this.#gameSpeed ? this.#gameSpeed / 2 : config.SPEED / 2))
+    return config.platForm.gap * (Math.random() * (this.#gameSpeed ? this.#gameSpeed / 2 : this.#gameSpeed / 2))
   }
 
   getFarfestXCoord(): number {
