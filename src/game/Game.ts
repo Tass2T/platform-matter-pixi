@@ -4,7 +4,6 @@ import * as MATTER from 'matter-js'
 import gsap from 'gsap'
 import PlatformManager from './components/PlatFormManager.ts'
 import Player from './components/Player.ts'
-import { inputManager } from '../utils/inputManager.ts'
 import config from '../../gameConfig.ts'
 
 export default class Game extends Container implements AppScreen {
@@ -12,9 +11,10 @@ export default class Game extends Container implements AppScreen {
   #backProps = new Container()
   #player: Player
   #platformManager: PlatformManager
+  #backgroundSpeed = config.props.backPropSpeed
   #isReady = false
   #isPaused = false
-  #blockJump = false
+  #score = 0
 
   constructor() {
     super()
@@ -36,9 +36,27 @@ export default class Game extends Container implements AppScreen {
     this.#physicEngine.gravity.scale = config.GRAVITY
   }
 
-  async setBackground() {
+  getPhysicEngine() {
+    return this.#physicEngine
+  }
+
+  getPlayer() {
+    return this.#player
+  }
+
+  getScore() {
+    return this.#score
+  }
+
+  pause() {
+    this.#platformManager.setGameSpeed(0)
+    this.#backgroundSpeed = 0
+  }
+
+  private async setBackground() {
     const texture = await Assets.load('backdrop')
     const skySprite = new Sprite(texture)
+    skySprite.zIndex = -3
 
     const seaTextures = await Assets.load('seaProp')
     const seaSprite = new AnimatedSprite(seaTextures.animations['glitter'])
@@ -46,45 +64,41 @@ export default class Game extends Container implements AppScreen {
     seaSprite.width = config.WIDTH
     seaSprite.position.set(0, config.HEIGHT)
     seaSprite.animationSpeed = 0.15
+    seaSprite.zIndex = -2
     this.addChild(skySprite, seaSprite)
     seaSprite.play()
   }
 
-  async setBackProps(): Promise<void> {
+  private async setBackProps(): Promise<void> {
     const texture = await Assets.load('backProps')
     const sprite = new Sprite(texture)
     sprite.height = config.HEIGHT * 1.1
     sprite.x = 0
     sprite.y = -config.HEIGHT * 0.1
+    this.#backProps.zIndex = -1
     this.#backProps.addChild(sprite)
   }
 
-  async initLevel() {
+  private async initLevel() {
     await Assets.loadBundle('level')
 
-    this.#platformManager = new PlatformManager(this.#physicEngine, this)
+    this.#platformManager = new PlatformManager(this)
 
     this.#player = new Player(this.#physicEngine.world, this)
 
     this.#isReady = true
   }
 
-  checkInputs() {
-    if (inputManager.isSpacePressed() && !this.#blockJump) this.#player.setIsJumping(true)
-    else this.#player.setIsJumping(false)
-  }
-
-  checkIfPlayerFell(): void {
-    if (this.#player.hasFallen()) {
-      this.#platformManager.setGameSpeed(0)
-      this.#blockJump = true
-    }
-  }
-
-  checkForCollisionWithPlatform() {
-    this.#platformManager.getPlatformList().forEach(platform => {
-      const collision = MATTER.Collision.collides(this.#player.getBody(), platform.getBody())
-      if (collision?.collided && collision.normal.y === 1) this.#player.resetJump()
+  checkForCollisionWithDiamonds(): void {
+    this.#platformManager.getPlatformList().forEach(platForm => {
+      platForm.getDiamondList().forEach(diamond => {
+        const collision = MATTER.Collision.collides(this.#player.getBody(), diamond.getBody())
+        if (collision?.collided && !diamond.getHasBeenTaken()) {
+          diamond.setHasBeenTaken(true)
+          this.#score += config.diamond.points
+          this.#platformManager.increaseGamespeed()
+        }
+      })
     })
   }
 
@@ -92,12 +106,10 @@ export default class Game extends Container implements AppScreen {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
-      this.#backProps.x -= 0.06 * delta
-      this.checkInputs()
-      this.checkForCollisionWithPlatform()
+      this.#backProps.x -= this.#backgroundSpeed * delta
       this.#platformManager.update(delta)
+      this.checkForCollisionWithDiamonds()
       this.#player.update()
-      this.checkIfPlayerFell()
     }
   }
 }

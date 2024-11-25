@@ -4,6 +4,7 @@ import ScoreBoard from '../components/ScoreBoard.ts'
 
 export default class GameUI extends Container implements AppScreen {
   #scoreBoard: ScoreBoard
+
   constructor() {
     super()
   }
@@ -11,6 +12,10 @@ export default class GameUI extends Container implements AppScreen {
   async prepare(): Promise<void> {
     this.#scoreBoard = new ScoreBoard()
     this.addChild(this.#scoreBoard)
+  }
+
+  setScore(score: number): void {
+    this.#scoreBoard.setScore(score)
   }
 
   update = () => {

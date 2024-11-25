@@ -2,16 +2,15 @@ import * as MATTER from 'matter-js'
 import { Container, Assets, Sprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import Diamond from './Diamond.ts'
-import VisibleObjects from '../../traits/VisibleObjects.ts'
 
-export default class Platform extends VisibleObjects {
+export default class Platform {
   #diamondList: Array<Diamond> = []
   #isFirst: boolean
   #platformContainer = new Container({ isRenderGroup: true })
+  #body: MATTER.Body
   constructor(xStart: number, levelContainer: Container, first = false) {
-    super()
     this.#isFirst = first
-    this._body = MATTER.Bodies.rectangle(
+    this.#body = MATTER.Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
       config.platForm.width,
@@ -40,13 +39,17 @@ export default class Platform extends VisibleObjects {
   }
 
   getRightCoord() {
-    return this._body.position.x + config.platForm.width
+    return this.#body.position.x + config.platForm.width
+  }
+
+  getBody = () => {
+    return this.#body
   }
 
   moveLeft(speed: number) {
-    MATTER.Body.setPosition(this._body, {
-      x: this._body.position.x - speed,
-      y: this._body.position.y,
+    MATTER.Body.setPosition(this.#body, {
+      x: this.#body.position.x - speed,
+      y: this.#body.position.y,
     })
   }
 
@@ -55,10 +58,12 @@ export default class Platform extends VisibleObjects {
   }
 
   moveToRight(x: number) {
-    MATTER.Body.setPosition(this._body, {
+    MATTER.Body.setPosition(this.#body, {
       x,
       y: this.getAdjustedHeight(),
     })
+
+    this.#diamondList.forEach(diamond => diamond.setHasBeenTaken(false))
   }
 
   getDiamondList(): Array<Diamond> {
@@ -67,19 +72,19 @@ export default class Platform extends VisibleObjects {
 
   prepareDiamond(levelContainer: Container) {
     for (let i = 1; i <= config.diamond.nb; i++) {
-      this.#diamondList.push(new Diamond(levelContainer, this._body.position, i, this.#isFirst))
+      this.#diamondList.push(new Diamond(levelContainer, this.#body.position, i, this.#isFirst))
     }
   }
 
   setPosition(x: number, y: number): void {
-    MATTER.Body.setPosition(this._body, { x, y })
+    MATTER.Body.setPosition(this.#body, { x, y })
     this.#platformContainer.position.set(x, y)
   }
 
   syncSpriteWithBody() {
     this.#platformContainer.position.set(
-      this._body.position.x - config.platForm.width / 2,
-      this._body.position.y - config.platForm.height / 2
+      this.#body.position.x - config.platForm.width / 2,
+      this.#body.position.y - config.platForm.height / 2
     )
   }
 
