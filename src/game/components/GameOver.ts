@@ -95,6 +95,7 @@ export default class GameOver extends Container implements AppScreen {
 
   start = (playerScore: number) => {
     this.visible = true
+    this.#isActive = true
     this.#scoreText.text = playerScore ? `${playerScore}` : '0'
     this.#timeline.play()
   }
@@ -201,11 +202,12 @@ export default class GameOver extends Container implements AppScreen {
 
   update() {
     if (this.#counter > 100) this.leaveScreen()
-    if (inputManager.getPressedInputs().includes('Space')) {
-      this.incrementConter(4)
+    if (inputManager.isSpacePressed()) {
+      this.incrementConter(2)
     } else if (this.#counter > 0) {
-      this.incrementConter(-4)
+      this.incrementConter(-2)
     }
+    console.log(this.#counter)
     this.syncYellowCircle()
   }
 }
