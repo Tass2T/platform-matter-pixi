@@ -15,8 +15,8 @@ importers:
         specifier: ^0.20.0
         version: 0.20.0
       pixi.js:
-        specifier: ^8.6.1
-        version: 8.6.1
+        specifier: ^8.6.2
+        version: 8.6.2
     devDependencies:
       '@types/matter-js':
         specifier: ^0.19.8
@@ -319,8 +319,8 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
-  pixi.js@8.6.1:
-    resolution: {integrity: sha512-8l1TCoByuy/ZTeqttQnFw470MrMX7lufJyygqrkZFo7hFjfIcKnTYiID/30g8HgRghEGjiU/W89lonVQEDH+6g==}
+  pixi.js@8.6.2:
+    resolution: {integrity: sha512-wTtjb6y9egIJyAFxey9Fk34KXFETcZJ3whd00OcfO/pqHPwy/UHgGyyuF7AWYBmSU/H10lxXJsj4oNcIVVzBRw==}
 
   postcss@8.4.49:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
@@ -560,7 +560,7 @@ snapshots:
 
   picocolors@1.1.1: {}
 
-  pixi.js@8.6.1:
+  pixi.js@8.6.2:
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.12
