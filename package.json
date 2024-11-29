@@ -12,7 +12,7 @@
     "@types/matter-js": "^0.19.8",
     "prettier": "^3.4.1",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "vite": "^6.0.0"
   },
   "dependencies": {
     "gsap": "^3.12.5",
