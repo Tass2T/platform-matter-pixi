@@ -10,9 +10,11 @@ class Navigation {
     this.#currentState = screen
     app.stage.addChild(screen)
 
-    this.#currentState.prepare().then(() => {
-      if (!!this.#currentState?.update) app.ticker.add(this.#currentState.update)
-    })
+    if (this.#currentState?.prepare) {
+      this.#currentState.prepare().then(() => {
+        if (!!this.#currentState?.update) app.ticker.add(this.#currentState.update)
+      })
+    }
   }
 
   destroyCurrentState = () => {

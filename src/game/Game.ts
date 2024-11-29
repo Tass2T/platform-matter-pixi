@@ -84,8 +84,10 @@ export default class Game extends Container implements AppScreen {
     await Assets.loadBundle('level')
 
     this.#platformManager = new PlatformManager(this)
+    await this.#platformManager.prepare()
 
-    this.#player = new Player(this.#physicEngine.world, this)
+    this.#player = new Player(this.#physicEngine, this)
+    await this.#player.prepare()
 
     this.#isReady = true
   }

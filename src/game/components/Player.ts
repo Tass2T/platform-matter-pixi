@@ -4,8 +4,11 @@ import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
 import gsap from 'gsap'
 import { Sleeping } from 'matter-js'
+import { AppScreen } from '../../models'
 
 export default class Player {
+  #parentContainer: AppScreen
+  #engine: MATTER.Engine
   #isJumping: boolean = false
   #playerSpritesheet: Spritesheet
   #velocity: number = config.player.baseJumpSpeed
@@ -14,13 +17,19 @@ export default class Player {
   #sprite: AnimatedSprite
   #hasFallen: boolean = false
 
-  constructor(physicEngineWorld: MATTER.World, parentContainer: Container) {
+  constructor(physicEngine: MATTER.Engine, parentContainer: Container) {
+    this.#parentContainer = parentContainer
+    this.#engine = physicEngine
+  }
+
+  prepare = async () => {
     this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
       inertia: -Infinity,
+      isSleeping: true,
     })
+    MATTER.Composite.add(this.#engine.world, this.#body)
 
-    this.initSprite(parentContainer)
-    MATTER.Composite.add(physicEngineWorld, this.#body)
+    await this.initSprite(this.#parentContainer)
   }
 
   getHasFallen = () => {
@@ -37,8 +46,6 @@ export default class Player {
     this.#sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)
-
-    this.animateSprite()
 
     parentContainer.addChild(this.#sprite)
   }
