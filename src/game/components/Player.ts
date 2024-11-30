@@ -44,10 +44,15 @@ export default class Player {
     return this.#body
   }
 
+  getSprite = () => {
+    return this.#sprite
+  }
+
   async initSprite(parentContainer: Container) {
     this.#playerSpritesheet = await Assets.load('player')
 
     this.#sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
+    this.#sprite.visible = false
     this.#sprite.animationSpeed = 0.2
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)

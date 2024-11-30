@@ -19,11 +19,23 @@ export default class GameOver extends Container implements AppScreen {
 
   #counter: number = 0
 
-  #scoreText: BitmapText
+  #scoreText = new BitmapText({
+    text: ``,
+    style: {
+      fontFamily: 'Arial',
+      fontSize: 56,
+      fill: 'white',
+      letterSpacing: 2,
+    },
+  })
   #textMessage: BitmapText
   #shadowTextMessage: BitmapText
 
-  #timeline = gsap.timeline()
+  #timeline = gsap.timeline({
+    onReverseComplete: () => {
+      this.visible = false
+    },
+  })
 
   #illustration: {
     illu: Sprite
@@ -32,13 +44,12 @@ export default class GameOver extends Container implements AppScreen {
 
   constructor() {
     super()
-
-    this.visible = false
-    this.addChild(this.#curtainContainer, this.#scoreContainer, this.#illustrationContainer, this.#msgContainer)
-    this.initCurtains()
     this.initIllustration()
     this.setMessage()
+    this.initCurtains()
+    this.visible = false
     this.setTimeline()
+    this.addChild(this.#curtainContainer, this.#scoreContainer, this.#illustrationContainer, this.#msgContainer)
   }
 
   initCurtains() {
@@ -46,16 +57,6 @@ export default class GameOver extends Container implements AppScreen {
       .rect(config.WIDTH / 2, config.HEIGHT / 2, config.WIDTH + config.WIDTH / 2, config.HEIGHT + config.HEIGHT / 2)
       .fill('#e7e700')
     this.#yellowRectScreen.zIndex = 1
-
-    this.#scoreText = new BitmapText({
-      text: '0',
-      style: {
-        fontFamily: 'Arial',
-        fontSize: 56,
-        fill: 'white',
-        letterSpacing: 2,
-      },
-    })
 
     this.#scoreText.zIndex = 2
     this.#scoreText.position.set(config.WIDTH + 80, config.HEIGHT / 2.5)
@@ -79,7 +80,6 @@ export default class GameOver extends Container implements AppScreen {
     const illustrationAsset = await Assets.load(['gameOverIllu', 'gameOverIlluEyes'])
 
     this.#illustration.illu = Sprite.from(illustrationAsset.gameOverIllu)
-
     this.#illustration.illu.anchor.set(0.5)
     this.#illustration.illu.position.set(config.WIDTH * 0.7, config.HEIGHT * 0.6)
     this.#illustration.eyeAnim = new AnimatedSprite(illustrationAsset.gameOverIlluEyes.animations['open'])
@@ -140,7 +140,7 @@ export default class GameOver extends Container implements AppScreen {
     )
   }
 
-  incrementConter(value: number): void {
+  incrementCounter(value: number): void {
     this.#counter += value
 
     if (this.#counter < 0) this.#counter = 0
@@ -148,14 +148,25 @@ export default class GameOver extends Container implements AppScreen {
 
   setTimeline() {
     this.#timeline.pause()
-    this.#timeline.to(this.#curtainContainer, { x: -120, duration: 0.6 })
-    this.#timeline.to(this.#yellowRectScreen, { angle: -Math.PI * 2, duration: 0.4 })
-    this.#timeline.fromTo(this.#textMessage, { pixi: { alpha: 0, x: 100 } }, { pixi: { alpha: 1, x: 40 } })
+    this.#timeline.to(this.#curtainContainer, { x: -120, duration: 0.2 })
+    this.#timeline.to(this.#yellowRectScreen, { angle: -Math.PI * 2, duration: 0.1 })
+    this.#timeline.fromTo(
+      this.#textMessage,
+      { pixi: { alpha: 0, x: 100 } },
+      { pixi: { alpha: 1, x: 40 }, duration: 0.1 }
+    )
+    this.#timeline.to(this.#textMessage, { pixi: { alpha: 1 }, duration: 0.1 })
+    this.#timeline.fromTo(
+      this.#illustration.illu,
+      { pixi: { x: 0, alpha: 0 } },
+      { pixi: { x: 100, alpha: 1 }, duration: 0.5 }
+    )
     this.#timeline.fromTo(
       this.#scoreText,
       { pixi: { alpha: 0, x: config.WIDTH + 140 } },
       { pixi: { alpha: 1, x: config.WIDTH + 80 }, duration: 0.3 }
     )
+    this.#timeline.fromTo(this.#yellowCircle, { pixi: { alpha: 0 } }, { pixi: { alpha: 1 }, duration: 0.1 })
   }
 
   syncYellowCircle() {
@@ -177,11 +188,14 @@ export default class GameOver extends Container implements AppScreen {
   }
 
   update() {
-    if (this.#counter > 100) this.leaveScreen()
+    if (this.#counter >= 100) {
+      this.leaveScreen()
+      return
+    }
     if (inputManager.isSpacePressed()) {
-      this.incrementConter(2)
+      this.incrementCounter(2)
     } else if (this.#counter > 0) {
-      this.incrementConter(-2)
+      this.incrementCounter(-2)
     }
     this.syncYellowCircle()
   }

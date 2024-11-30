@@ -29,7 +29,7 @@ export default class GameUI extends Container implements AppScreen {
   }
 
   startGameOver(): void {
-    if (!this.#gameOver.getIsActive()) this.#gameOver.start(this.#scoreBoard.getScore())
+    if (!this.#gameOver.getIsActive()) this.#gameOver.start(this.#scoreBoard.getScore() || 0)
   }
 
   update = () => {

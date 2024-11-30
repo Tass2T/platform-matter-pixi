@@ -15,12 +15,11 @@ export default class GameState extends Container implements AppScreen {
     return new Promise(async (resolve): Promise<void> => {
       this.#game = new Game()
       this.#ui = new GameUI()
-
+      this.addChild(this.#game, this.#ui)
       this.#game.zIndex = 1
       this.#ui.zIndex = 4
 
       await this.#game.prepare()
-      this.addChild(this.#game, this.#ui)
 
       await this.#ui.startCountDown()
       resolve()
