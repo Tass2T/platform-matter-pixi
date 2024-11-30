@@ -90,6 +90,7 @@ export default class Game extends Container implements AppScreen {
     await this.#player.prepare()
 
     this.#isReady = true
+    this.#player.start()
   }
 
   checkForCollisionWithDiamonds(): void {
@@ -111,8 +112,8 @@ export default class Game extends Container implements AppScreen {
       MATTER.Engine.update(this.#physicEngine, delta)
       this.#backProps.x -= this.#backgroundSpeed * delta
       this.#platformManager.update(delta)
-      this.checkForCollisionWithDiamonds()
       this.#player.update()
+      this.checkForCollisionWithDiamonds()
     }
   }
 }

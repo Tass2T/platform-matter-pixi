@@ -1,20 +1,21 @@
 import * as MATTER from 'matter-js'
-import { Container } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import Platform from './PlateForm.ts'
 import Game from '../Game.ts'
+import { AppScreen } from '../../models'
 
 export default class PlatformManager {
   #engine: MATTER.Engine
   #platFormList: Array<Platform> = []
   #gameSpeed: number = config.SPEED
+  #parentContainer: AppScreen
   constructor(parentContainer: Game) {
     this.#engine = parentContainer.getPhysicEngine()
-    this.createPlatforms(parentContainer)
+    this.#parentContainer = parentContainer
   }
 
-  getGamespeed() {
-    return this.#gameSpeed
+  prepare = async () => {
+    await this.createPlatforms()
   }
 
   getPlatformList() {
@@ -29,13 +30,13 @@ export default class PlatformManager {
     this.#gameSpeed = newValue
   }
 
-  createPlatforms(levelContainer: Container) {
+  createPlatforms = async () => {
     for (let i = 1; i <= 6; i++) {
       const x =
         i === 1
           ? config.platForm.start
           : this.#platFormList[this.#platFormList.length - 1].getRightCoord() + this.setAjustedGap()
-      const ground = new Platform(x, levelContainer, i === 1)
+      const ground = new Platform(x, this.#parentContainer, i === 1)
 
       this.#platFormList.push(ground)
       MATTER.Composite.add(this.#engine.world, ground.getBody())

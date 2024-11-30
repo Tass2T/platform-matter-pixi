@@ -25,11 +25,14 @@ export default class Player {
   prepare = async () => {
     this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
       inertia: -Infinity,
-      isSleeping: true,
     })
     MATTER.Composite.add(this.#engine.world, this.#body)
 
     await this.initSprite(this.#parentContainer)
+  }
+
+  start = () => {
+    this.#sprite.play()
   }
 
   getHasFallen = () => {
@@ -44,6 +47,7 @@ export default class Player {
     this.#playerSpritesheet = await Assets.load('player')
 
     this.#sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
+    this.#sprite.animationSpeed = 0.2
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)
 
@@ -86,11 +90,6 @@ export default class Player {
         y: -this.#velocity,
       })
     }
-  }
-
-  animateSprite(customSpeed: number = 0): void {
-    this.#sprite.animationSpeed = customSpeed || 0.2
-    this.#sprite.play()
   }
 
   syncSpriteWithBody(): void {
