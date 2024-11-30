@@ -51,6 +51,7 @@ export default class Diamond extends VisibleObjects {
 
     this.#diamondContainer.addChild(this.#sprite)
 
+    this.syncSpriteWithBody()
     this.initScoreContainer()
   }
 

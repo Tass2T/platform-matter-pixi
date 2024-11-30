@@ -32,6 +32,7 @@ export default class Platform {
     sprite.width = config.platForm.width
     sprite.height = config.platForm.height
     this.#platformContainer.addChild(sprite)
+    this.syncSpriteWithBody()
   }
 
   getAdjustedHeight(): number {
