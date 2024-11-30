@@ -2,14 +2,13 @@ import { Container, BitmapText } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 
 export default class ScoreBoard extends Container {
-  #displayedPlayerScore = 0
   #actualPlayerScore = 0
   #scoreText: BitmapText | null = null
 
   constructor() {
     super()
     this.#scoreText = new BitmapText({
-      text: `${this.#displayedPlayerScore}`,
+      text: `${this.#actualPlayerScore}`,
       style: {
         fontFamily: 'Arial',
         fontSize: 36,
