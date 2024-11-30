@@ -25,6 +25,7 @@ export default class Player {
   prepare = async () => {
     this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
       inertia: -Infinity,
+      isSleeping: true,
     })
     MATTER.Composite.add(this.#engine.world, this.#body)
 
