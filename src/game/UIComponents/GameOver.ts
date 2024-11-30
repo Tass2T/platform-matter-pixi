@@ -19,8 +19,6 @@ export default class GameOver extends Container implements AppScreen {
 
   #counter: number = 0
 
-  #animationProcess: number = 0
-
   #scoreText: BitmapText
   #textMessage: BitmapText
   #shadowTextMessage: BitmapText
@@ -142,32 +140,10 @@ export default class GameOver extends Container implements AppScreen {
     )
   }
 
-  resetVariablesAndElements() {
-    this.#animationProcess = 0
-
-    this.#scoreText.position.x = config.WIDTH + 80
-    this.#curtainContainer.position.x = config.WIDTH
-    this.#curtainContainer.position.y = -28
-    this.#yellowRectScreen.rotation = 0
-
-    this.#illustration.eyeAnim?.gotoAndStop(0)
-  }
-
   incrementConter(value: number): void {
     this.#counter += value
 
     if (this.#counter < 0) this.#counter = 0
-  }
-
-  moveScore(delta: number) {
-    if (this.#scoreText.position.x > config.WIDTH) this.#scoreText.position.x -= 20 * delta
-    else {
-      this.#textMessage.visible = true
-      this.#shadowTextMessage.visible = true
-      this.#illustrationContainer.visible = true
-      setTimeout(() => this.#illustration.eyeAnim?.play(), 2000)
-      this.#animationProcess++
-    }
   }
 
   setTimeline() {
@@ -197,7 +173,7 @@ export default class GameOver extends Container implements AppScreen {
 
   leaveScreen() {
     this.#counter = 0
-    this.resetVariablesAndElements()
+    this.#timeline.reverse(0)
   }
 
   update() {
@@ -207,7 +183,6 @@ export default class GameOver extends Container implements AppScreen {
     } else if (this.#counter > 0) {
       this.incrementConter(-2)
     }
-    console.log(this.#counter)
     this.syncYellowCircle()
   }
 }
