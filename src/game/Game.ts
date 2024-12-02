@@ -25,8 +25,6 @@ export default class Game extends Container implements AppScreen {
   async prepare(): Promise<void> {
     await this.setBackground()
 
-    await this.setBackProps()
-
     await this.initLevel()
 
     this.addChild(this.#backProps)
@@ -54,6 +52,11 @@ export default class Game extends Container implements AppScreen {
     this.#backgroundSpeed = 0
   }
 
+  reset() {
+    this.#platformManager.resetPlatforms()
+    this.#player.reset()
+  }
+
   private async setBackground() {
     const texture = await Assets.load('backdrop')
     const skySprite = new Sprite(texture)
@@ -68,16 +71,6 @@ export default class Game extends Container implements AppScreen {
     seaSprite.zIndex = -2
     this.addChild(skySprite, seaSprite)
     seaSprite.play()
-  }
-
-  private async setBackProps(): Promise<void> {
-    const texture = await Assets.load('backProps')
-    const sprite = new Sprite(texture)
-    sprite.height = config.HEIGHT * 1.1
-    sprite.x = 0
-    sprite.y = -config.HEIGHT * 0.1
-    this.#backProps.zIndex = -1
-    this.#backProps.addChild(sprite)
   }
 
   private async initLevel() {

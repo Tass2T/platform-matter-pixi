@@ -1,4 +1,4 @@
-import { Container, Graphics, BitmapText, Assets, Sprite, AnimatedSprite } from 'pixi.js'
+import { Container, Graphics, BitmapText } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { AppScreen } from '../../models'
 import { inputManager } from '../../utils/inputManager.ts'
@@ -6,6 +6,7 @@ import gsap from 'gsap'
 
 export default class GameOver extends Container implements AppScreen {
   #isActive: boolean = false
+  #isLeaving: boolean = false
   #curtainContainer: Container = new Container()
   #scoreContainer: Container = new Container()
   #illustrationContainer: Container = new Container()
@@ -15,9 +16,10 @@ export default class GameOver extends Container implements AppScreen {
   #greenRectScreen: Graphics = new Graphics()
   #textMessageBg: Graphics = new Graphics()
   #yellowCircle: Graphics = new Graphics()
-  #yellowCircleMask: Graphics = new Graphics()
 
   #counter: number = 0
+
+  #resetCallBack: () => Promise<void>
 
   #scoreText = new BitmapText({
     text: ``,
@@ -29,22 +31,18 @@ export default class GameOver extends Container implements AppScreen {
     },
   })
   #textMessage: BitmapText
-  #shadowTextMessage: BitmapText
 
   #timeline = gsap.timeline({
     onReverseComplete: () => {
       this.visible = false
+      this.#isActive = false
+      this.#isLeaving = false
     },
   })
 
-  #illustration: {
-    illu: Sprite
-    eyeAnim?: AnimatedSprite
-  }
-
-  constructor() {
+  constructor(resetCallback: () => Promise<void>) {
     super()
-    this.initIllustration()
+    this.#resetCallBack = resetCallback
     this.setMessage()
     this.initCurtains()
     this.visible = false
@@ -73,24 +71,6 @@ export default class GameOver extends Container implements AppScreen {
     this.#curtainContainer.position.x += this.#curtainContainer.width
   }
 
-  async initIllustration() {
-    this.#illustration = {
-      illu: new Sprite(),
-    }
-    const illustrationAsset = await Assets.load(['gameOverIllu', 'gameOverIlluEyes'])
-
-    this.#illustration.illu = Sprite.from(illustrationAsset.gameOverIllu)
-    this.#illustration.illu.anchor.set(0.5)
-    this.#illustration.illu.position.set(config.WIDTH * 0.7, config.HEIGHT * 0.6)
-    this.#illustration.eyeAnim = new AnimatedSprite(illustrationAsset.gameOverIlluEyes.animations['open'])
-    this.#illustration.eyeAnim.zIndex = 3
-    this.#illustration.eyeAnim.anchor.set(0.5)
-    this.#illustration.eyeAnim.position.set(config.WIDTH * 0.7, config.HEIGHT * 0.6)
-    this.#illustration.eyeAnim.loop = false
-    this.#illustration.eyeAnim.animationSpeed = 0.4
-    this.#illustrationContainer.addChild(this.#illustration.illu, this.#illustration.eyeAnim)
-  }
-
   start = (playerScore: number) => {
     this.visible = true
     this.#isActive = true
@@ -100,6 +80,10 @@ export default class GameOver extends Container implements AppScreen {
 
   getIsActive = () => {
     return this.#isActive
+  }
+
+  setIsActive = (value: boolean) => {
+    this.#isActive = value
   }
 
   setMessage() {
@@ -114,30 +98,10 @@ export default class GameOver extends Container implements AppScreen {
       },
     })
 
-    this.#shadowTextMessage = new BitmapText({
-      text: message,
-      style: {
-        fontFamily: 'Arial',
-        fontSize: 26,
-        fill: 0x49c801,
-        letterSpacing: 2,
-      },
-    })
-
     this.#textMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85)
-    this.#shadowTextMessage.position.set(config.WIDTH * 0.05, config.HEIGHT * 0.85)
     this.#textMessage.zIndex = 12
-    this.#shadowTextMessage.zIndex = 13
 
-    this.#shadowTextMessage.mask = this.#yellowCircleMask
-
-    this.#msgContainer.addChild(
-      this.#textMessage,
-      this.#shadowTextMessage,
-      this.#textMessageBg,
-      this.#yellowCircle,
-      this.#yellowCircleMask
-    )
+    this.#msgContainer.addChild(this.#textMessage, this.#textMessageBg, this.#yellowCircle)
   }
 
   incrementCounter(value: number): void {
@@ -157,34 +121,26 @@ export default class GameOver extends Container implements AppScreen {
     )
     this.#timeline.to(this.#textMessage, { pixi: { alpha: 1 }, duration: 0.1 })
     this.#timeline.fromTo(
-      this.#illustration.illu,
-      { pixi: { x: 0, alpha: 0 } },
-      { pixi: { x: 100, alpha: 1 }, duration: 0.5 }
-    )
-    this.#timeline.fromTo(
       this.#scoreText,
       { pixi: { alpha: 0, x: config.WIDTH + 140 } },
       { pixi: { alpha: 1, x: config.WIDTH + 80 }, duration: 0.3 }
     )
-    this.#timeline.fromTo(this.#yellowCircle, { pixi: { alpha: 0 } }, { pixi: { alpha: 1 }, duration: 0.1 })
+    this.#timeline.fromTo(
+      this.#yellowCircle,
+      { pixi: { alpha: 0, x: -200 } },
+      { pixi: { alpha: 1, x: 0 }, duration: 0.1 }
+    )
   }
 
   syncYellowCircle() {
     this.#yellowCircle.clear()
-    this.#yellowCircleMask.clear()
-
-    this.#yellowCircle
-      .circle(config.WIDTH * 0.35, config.HEIGHT * 0.86, 50 + Math.floor(this.#counter * 8))
-      .fill(0xffff00)
-
-    this.#yellowCircleMask
-      .circle(config.WIDTH * 0.35, config.HEIGHT * 0.86, 50 + Math.floor(this.#counter * 8))
-      .fill(0x000000)
+    this.#yellowCircle.circle(config.WIDTH, config.HEIGHT, 120 + Math.floor(this.#counter * 8)).fill(0xffff00)
   }
 
-  leaveScreen() {
+  leaveScreen = () => {
+    this.#isLeaving = true
     this.#counter = 0
-    this.#timeline.reverse(0)
+    this.#resetCallBack().then(() => this.#timeline.reverse(0))
   }
 
   update() {
@@ -192,11 +148,13 @@ export default class GameOver extends Container implements AppScreen {
       this.leaveScreen()
       return
     }
-    if (inputManager.isSpacePressed()) {
-      this.incrementCounter(2)
-    } else if (this.#counter > 0) {
-      this.incrementCounter(-2)
+    if (!this.#isLeaving) {
+      if (inputManager.isSpacePressed()) {
+        this.incrementCounter(2)
+      } else if (this.#counter > 0) {
+        this.incrementCounter(-2)
+      }
+      this.syncYellowCircle()
     }
-    this.syncYellowCircle()
   }
 }

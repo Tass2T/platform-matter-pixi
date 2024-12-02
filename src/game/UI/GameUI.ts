@@ -6,15 +6,20 @@ import CountDown from '../UIComponents/CountDown.ts'
 
 export default class GameUI extends Container implements AppScreen {
   #scoreBoard = new ScoreBoard()
-  #gameOver = new GameOver()
   #countDown = new CountDown()
+  #gameOver: GameOver
 
-  constructor() {
+  constructor(resetCallBack: () => Promise<void>) {
     super()
+    this.#gameOver = new GameOver(resetCallBack)
     this.#countDown.zIndex = 1
     this.#scoreBoard.zIndex = 2
     this.#gameOver.zIndex = 3
     this.addChild(this.#scoreBoard, this.#gameOver, this.#countDown)
+  }
+
+  getGameOver() {
+    return this.#gameOver
   }
 
   startCountDown = async (): Promise<void> => {

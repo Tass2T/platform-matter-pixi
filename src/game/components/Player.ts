@@ -48,6 +48,13 @@ export default class Player {
     return this.#sprite
   }
 
+  reset = () => {
+    this.#body.position.x = config.player.xAxisStart
+    this.#body.position.y = config.HEIGHT / 3
+    this.#hasFallen = false
+    this.syncSpriteWithBody()
+  }
+
   async initSprite(parentContainer: Container) {
     this.#playerSpritesheet = await Assets.load('player')
 
