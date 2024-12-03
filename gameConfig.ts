@@ -1,26 +1,26 @@
-const playWidth = window.innerWidth > 1920 ? 1920 : window.innerWidth
-
 const config = {
-  HEIGHT: window.innerHeight,
-  WIDTH: playWidth,
-  SPEED: 6,
-  GRAVITY: 1.5,
-  MAXSPEED: 25,
+  HEIGHT: 720,
+  WIDTH: 1280,
+  SPEED: 3,
+  GRAVITY: 0.8,
+  MAXSPEED: 45,
+  DEBUG: false,
   COUNTDOWN: 3,
-  PHYSIC_DEBUG_MODE: false,
+  props: {
+    backPropSpeed: 0.06,
+  },
   player: {
     xAxisStart: 150,
-    baseJumpSpeed: 260,
-    velocityLoss: 11,
+    baseJumpSpeed: 300,
+    velocityLoss: 6,
     height: 70,
     width: 40,
   },
   platForm: {
-    balloonNb: 7,
-    gap: 90,
+    gap: 120,
     start: 150,
-    width: 300,
-    height: 50,
+    width: 327,
+    height: 127,
     spaceFromCenter: 450,
   },
   diamond: {
@@ -30,7 +30,7 @@ const config = {
     gap: 45,
     points: 500,
   },
-  frontPropsWidth: 1080 * (window.innerWidth / 1080)
+  frontPropsWidth: 1080 * (1280 / 1080),
 }
 
 export default config

@@ -14,16 +14,12 @@
         },
         {
           "alias": "platform",
-          "src": "platform/platformMap.json"
+          "src": "platform/platForm.png"
         },
         { "alias": "diamonds", "src": "diamonds/diamondsSpritesheet.json" },
         {
-          "alias": "props1",
-          "src": "background/props/0.png"
-        },
-        {
-          "alias": "props2",
-          "src": "background/props/1.png"
+          "alias": "backProps",
+          "src": "background/backProps/backProp.png"
         },
         {
           "alias": "trees",

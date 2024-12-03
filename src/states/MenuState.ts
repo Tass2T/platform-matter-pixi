@@ -1,27 +1,33 @@
 import { AnimatedSprite, Assets, Container, Sprite, Text } from 'pixi.js'
-import config from '../../../../gameConfig.ts'
-import ScoreBoard from '../../components/scoreBoard'
-import GameState from '../../traits/GameState'
+import config from '../../gameConfig.ts'
+import { AppScreen } from '../models'
+import { inputManager } from '../utils/inputManager.ts'
+import { navigation } from '../Navigation.ts'
+import GameState from './GameState.ts'
+import gsap from 'gsap'
 
-export default class Menu extends GameState {
-  #seconds = 0
-  #eyeCounts = 0
+export default class MenuState extends Container implements AppScreen {
   #charContainer = new Container()
   #eyes: AnimatedSprite
   #lArm: Sprite
   #rArm: Sprite
   #text: Text
   #subTitle: Text
-  #isReady = false
-  constructor(parentContainer: Container, changeState: Function, scoreBoard: ScoreBoard) {
-    super(parentContainer, changeState, scoreBoard)
-    this._stateContainer.zIndex = 1
-    this.initBackground().then(() => {
-      this.initText().then(() => (this.#isReady = true))
+
+  constructor() {
+    super()
+  }
+
+  prepare(): Promise<void> {
+    return new Promise(async resolve => {
+      await this.initArt()
+      await this.initText()
+      this.animate()
+      resolve()
     })
   }
 
-  async initBackground() {
+  async initArt() {
     const menubundle = await Assets.loadBundle('menu')
 
     const textureSprite = new Sprite(menubundle.background)
@@ -50,8 +56,8 @@ export default class Menu extends GameState {
     const leftArm = new Sprite(menubundle.lArm)
     leftArm.anchor.set(1, 0.5)
     leftArm.height = persoSprite.height * 0.35
-    leftArm.width = leftArm.height
-    leftArm.position.set(persoSprite.x - 70, config.HEIGHT / 2.2)
+    leftArm.width = persoSprite.height * 0.35
+    leftArm.position.set(persoSprite.x - 80, config.HEIGHT / 2.2)
     leftArm.angle = 15
     leftArm.zIndex = 4
     this.#lArm = leftArm
@@ -59,13 +65,13 @@ export default class Menu extends GameState {
     const rightArm = new Sprite(menubundle.rArm)
     rightArm.anchor.set(0, 0.5)
     rightArm.height = persoSprite.height * 0.35
-    rightArm.width = rightArm.height
+    rightArm.width = persoSprite.height * 0.35
     rightArm.position.set(config.WIDTH / 1.83, config.HEIGHT / 2.5)
     rightArm.zIndex = 2
     this.#rArm = rightArm
 
     this.#charContainer.addChild(textureSprite, persoSprite, leftArm, rightArm, eyes)
-    this._stateContainer.addChild(this.#charContainer)
+    this.addChild(this.#charContainer)
   }
 
   async initText() {
@@ -108,42 +114,17 @@ export default class Menu extends GameState {
     this.#subTitle.zIndex = 30
     this.#subTitle.position.set(config.WIDTH / 2, config.HEIGHT * 0.9)
 
-    this._stateContainer.addChild(this.#text, this.#subTitle)
+    this.addChild(this.#text, this.#subTitle)
   }
 
-  start() {
-    return
+  animate() {
+    setInterval(() => this.#eyes.gotoAndPlay(0), 4000)
+    gsap.to(this.#subTitle, { pixi: { scale: 1.1 }, duration: 2, repeat: -1, yoyo: true })
+    gsap.to(this.#lArm, { pixi: { rotation: 10 }, duration: 1, repeat: -1, yoyo: true })
+    gsap.to(this.#rArm, { pixi: { rotation: -4 }, duration: 1.3, repeat: -1, yoyo: true })
   }
 
-  animateBody(delta: number) {
-    if (Math.floor(this.#eyeCounts) === 3) {
-      this.#eyes.play()
-      this.#eyeCounts = 0
-    }
-
-    this.#subTitle.width = this.#subTitle.width + Math.cos(this.#seconds) * delta
-    this.#lArm.angle = 15 + Math.sin(this.#seconds) * 5
-    this.#rArm.angle = 15 + Math.cos(this.#seconds) * 3
-  }
-
-  leave() {
-    this.switchVisibility()
-    this._changeState('level')
-  }
-
-  update(delta: number, inputArrays: Array<String>) {
-    if (this.#isReady) {
-      if (inputArrays.length) this.leave()
-
-      this.animateBody(delta)
-
-      this.#seconds += (1 / 60) * delta
-      this.#eyeCounts += (1 / 60) * delta
-    }
-  }
-
-  destroy() {
-    this.#seconds = 0
-    this.#eyeCounts = 0
+  update = () => {
+    if (inputManager.getPressedInputs().length) navigation.goToScreen(new GameState())
   }
 }
