@@ -51,7 +51,7 @@ export default class PlatformManager {
       const y = i === 0 ? config.HEIGHT / 2 : this.#platFormList[i].getAdjustedHeight()
 
       this.#platFormList[i].setPosition(x, y)
-      this.setGameSpeed(config.SPEED)
+      this.#platFormList[i].resetDiamond()
     }
   }
 

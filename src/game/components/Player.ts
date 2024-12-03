@@ -3,8 +3,8 @@ import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
 import gsap from 'gsap'
-import { Sleeping } from 'matter-js'
 import { AppScreen } from '../../models'
+import { Sleeping } from 'matter-js'
 
 export default class Player {
   #parentContainer: AppScreen
@@ -32,10 +32,6 @@ export default class Player {
     await this.initSprite(this.#parentContainer)
   }
 
-  start = () => {
-    this.#sprite.play()
-  }
-
   getHasFallen = () => {
     return this.#hasFallen
   }
@@ -51,19 +47,26 @@ export default class Player {
   reset = () => {
     this.#body.position.x = config.player.xAxisStart
     this.#body.position.y = config.HEIGHT / 3
-    this.#hasFallen = false
     this.syncSpriteWithBody()
+    this.#hasFallen = false
+    this.#isJumping = false
+    Sleeping.set(this.#body, true)
+  }
+
+  start = () => {
+    Sleeping.set(this.#body, false)
+    this.#sprite.play()
   }
 
   async initSprite(parentContainer: Container) {
     this.#playerSpritesheet = await Assets.load('player')
 
     this.#sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
-    this.#sprite.visible = false
     this.#sprite.animationSpeed = 0.2
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)
 
+    this.syncSpriteWithBody()
     parentContainer.addChild(this.#sprite)
   }
 
@@ -128,7 +131,6 @@ export default class Player {
     if (this.#body.position.y >= config.HEIGHT || this.#body.position.x < 0) {
       this.#hasFallen = true
       this.#sprite.stop()
-      Sleeping.set(this.#body, true)
     }
   }
 

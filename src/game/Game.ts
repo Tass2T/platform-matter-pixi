@@ -60,6 +60,8 @@ export default class Game extends Container implements AppScreen {
   start = () => {
     this.#isReady = true
     this.#isPaused = false
+    this.#player.start()
+    this.#platformManager.setGameSpeed(config.SPEED)
   }
 
   private async setBackground() {
@@ -106,10 +108,6 @@ export default class Game extends Container implements AppScreen {
 
   update = () => {
     if (this.#isReady && !this.#isPaused) {
-      if (this.#player.getBody().isSleeping) {
-        this.#player.getBody().isSleeping = false
-        this.#player.getSprite().visible = true
-      }
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
       this.#backProps.x -= this.#backgroundSpeed * delta

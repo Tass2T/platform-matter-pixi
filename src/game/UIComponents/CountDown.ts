@@ -18,19 +18,23 @@ export default class CountDown extends Container implements AppScreen {
       text: '',
       style: {
         fontFamily: 'Arial',
-        fontSize: 46,
+        fontSize: 62,
         fill: 'white',
         stroke: { width: 1 },
       },
     })
     this.setTimeline()
-    this.#text.position.set(config.WIDTH / 2.1, config.HEIGHT / 2.1)
+    this.#text.position.set(config.WIDTH / 2.3, config.HEIGHT / 2.1)
     this.addChild(this.#background, this.#text)
   }
 
   setTimeline = () => {
     this.#backgroundTimeline.pause()
-    this.#backgroundTimeline.to(this.#background, { pixi: { rotation: 45, height: 80 }, duration: 0.2 })
+    this.#backgroundTimeline.fromTo(
+      this.#background,
+      { pixi: { rotation: 0, height: config.HEIGHT } },
+      { pixi: { rotation: 45, height: 200 }, duration: 0.5 }
+    )
   }
 
   start = async (): Promise<void> => {
@@ -39,7 +43,6 @@ export default class CountDown extends Container implements AppScreen {
     this.visible = true
     this.#backgroundTimeline.play()
     this.#text.text = this.#count
-    this.#background.alpha = 0.8
     return new Promise(resolve => {
       const interval = setInterval(() => {
         this.#count--

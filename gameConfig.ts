@@ -1,10 +1,10 @@
 const config = {
   HEIGHT: 720,
   WIDTH: 1280,
-  SPEED: 4,
+  SPEED: 3,
   GRAVITY: 0.8,
   MAXSPEED: 45,
-  COUNTDOWN: 1,
+  COUNTDOWN: 3,
   props: {
     backPropSpeed: 0.06,
   },
@@ -16,8 +16,7 @@ const config = {
     width: 40,
   },
   platForm: {
-    balloonNb: 7,
-    gap: 90,
+    gap: 120,
     start: 150,
     width: 327,
     height: 127,

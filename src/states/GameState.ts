@@ -22,6 +22,7 @@ export default class GameState extends Container implements AppScreen {
       await this.#game.prepare()
 
       await this.#ui.startCountDown()
+
       resolve()
     })
   }

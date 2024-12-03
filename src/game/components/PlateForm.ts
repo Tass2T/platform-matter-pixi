@@ -77,6 +77,10 @@ export default class Platform {
     }
   }
 
+  resetDiamond() {
+    this.#diamondList.forEach(diamond => (this.#isFirst ? diamond.hide() : diamond.reset()))
+  }
+
   setPosition(x: number, y: number): void {
     MATTER.Body.setPosition(this.#body, { x, y })
     this.#platformContainer.position.set(x, y)
