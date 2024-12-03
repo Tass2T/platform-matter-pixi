@@ -52,9 +52,14 @@ export default class Game extends Container implements AppScreen {
     this.#backgroundSpeed = 0
   }
 
-  reset() {
+  reset = () => {
     this.#platformManager.resetPlatforms()
     this.#player.reset()
+  }
+
+  start = () => {
+    this.#isReady = true
+    this.#isPaused = false
   }
 
   private async setBackground() {

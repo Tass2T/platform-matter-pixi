@@ -33,9 +33,15 @@ export default class GameState extends Container implements AppScreen {
     }
   }
 
-  resetGame = async () => {
-    this.#game.reset()
+  resetGame = () => {
     this.#ui.getGameOver().setIsActive(false)
+    this.#game.reset()
+    this.start()
+  }
+
+  start = async () => {
+    await this.#ui.startCountDown()
+    this.#game.start()
   }
 
   update = () => {

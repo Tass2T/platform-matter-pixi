@@ -31,6 +31,7 @@ export default class PlatformManager {
   }
 
   createPlatforms = async () => {
+    this.#platFormList = []
     for (let i = 1; i <= 6; i++) {
       const x =
         i === 1

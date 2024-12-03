@@ -9,7 +9,7 @@ export default class GameUI extends Container implements AppScreen {
   #countDown = new CountDown()
   #gameOver: GameOver
 
-  constructor(resetCallBack: () => Promise<void>) {
+  constructor(resetCallBack: () => void) {
     super()
     this.#gameOver = new GameOver(resetCallBack)
     this.#countDown.zIndex = 1

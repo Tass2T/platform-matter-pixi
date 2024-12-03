@@ -19,7 +19,7 @@ export default class GameOver extends Container implements AppScreen {
 
   #counter: number = 0
 
-  #resetCallBack: () => Promise<void>
+  #resetCallBack: () => void
 
   #scoreText = new BitmapText({
     text: ``,
@@ -40,7 +40,7 @@ export default class GameOver extends Container implements AppScreen {
     },
   })
 
-  constructor(resetCallback: () => Promise<void>) {
+  constructor(resetCallback: () => void) {
     super()
     this.#resetCallBack = resetCallback
     this.setMessage()
@@ -140,7 +140,8 @@ export default class GameOver extends Container implements AppScreen {
   leaveScreen = () => {
     this.#isLeaving = true
     this.#counter = 0
-    this.#resetCallBack().then(() => this.#timeline.reverse(0))
+    this.#resetCallBack()
+    this.#timeline.reverse(0)
   }
 
   update() {
