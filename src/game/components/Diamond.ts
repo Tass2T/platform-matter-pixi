@@ -1,24 +1,23 @@
-import * as MATTER from 'matter-js'
 import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite, Sprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import VisibleObjects from '../../traits/VisibleObjects.ts'
 import gsap from 'gsap'
-import * as Matter from 'matter-js'
+import { Vector, Body, Bodies } from 'matter-js'
 
 export default class Diamond extends VisibleObjects {
   #diamondContainer: Container = new Container()
-  #parentPos: MATTER.Vector
+  #parentPos: Vector
   #orderIndex: number
   #hasBeenTaken: boolean
   #spritesheet: Spritesheet
   #scoreText: BitmapText
   #pointsContainer: Container = new Container()
   #boundWithFirstPlatform: boolean
-  #body: MATTER.Body
+  #body: Body
   #bodyHeight = config.diamond.side
   #bodyWidth = config.diamond.side
   #sprite: Sprite
-  constructor(levelContainer: Container, platFormPos: MATTER.Vector, pos: number, firstPlatform: boolean) {
+  constructor(levelContainer: Container, platFormPos: Vector, pos: number, firstPlatform: boolean) {
     super()
     levelContainer.addChild(this.#diamondContainer)
     this.#parentPos = platFormPos
@@ -27,7 +26,7 @@ export default class Diamond extends VisibleObjects {
 
     if (this.#boundWithFirstPlatform) this.#hasBeenTaken = true
 
-    this.#body = MATTER.Bodies.rectangle(
+    this.#body = Bodies.rectangle(
       platFormPos.x - config.platForm.width / 2 + (config.diamond.side + config.diamond.gap) * pos,
       platFormPos.y - config.diamond.height,
       config.diamond.side,
@@ -75,10 +74,6 @@ export default class Diamond extends VisibleObjects {
     this.#diamondContainer.addChild(this.#pointsContainer)
   }
 
-  getPosition(): MATTER.Vector {
-    return this.#body.position
-  }
-
   getHasBeenTaken() {
     return this.#hasBeenTaken
   }
@@ -118,7 +113,7 @@ export default class Diamond extends VisibleObjects {
   }
 
   syncPosition(): void {
-    MATTER.Body.setPosition(this.#body, {
+    Body.setPosition(this.#body, {
       x: this.#parentPos.x - config.platForm.width / 2 + (40 + config.diamond.gap) * this.#orderIndex,
       y: this.#parentPos.y - 50,
     })

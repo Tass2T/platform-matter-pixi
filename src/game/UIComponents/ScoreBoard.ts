@@ -26,5 +26,6 @@ export default class ScoreBoard extends Container {
 
   setScore(value: number): void {
     this.#actualPlayerScore = value
+    if (this.#actualPlayerScore && this.#scoreText) this.#scoreText.text = this.#actualPlayerScore
   }
 }
