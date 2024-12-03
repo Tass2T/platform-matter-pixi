@@ -1,33 +1,32 @@
-import * as MATTER from 'matter-js'
 import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
 import gsap from 'gsap'
 import { AppScreen } from '../../models'
-import { Sleeping } from 'matter-js'
+import { Sleeping, Body, Engine, Bodies, Composite, Vector } from 'matter-js'
 
 export default class Player {
   #parentContainer: AppScreen
-  #engine: MATTER.Engine
+  #engine: Engine
   #isJumping: boolean = false
   #playerSpritesheet: Spritesheet
   #velocity: number = config.player.baseJumpSpeed
   #bodyHeight = config.player.height
-  #body: MATTER.Body
+  #body: Body
   #sprite: AnimatedSprite
   #hasFallen: boolean = false
 
-  constructor(physicEngine: MATTER.Engine, parentContainer: Container) {
+  constructor(physicEngine: Engine, parentContainer: Container) {
     this.#parentContainer = parentContainer
     this.#engine = physicEngine
   }
 
   prepare = async () => {
-    this.#body = MATTER.Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
+    this.#body = Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
       inertia: -Infinity,
       isSleeping: true,
     })
-    MATTER.Composite.add(this.#engine.world, this.#body)
+    Composite.add(this.#engine.world, this.#body)
 
     await this.initSprite(this.#parentContainer)
   }
@@ -40,22 +39,21 @@ export default class Player {
     return this.#body
   }
 
-  getSprite = () => {
-    return this.#sprite
-  }
-
   reset = () => {
-    this.#body.position.x = config.player.xAxisStart
-    this.#body.position.y = config.HEIGHT / 3
+    Sleeping.set(this.#body, true)
+    Body.setPosition(this.#body, Vector.create(config.player.xAxisStart, config.HEIGHT / 3))
+    this.#body.velocity.x = 0
+    this.#body.velocity.y = 0
     this.syncSpriteWithBody()
     this.#hasFallen = false
     this.#isJumping = false
-    Sleeping.set(this.#body, true)
   }
 
   start = () => {
     Sleeping.set(this.#body, false)
-    this.#sprite.play()
+    this.#body.velocity.x = 0
+    this.#body.velocity.y = 0
+    this.#sprite.gotoAndPlay(0)
   }
 
   async initSprite(parentContainer: Container) {
@@ -101,7 +99,7 @@ export default class Player {
       const delta = gsap.ticker.deltaRatio()
       this.#velocity -= config.player.velocityLoss * delta
 
-      MATTER.Body.setVelocity(this.#body, {
+      Body.setVelocity(this.#body, {
         x: 0,
         y: -this.#velocity,
       })
@@ -130,6 +128,7 @@ export default class Player {
   checkIfPlayerHasFallen() {
     if (this.#body.position.y >= config.HEIGHT || this.#body.position.x < 0) {
       this.#hasFallen = true
+      Sleeping.set(this.#body, true)
       this.#sprite.stop()
     }
   }

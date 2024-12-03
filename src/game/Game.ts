@@ -5,13 +5,13 @@ import gsap from 'gsap'
 import PlatformManager from './components/PlatFormManager.ts'
 import Player from './components/Player.ts'
 import config from '../../gameConfig.ts'
+import { Render } from 'matter-js'
 
 export default class Game extends Container implements AppScreen {
   #physicEngine: Matter.Engine
   #backProps = new Container()
   #player: Player
   #platformManager: PlatformManager
-  #backgroundSpeed = config.props.backPropSpeed
   #isReady = false
   #isPaused = false
   #score = 0
@@ -32,7 +32,16 @@ export default class Game extends Container implements AppScreen {
 
   initEngine() {
     this.#physicEngine = MATTER.Engine.create()
+    this.#physicEngine.enableSleeping = true
     this.#physicEngine.gravity.scale = config.GRAVITY
+
+    if (config.DEBUG) {
+      const render = Render.create({
+        element: document.body,
+        engine: this.#physicEngine,
+      })
+      Render.run(render)
+    }
   }
 
   getPhysicEngine() {
@@ -49,7 +58,8 @@ export default class Game extends Container implements AppScreen {
 
   pause() {
     this.#platformManager.setGameSpeed(0)
-    this.#backgroundSpeed = 0
+    this.#isReady = false
+    this.#isPaused = true
   }
 
   reset = () => {
@@ -110,7 +120,6 @@ export default class Game extends Container implements AppScreen {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       MATTER.Engine.update(this.#physicEngine, delta)
-      this.#backProps.x -= this.#backgroundSpeed * delta
       this.#platformManager.update(delta)
       this.#player.update()
       this.checkForCollisionWithDiamonds()

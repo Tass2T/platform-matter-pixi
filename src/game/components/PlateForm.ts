@@ -83,7 +83,7 @@ export default class Platform {
 
   setPosition(x: number, y: number): void {
     MATTER.Body.setPosition(this.#body, { x, y })
-    this.#platformContainer.position.set(x, y)
+    this.syncSpriteWithBody()
   }
 
   syncSpriteWithBody() {

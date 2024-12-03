@@ -4,6 +4,7 @@ const config = {
   SPEED: 3,
   GRAVITY: 0.8,
   MAXSPEED: 45,
+  DEBUG: false,
   COUNTDOWN: 3,
   props: {
     backPropSpeed: 0.06,
