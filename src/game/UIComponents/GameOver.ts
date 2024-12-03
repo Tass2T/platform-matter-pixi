@@ -37,6 +37,7 @@ export default class GameOver extends Container implements AppScreen {
       this.visible = false
       this.#isActive = false
       this.#isLeaving = false
+      this.#resetCallBack()
     },
   })
 
@@ -140,7 +141,6 @@ export default class GameOver extends Container implements AppScreen {
   leaveScreen = () => {
     this.#isLeaving = true
     this.#counter = 0
-    this.#resetCallBack()
     this.#timeline.reverse(0)
   }
 

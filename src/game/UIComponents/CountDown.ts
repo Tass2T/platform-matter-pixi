@@ -34,6 +34,7 @@ export default class CountDown extends Container implements AppScreen {
   }
 
   start = async (): Promise<void> => {
+    if (config.COUNTDOWN <= 0) return
     this.#count = config.COUNTDOWN
     this.visible = true
     this.#backgroundTimeline.play()
@@ -42,7 +43,7 @@ export default class CountDown extends Container implements AppScreen {
     return new Promise(resolve => {
       const interval = setInterval(() => {
         this.#count--
-        if (this.#count === 0) {
+        if (this.#count <= 0) {
           clearInterval(interval)
           this.visible = false
           resolve()
