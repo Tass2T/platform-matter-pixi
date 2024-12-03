@@ -51,6 +51,7 @@ export default class PlatformManager {
       const y = i === 0 ? config.HEIGHT / 2 : this.#platFormList[i].getAdjustedHeight()
 
       this.#platFormList[i].setPosition(x, y)
+      this.setGameSpeed(config.SPEED)
     }
   }
 
@@ -58,7 +59,7 @@ export default class PlatformManager {
     return config.platForm.gap * (Math.random() * (this.#gameSpeed ? this.#gameSpeed / 2 : this.#gameSpeed / 2))
   }
 
-  getFarfestXCoord(): number {
+  getFarestXCoord(): number {
     let result = 0
 
     for (let i = 0; i < this.#platFormList.length; i++) {
@@ -71,7 +72,7 @@ export default class PlatformManager {
   movePlatforms(delta: number): void {
     this.#platFormList.forEach(platForm => {
       if (platForm.hasDisappeared()) {
-        const x = this.getFarfestXCoord()
+        const x = this.getFarestXCoord()
 
         platForm.moveToRight(x + this.setAjustedGap())
       } else {
