@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Application, Graphics } from 'pixi.js'
 import config from '../gameConfig.ts'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import { initAssetsBundles } from './utils/loaderUtils.ts'
@@ -9,9 +9,9 @@ import GameState from './states/GameState.ts'
 import gsap from 'gsap'
 
 gsap.registerPlugin(PixiPlugin)
-PixiPlugin.registerPIXI(PIXI)
+PixiPlugin.registerPIXI({ Graphics: Graphics })
 
-export const app = new PIXI.Application()
+export const app = new Application()
 
 await app.init({
   height: config.HEIGHT,

@@ -1,5 +1,5 @@
 import { AppScreen } from './models'
-import { app } from './main.ts'
+import { app } from './main.js'
 
 class Navigation {
   #currentState?: AppScreen
