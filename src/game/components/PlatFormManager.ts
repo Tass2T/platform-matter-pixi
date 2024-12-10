@@ -1,11 +1,11 @@
-import * as MATTER from 'matter-js'
+import { Engine, Composite } from 'matter-js'
 import config from '../../../gameConfig.ts'
 import Platform from './PlateForm.ts'
 import Game from '../Game.ts'
 import { AppScreen } from '../../models'
 
 export default class PlatformManager {
-  #engine: MATTER.Engine
+  #engine: Engine
   #platFormList: Array<Platform> = []
   #gameSpeed: number = config.SPEED
   #parentContainer: AppScreen
@@ -40,7 +40,7 @@ export default class PlatformManager {
       const ground = new Platform(x, this.#parentContainer, i === 1)
 
       this.#platFormList.push(ground)
-      MATTER.Composite.add(this.#engine.world, ground.getBody())
+      Composite.add(this.#engine.world, ground.getBody())
     }
   }
 

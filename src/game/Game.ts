@@ -1,6 +1,6 @@
 import { AnimatedSprite, Assets, Container, Sprite, Spritesheet } from 'pixi.js'
 import { AppScreen } from '../models'
-import * as MATTER from 'matter-js'
+import { Engine, Collision } from 'matter-js'
 import gsap from 'gsap'
 import PlatformManager from './components/PlatFormManager.ts'
 import Player from './components/Player.ts'
@@ -8,7 +8,7 @@ import config from '../../gameConfig.ts'
 import { Render } from 'matter-js'
 
 export default class Game extends Container implements AppScreen {
-  #physicEngine: Matter.Engine
+  #physicEngine: Engine
   #backProps = new Container({ isRenderGroup: true })
   #backPropsUsedKeys: Array<string> = []
   #backdropTextureKeys: Array<string> = []
@@ -36,7 +36,7 @@ export default class Game extends Container implements AppScreen {
   }
 
   initEngine() {
-    this.#physicEngine = MATTER.Engine.create()
+    this.#physicEngine = Engine.create()
     this.#physicEngine.enableSleeping = true
     this.#physicEngine.gravity.scale = config.GRAVITY
 
@@ -140,7 +140,7 @@ export default class Game extends Container implements AppScreen {
   private checkForCollisionWithDiamonds(): void {
     this.#platformManager.getPlatformList().forEach(platForm => {
       platForm.getDiamondList().forEach(diamond => {
-        const collision = MATTER.Collision.collides(this.#player.getBody(), diamond.getBody())
+        const collision = Collision.collides(this.#player.getBody(), diamond.getBody())
         if (collision?.collided && !diamond.getHasBeenTaken()) {
           diamond.setHasBeenTaken(true)
           this.#score += config.diamond.points
@@ -168,7 +168,7 @@ export default class Game extends Container implements AppScreen {
     if (this.#isReady && !this.#isPaused) {
       const delta = gsap.ticker.deltaRatio()
       this.moveBackdrop(delta)
-      MATTER.Engine.update(this.#physicEngine, delta)
+      Engine.update(this.#physicEngine, delta)
       this.#platformManager.update(delta)
       this.#player.update()
       this.checkForCollisionWithDiamonds()

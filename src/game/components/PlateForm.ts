@@ -1,4 +1,4 @@
-import * as MATTER from 'matter-js'
+import { Body, Bodies } from 'matter-js'
 import { Container, Assets, Sprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import Diamond from './Diamond.ts'
@@ -7,10 +7,10 @@ export default class Platform {
   #diamondList: Array<Diamond> = []
   #isFirst: boolean
   #platformContainer = new Container({ isRenderGroup: true })
-  #body: MATTER.Body
+  #body: Body
   constructor(xStart: number, levelContainer: Container, first = false) {
     this.#isFirst = first
-    this.#body = MATTER.Bodies.rectangle(
+    this.#body = Bodies.rectangle(
       xStart,
       first ? config.HEIGHT / 2 : this.getAdjustedHeight(),
       config.platForm.width,
@@ -48,7 +48,7 @@ export default class Platform {
   }
 
   moveLeft(speed: number) {
-    MATTER.Body.setPosition(this.#body, {
+    Body.setPosition(this.#body, {
       x: this.#body.position.x - speed,
       y: this.#body.position.y,
     })
@@ -59,7 +59,7 @@ export default class Platform {
   }
 
   moveToRight(x: number) {
-    MATTER.Body.setPosition(this.#body, {
+    Body.setPosition(this.#body, {
       x,
       y: this.getAdjustedHeight(),
     })
@@ -82,7 +82,7 @@ export default class Platform {
   }
 
   setPosition(x: number, y: number): void {
-    MATTER.Body.setPosition(this.#body, { x, y })
+    Body.setPosition(this.#body, { x, y })
     this.syncSpriteWithBody()
   }
 
