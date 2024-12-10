@@ -1,4 +1,4 @@
-export default class InputManager {
+class InputManager {
   pressedInput: Array<String> = []
   constructor() {
     window.addEventListener('keydown', e => {
@@ -15,4 +15,10 @@ export default class InputManager {
   getPressedInputs() {
     return this.pressedInput
   }
+
+  isSpacePressed() {
+    return this.pressedInput.includes('Space')
+  }
 }
+
+export const inputManager = new InputManager()
