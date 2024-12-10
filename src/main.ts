@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Application, Graphics } from 'pixi.js'
 import config from '../gameConfig.ts'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import { initAssetsBundles } from './utils/loaderUtils.ts'
@@ -9,32 +9,36 @@ import GameState from './states/GameState.ts'
 import gsap from 'gsap'
 
 gsap.registerPlugin(PixiPlugin)
-PixiPlugin.registerPIXI(PIXI)
+PixiPlugin.registerPIXI({ Graphics: Graphics })
 
-export const app = new PIXI.Application()
+export const app = new Application()
 
-await app.init({
-  height: config.HEIGHT,
-  width: config.WIDTH,
-  background: '#000000',
-})
+const main = async () => {
+  await app.init({
+    height: config.HEIGHT,
+    width: config.WIDTH,
+    background: '#000000',
+  })
 
-document.body.appendChild(app.canvas)
+  document.body.appendChild(app.canvas)
 
-app.ticker.stop()
+  app.ticker.stop()
 
-gsap.ticker.add(() => {
-  app.ticker.update()
-})
+  gsap.ticker.add(() => {
+    app.ticker.update()
+  })
 
-await initAssetsBundles()
+  await initAssetsBundles()
 
-if (import.meta.env.MODE === 'development') {
-  if (getStateFromParams() === 'game') {
-    navigation.goToScreen(new GameState())
+  if (import.meta.env.MODE === 'development') {
+    if (getStateFromParams() === 'game') {
+      navigation.goToScreen(new GameState())
+    } else {
+      navigation.goToScreen(new MenuState())
+    }
   } else {
     navigation.goToScreen(new MenuState())
   }
-} else {
-  navigation.goToScreen(new MenuState())
 }
+
+main()

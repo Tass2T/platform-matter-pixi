@@ -1,14 +1,14 @@
-import * as MATTER from 'matter-js'
+import { Body } from 'matter-js'
 import { AnimatedSprite, Sprite, Container } from 'pixi.js'
 
 type CustomSprite = Sprite | AnimatedSprite
 
 export default class VisibleObjects {
-  #body: MATTER.Body
+  #body: Body
   #sprite: CustomSprite
   constructor() {}
 
-  getBody(): MATTER.Body {
+  getBody(): Body {
     return this.#body
   }
 
