@@ -8,7 +8,7 @@ export default class Player {
   #parentContainer: AppScreen
   #engine: Engine
   #jumpsLeft = config.player.nbOfJumps
-  #jumpDelay = false
+  #keyMustBeReleased = false
   #playerSpritesheet: Spritesheet
   #bodyHeight = config.player.height
   #body: Body
@@ -95,18 +95,18 @@ export default class Player {
   }
 
   private checkForInputs() {
-    if (inputManager.isSpacePressed() && this.#jumpsLeft && !this.#jumpDelay) {
-      this.#jumpDelay = true
-      this.#jumpsLeft -= 1
-      console.log(this.#jumpDelay)
-      this.setIsJumping()
-      Body.setVelocity(this.#body, {
-        x: 0,
-        y: -config.player.baseJumpSpeed,
-      })
-      setTimeout(() => {
-        this.#jumpDelay = false
-      }, config.player.jumpDelay)
+    if (inputManager.isSpacePressed()) {
+      if (this.#jumpsLeft && !this.#keyMustBeReleased) {
+        this.#keyMustBeReleased = true
+        this.#jumpsLeft -= 1
+        this.setIsJumping()
+        Body.setVelocity(this.#body, {
+          x: 0,
+          y: -config.player.baseJumpSpeed,
+        })
+      }
+    } else {
+      this.#keyMustBeReleased = false
     }
   }
 
