@@ -20,6 +20,7 @@ export default class Diamond extends VisibleObjects {
   constructor(levelContainer: Container, platFormPos: Vector, pos: number, firstPlatform: boolean) {
     super()
     levelContainer.addChild(this.#diamondContainer)
+    this.#diamondContainer.zIndex = 11
     this.#parentPos = platFormPos
     this.#orderIndex = pos
     this.#boundWithFirstPlatform = firstPlatform
@@ -27,8 +28,8 @@ export default class Diamond extends VisibleObjects {
     if (this.#boundWithFirstPlatform) this.#hasBeenTaken = true
 
     this.#body = Bodies.rectangle(
-      platFormPos.x - config.platForm.width / 2 + (config.diamond.side + config.diamond.gap) * pos,
-      platFormPos.y - config.diamond.height,
+      this.#parentPos.x - config.platForm.width / 2 + (40 + config.diamond.gap) * this.#orderIndex,
+      this.#parentPos.y - 50,
       config.diamond.side,
       config.diamond.side,
       { isStatic: true, isSensor: true }
@@ -44,13 +45,13 @@ export default class Diamond extends VisibleObjects {
     this.#sprite.width = this.#bodyWidth
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)
+    this.syncSpriteWithBody()
 
     this.animateSprite(0.08)
     if (this.#boundWithFirstPlatform) this.#sprite.visible = false
 
     this.#diamondContainer.addChild(this.#sprite)
 
-    this.syncSpriteWithBody()
     this.initScoreContainer()
   }
 
