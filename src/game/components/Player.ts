@@ -44,6 +44,7 @@ export default class Player {
     this.syncSpriteWithBody()
     this.#hasFallen = false
     this.#jumpsLeft = config.player.nbOfJumps
+    this.startAnimation('run')
     Sleeping.set(this.#body, false)
   }
 
@@ -53,7 +54,7 @@ export default class Player {
     this.#sprite.gotoAndPlay(0)
   }
 
-  async initSprite(parentContainer: Container) {
+  private async initSprite(parentContainer: Container) {
     this.#playerSpritesheet = await Assets.load('player')
 
     this.#sprite = new AnimatedSprite(this.#playerSpritesheet.animations['run'])
