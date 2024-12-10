@@ -1,7 +1,7 @@
 const config = {
   HEIGHT: 720,
   WIDTH: 1280,
-  SPEED: 3,
+  SPEED: 0,
   GRAVITY: 0.8,
   MAXSPEED: 45,
   DEBUG: false,

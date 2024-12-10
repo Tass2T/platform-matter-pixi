@@ -19,11 +19,7 @@
         { "alias": "diamonds", "src": "diamonds/diamondsSpritesheet.json" },
         {
           "alias": "backProps",
-          "src": "background/backProps/backProp.png"
-        },
-        {
-          "alias": "trees",
-          "src": "background/frontProps/frontPropsSheet.json"
+          "src": "background/backgroundSheet.json"
         },
         {
           "alias": "gameOverIllu",
