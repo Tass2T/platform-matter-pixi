@@ -63,6 +63,7 @@ export default class Player {
     this.#sprite.animationSpeed = 0.2
     this.#sprite.height = this.#bodyHeight
     this.#sprite.anchor.set(0.5, 0.5)
+    this.#sprite.zIndex = 10
 
     this.syncSpriteWithBody()
     parentContainer.addChild(this.#sprite)

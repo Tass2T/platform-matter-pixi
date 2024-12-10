@@ -1,9 +1,8 @@
 const config = {
   HEIGHT: 720,
   WIDTH: 1280,
-  SPEED: 0,
+  SPEED: 3,
   GRAVITY: 0.8,
-  MAXSPEED: 45,
   DEBUG: false,
   COUNTDOWN: 3,
   props: {

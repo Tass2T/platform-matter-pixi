@@ -19,7 +19,7 @@ export default class Platform {
         isStatic: true,
       }
     )
-    this.#platformContainer.zIndex = 3
+    this.#platformContainer.zIndex = 11
 
     this.initAssets()
     this.prepareDiamond(levelContainer)

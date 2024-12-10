@@ -23,7 +23,7 @@ export default class PlatformManager {
   }
 
   increaseGamespeed() {
-    if (this.#gameSpeed < config.MAXSPEED) this.#gameSpeed += 0.05
+    this.#gameSpeed += 0.05
   }
 
   setGameSpeed(newValue: number): void {
