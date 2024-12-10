@@ -1,16 +1,15 @@
 import { Spritesheet, Container, Assets, AnimatedSprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
 import { inputManager } from '../../utils/inputManager.ts'
-import gsap from 'gsap'
 import { AppScreen } from '../../models'
 import { Sleeping, Body, Engine, Bodies, Composite, Vector } from 'matter-js'
 
 export default class Player {
   #parentContainer: AppScreen
   #engine: Engine
-  #isJumping: boolean = false
+  #jumpsLeft = config.player.nbOfJumps
+  #jumpDelay = false
   #playerSpritesheet: Spritesheet
-  #velocity: number = config.player.baseJumpSpeed
   #bodyHeight = config.player.height
   #body: Body
   #sprite: AnimatedSprite
@@ -24,7 +23,6 @@ export default class Player {
   prepare = async () => {
     this.#body = Bodies.rectangle(config.player.xAxisStart, config.HEIGHT / 3, 40, 70, {
       inertia: -Infinity,
-      isSleeping: true,
     })
     Composite.add(this.#engine.world, this.#body)
 
@@ -40,17 +38,16 @@ export default class Player {
   }
 
   reset = () => {
-    Sleeping.set(this.#body, true)
     Body.setPosition(this.#body, Vector.create(config.player.xAxisStart, config.HEIGHT / 3))
     this.#body.velocity.x = 0
     this.#body.velocity.y = 0
     this.syncSpriteWithBody()
     this.#hasFallen = false
-    this.#isJumping = false
+    this.#jumpsLeft = config.player.nbOfJumps
+    Sleeping.set(this.#body, false)
   }
 
   start = () => {
-    Sleeping.set(this.#body, false)
     this.#body.velocity.x = 0
     this.#body.velocity.y = 0
     this.#sprite.gotoAndPlay(0)
@@ -69,9 +66,8 @@ export default class Player {
     parentContainer.addChild(this.#sprite)
   }
 
-  setIsJumping(value: boolean): void {
-    this.#isJumping = value
-    if (this.#isJumping) {
+  setIsJumping(): void {
+    if (this.#jumpsLeft < config.player.nbOfJumps) {
       this.#sprite.textures = this.#playerSpritesheet.animations['jump']
       this.#sprite.gotoAndStop(0)
     } else {
@@ -91,22 +87,6 @@ export default class Player {
     this.#sprite.gotoAndPlay(0)
   }
 
-  addVelocity(): void {
-    if (this.#body.velocity.y <= 0 && this.#body.velocity.y > -2) {
-      this.setIsJumping(true)
-    }
-
-    if (this.#isJumping && this.#velocity) {
-      const delta = gsap.ticker.deltaRatio()
-      this.#velocity -= config.player.velocityLoss * delta
-
-      Body.setVelocity(this.#body, {
-        x: 0,
-        y: -this.#velocity,
-      })
-    }
-  }
-
   syncSpriteWithBody(): void {
     if (this.#sprite && this.#body) {
       this.#sprite.position.x = this.#body.position.x
@@ -114,15 +94,26 @@ export default class Player {
     }
   }
 
-  checkForInputs() {
-    if (inputManager.isSpacePressed()) this.addVelocity()
-    else if (!inputManager.isSpacePressed() && this.#isJumping) this.#velocity = 0
+  private checkForInputs() {
+    if (inputManager.isSpacePressed() && this.#jumpsLeft && !this.#jumpDelay) {
+      this.#jumpDelay = true
+      this.#jumpsLeft -= 1
+      console.log(this.#jumpDelay)
+      this.setIsJumping()
+      Body.setVelocity(this.#body, {
+        x: 0,
+        y: -config.player.baseJumpSpeed,
+      })
+      setTimeout(() => {
+        this.#jumpDelay = false
+      }, config.player.jumpDelay)
+    }
   }
 
   checkIfIsStillJumping() {
-    if (this.#isJumping && this.#body.velocity.y === 0) {
-      this.setIsJumping(false)
-      this.#velocity = config.player.baseJumpSpeed
+    if (this.#jumpsLeft < config.player.nbOfJumps && this.#body.velocity.y === 0) {
+      this.#jumpsLeft = config.player.nbOfJumps
+      this.setIsJumping()
     }
   }
 

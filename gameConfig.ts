@@ -1,8 +1,8 @@
 const config = {
   HEIGHT: 720,
   WIDTH: 1280,
-  SPEED: 3,
-  GRAVITY: 0.8,
+  SPEED: 4,
+  GRAVITY: 1,
   DEBUG: false,
   COUNTDOWN: 3,
   props: {
@@ -10,8 +10,10 @@ const config = {
   },
   player: {
     xAxisStart: 150,
-    baseJumpSpeed: 300,
+    baseJumpSpeed: 370,
     velocityLoss: 6,
+    nbOfJumps: 2,
+    jumpDelay: 300,
     height: 70,
     width: 40,
   },
