@@ -1,10 +1,9 @@
 import { BitmapText, Container, Spritesheet, Assets, AnimatedSprite, Sprite } from 'pixi.js'
 import config from '../../../gameConfig.ts'
-import VisibleObjects from '../../traits/VisibleObjects.ts'
 import gsap from 'gsap'
 import { Vector, Body, Bodies } from 'matter-js'
 
-export default class Diamond extends VisibleObjects {
+export default class Diamond {
   #diamondContainer: Container = new Container()
   #parentPos: Vector
   #orderIndex: number
@@ -18,7 +17,6 @@ export default class Diamond extends VisibleObjects {
   #bodyWidth = config.diamond.side
   #sprite: Sprite
   constructor(levelContainer: Container, platFormPos: Vector, pos: number, firstPlatform: boolean) {
-    super()
     levelContainer.addChild(this.#diamondContainer)
     this.#diamondContainer.zIndex = 11
     this.#parentPos = platFormPos
@@ -110,6 +108,13 @@ export default class Diamond extends VisibleObjects {
         this.#pointsContainer.position.y = 0
         this.#pointsContainer.visible = false
       }
+    }
+  }
+
+  animateSprite(customSpeed: number = 0): void {
+    if (this.#sprite instanceof AnimatedSprite) {
+      this.#sprite.animationSpeed = customSpeed || 0.2
+      this.#sprite.play()
     }
   }
 
