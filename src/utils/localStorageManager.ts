@@ -20,6 +20,7 @@ class LocalStorageManager {
 
   switchIsMuted = () => {
     this.#storedData.soundIsMuted = !this.#storedData.soundIsMuted
+    this.saveDatas()
   }
 
   setBestScore = (bestScore: number) => {
