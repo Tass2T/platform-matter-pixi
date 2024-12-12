@@ -1,5 +1,5 @@
 class InputManager {
-  pressedInput: Array<String> = []
+  pressedInput: Array<string> = []
   constructor() {
     window.addEventListener('keydown', e => {
       if (e.repeat) return

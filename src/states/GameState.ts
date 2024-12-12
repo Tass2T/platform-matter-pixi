@@ -11,20 +11,16 @@ export default class GameState extends Container implements AppScreen {
     super()
   }
 
-  prepare = (): Promise<void> => {
-    return new Promise(async (resolve): Promise<void> => {
-      this.#game = new Game()
-      this.#ui = new GameUI(this.resetGame)
-      this.addChild(this.#game, this.#ui)
-      this.#game.zIndex = 1
-      this.#ui.zIndex = 4
+  prepare = async (): Promise<void> => {
+    this.#game = new Game()
+    this.#ui = new GameUI(this.resetGame)
+    this.addChild(this.#game, this.#ui)
+    this.#game.zIndex = 1
+    this.#ui.zIndex = 4
 
-      await this.#game.prepare()
+    await this.#game.prepare()
 
-      await this.#ui.startCountDown()
-
-      resolve()
-    })
+    await this.#ui.startCountDown()
   }
 
   checkIfGameOver() {
