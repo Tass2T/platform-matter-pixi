@@ -72,6 +72,7 @@ export default class Game extends Container implements AppScreen {
 
     reset = () => {
         this.#platformManager.resetPlatforms()
+        this.#score = 0
         this.#player.reset()
     }
 
