@@ -22,6 +22,10 @@
           "src": "background/backgroundSheet.json"
         },
         {
+          "alias": "frontProps",
+          "src": "frontProps/frontPropsSheet.json"
+        },
+        {
           "alias": "gameOverIllu",
           "src": "gameOver/gameOverIllu.png"
         },

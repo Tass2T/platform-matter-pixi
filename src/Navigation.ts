@@ -12,14 +12,14 @@ class Navigation {
 
     if (this.#currentState?.prepare) {
       this.#currentState.prepare().then(() => {
-        if (!!this.#currentState?.update) app.ticker.add(this.#currentState.update)
+        if (this.#currentState?.update) app.ticker.add(this.#currentState.update)
       })
     }
   }
 
   destroyCurrentState = () => {
     if (this.#currentState) {
-      if (!!this.#currentState.update) app.ticker.remove(this.#currentState.update)
+      if (this.#currentState.update) app.ticker.remove(this.#currentState.update)
 
       app.stage.removeChild(this.#currentState)
       this.#currentState.destroy()
