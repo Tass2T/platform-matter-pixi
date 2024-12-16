@@ -140,11 +140,10 @@ export default class Game extends Container implements AppScreen {
     }
 
     private moveBackdrop(delta: number) {
+        this.#backProps.position.x -= 0.2 * delta
         this.#backProps.children.forEach(async child => {
             const childSprite = child as Sprite
-            childSprite.position.x -= 0.2 * delta
-
-            if (childSprite.position.x + childSprite.width <= 0) {
+            if (childSprite.getGlobalPosition().x + childSprite.width <= 0) {
                 const texturesData = await Assets.load('backProps')
                 childSprite.position.x += childSprite.width * this.#backProps.children.length
                 childSprite.zIndex = Math.ceil(Math.random() * 10)
@@ -155,11 +154,10 @@ export default class Game extends Container implements AppScreen {
     }
 
     private moveFrontProps(delta: number) {
+        this.#frontProps.position.x -= config.SPEED * delta
         this.#frontProps.children.forEach(async child => {
-            const childSprite = child as Sprite
-            childSprite.position.x -= config.SPEED * delta
-            if (childSprite.position.x + childSprite.width <= 0) {
-                childSprite.position.x += childSprite.width * 4
+            if (child.getGlobalPosition().x + child.width <= 0) {
+                child.position.x += child.width * 4
             }
         })
     }
