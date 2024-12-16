@@ -97,6 +97,32 @@ export default class Game extends Container implements AppScreen {
         seaSprite.zIndex = -2
         this.addChild(skySprite, seaSprite)
         seaSprite.play()
+
+        const miniprops = await Assets.load('miniProps')
+        const keys = Object.keys(miniprops.textures)
+
+        keys.forEach(key => {
+            const sprite = new Sprite(miniprops.textures[key])
+
+            switch (key) {
+                case 'montgolfière1':
+                    sprite.position.set(Math.random() * (config.WIDTH / 2) + 40, (Math.random() * config.HEIGHT) / 5)
+                    break
+                case 'montgolfière2':
+                    sprite.position.set(
+                        (Math.random() * config.WIDTH) / 2 + config.WIDTH / 2,
+                        (Math.random() * config.HEIGHT) / 5
+                    )
+                    break
+                case 'bateau':
+                    sprite.position.set(Math.random() * config.WIDTH + 40, 200)
+                    break
+                default:
+                    break
+            }
+
+            this.addChild(sprite)
+        })
     }
 
     private async setFrontProps() {

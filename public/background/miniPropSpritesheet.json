@@ -1,0 +1,40 @@
+{
+  "frames": {
+    "montgolfière1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 1000,
+        "h": 1000
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1000, "h": 1000 },
+      "sourceSize": { "w": 1000, "h": 1000 }
+    },
+    "montgolfière2": {
+      "frame": {
+        "x": 0,
+        "y": 1000,
+        "w": 1000,
+        "h": 1000
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1000, "h": 1000 },
+      "sourceSize": { "w": 1000, "h": 1000 }
+    },
+    "bateau": {
+      "frame": {
+        "x": 0,
+        "y": 2000,
+        "w": 1000,
+        "h": 1000
+      },
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 1000, "h": 1000 },
+      "sourceSize": { "w": 1000, "h": 1000 }
+    }
+  },
+  "meta": {
+    "image": "miniPropSpriteSheet.png",
+    "format": "RGBA8888",
+    "size": { "w": 1000, "h": 3000 },
+    "scale": "20"
+  }
+}

@@ -26,6 +26,10 @@
           "src": "frontProps/frontPropsSheet.json"
         },
         {
+          "alias": "miniProps",
+          "src": "background/miniPropSpritesheet.json"
+        },
+        {
           "alias": "gameOverIllu",
           "src": "gameOver/gameOverIllu.png"
         },
