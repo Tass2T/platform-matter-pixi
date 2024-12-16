@@ -9,8 +9,8 @@ import { Render } from 'matter-js'
 
 export default class Game extends Container implements AppScreen {
     #physicEngine: Engine
-    #backProps = new Container({ isRenderGroup: true })
-    #frontProps = new Container({ isRenderGroup: true })
+    #backProps = new Container()
+    #frontProps = new Container()
     #backPropsUsedKeys: Array<string> = []
     #backdropTextureKeys: Array<string> = []
     #player: Player
@@ -144,11 +144,10 @@ export default class Game extends Container implements AppScreen {
         this.#backProps.children.forEach(async child => {
             const childSprite = child as Sprite
             if (childSprite.getGlobalPosition().x + childSprite.width <= 0) {
-                const texturesData = await Assets.load('backProps')
                 childSprite.position.x += childSprite.width * this.#backProps.children.length
                 childSprite.zIndex = Math.ceil(Math.random() * 10)
 
-                childSprite.texture = texturesData.textures[this.getPropLabel()]
+                childSprite.texture = this.#textureDatas.textures[this.getPropLabel()]
             }
         })
     }
