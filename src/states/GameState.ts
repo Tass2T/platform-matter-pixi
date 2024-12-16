@@ -2,9 +2,11 @@ import { Container } from 'pixi.js'
 import { AppScreen } from '../models'
 import Game from '../game/Game.ts'
 import GameUI from '../game/UI/GameUI.ts'
+import Loading from '../game/Loading.ts'
 
 export default class GameState extends Container implements AppScreen {
     #game: Game
+    #loadingScreen: Loading
     #ui: GameUI
 
     constructor() {
@@ -14,12 +16,14 @@ export default class GameState extends Container implements AppScreen {
     prepare = async (): Promise<void> => {
         this.#game = new Game()
         this.#ui = new GameUI(this.resetGame)
-        this.addChild(this.#game, this.#ui)
+        this.#loadingScreen = new Loading()
+        this.addChild(this.#game, this.#ui, this.#loadingScreen)
         this.#game.zIndex = 1
         this.#ui.zIndex = 4
+        this.#loadingScreen.zIndex = 1000
 
         await this.#game.prepare()
-
+        this.#loadingScreen.hide()
         await this.#ui.startCountDown()
     }
 
