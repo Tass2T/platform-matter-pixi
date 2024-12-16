@@ -15,8 +15,8 @@ importers:
         specifier: ^0.20.0
         version: 0.20.0
       pixi.js:
-        specifier: ^8.6.4
-        version: 8.6.4
+        specifier: ^8.6.5
+        version: 8.6.5
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
@@ -741,8 +741,8 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  pixi.js@8.6.4:
-    resolution: {integrity: sha512-hPJpxh3GRjU/wnDPlGZ9WqndJpDpQuaGnRpbAci3r7loX9Zw0zKFm1fph278YFNPfywPA15vjd512OQqYKq5dA==}
+  pixi.js@8.6.5:
+    resolution: {integrity: sha512-53QeyNbvbojFvCoKT7CgLE/O+6Fuf4KHRjOciwFpRKx5zhyoD7/WR1SYJ75wfo523m5QtJw+tn86n18zsroGaw==}
 
   postcss@8.4.49:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
@@ -1500,7 +1500,7 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  pixi.js@8.6.4:
+  pixi.js@8.6.5:
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.12
